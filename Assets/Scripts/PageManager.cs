@@ -6,9 +6,9 @@ public class PageManager : MonoBehaviour
 {
     public GameObject DialogPage;
     public GameObject OrderPage;
-    public bool isClickUp;//ÊÇ·ñµã»÷ÏòÉÏ»®°´Å¥
-    public bool isClickDown;//ÊÇ·ñµã»÷ÏòÏÂ»®°´Å¥
-    public float speed;//Ò³ÃæÒÆ¶¯ËÙ¶È
+    public bool isClickUp;//æ˜¯å¦ç‚¹å‡»å‘ä¸Šåˆ’æŒ‰é’®
+    public bool isClickDown;//æ˜¯å¦ç‚¹å‡»å‘ä¸‹åˆ’æŒ‰é’®
+    public float speed;//é¡µé¢ç§»åŠ¨é€Ÿåº¦
     void Start()
     {
         
