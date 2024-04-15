@@ -52,9 +52,6 @@ TagManager:
   - name: CoverBoard
     uniqueID: 2928629919
     locked: 0
-  - name: InformationArea
-    uniqueID: 1367012693
-    locked: 0
   - name: dish
     uniqueID: 2253693903
     locked: 0
@@ -66,4 +63,10 @@ TagManager:
     locked: 0
   - name: ProcessTool
     uniqueID: 423949153
+    locked: 0
+  - name: Button
+    uniqueID: 2479323369
+    locked: 0
+  - name: InformationArea
+    uniqueID: 1367012693
     locked: 0
