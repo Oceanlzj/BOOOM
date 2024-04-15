@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ConveyorBelt : MonoBehaviour
 {
-    private Vector3 direction;//´«ËÍ´øÒÆ¶¯·½Ïò
-    public float speed;//ÂÄ´øÒÆ¶¯ËÙ¶È
-    public bool isFull=false;//ÂÄ´øÉÏÊ³²ÄÊÇ·ñÒÑÂú
+    private Vector3 direction;//ä¼ é€å¸¦ç§»åŠ¨æ–¹å‘
+    public float speed;//å±¥å¸¦ç§»åŠ¨é€Ÿåº¦
+    public bool isFull=false;//å±¥å¸¦ä¸Šé£Ÿææ˜¯å¦å·²æ»¡
     void Start()
     {
         direction = new Vector2(1, 0);
@@ -18,7 +18,7 @@ public class ConveyorBelt : MonoBehaviour
             Move();
         
     }
-    private void Move()//ÂÄ´øÒÆ¶¯
+    private void Move()//å±¥å¸¦ç§»åŠ¨
     {
         transform.position += direction * Time.deltaTime * speed;
     }

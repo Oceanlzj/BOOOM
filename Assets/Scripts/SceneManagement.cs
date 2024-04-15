@@ -13,11 +13,11 @@ public class SceneManagement : MonoBehaviour
     {
         
     }
-    public void LoadMainPage()//¼ÓÔØµ½Ö÷Ò³Ãæ
+    public void LoadMainPage()//åŠ è½½åˆ°ä¸»é¡µé¢
     {
         SceneManager.LoadScene(0);
     }
-    public void LoadProcessPage()//¼ÓÔØµ½¼Ó¹¤Ò³Ãæ
+    public void LoadProcessPage()//åŠ è½½åˆ°åŠ å·¥é¡µé¢
     {
         SceneManager.LoadScene(1);
     }
