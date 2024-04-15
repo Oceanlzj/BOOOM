@@ -43,30 +43,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 737659255
+  - name: ProcessPage
+    uniqueID: 335612845
     locked: 0
-  - name: ConveryorBelt
-    uniqueID: 2333370739
+  - name: AccountPage
+    uniqueID: 14157921
     locked: 0
-  - name: CoverBoard
-    uniqueID: 2928629919
+  - name: DialogPage
+    uniqueID: 1213332903
     locked: 0
-  - name: dish
-    uniqueID: 2253693903
+  - name: OrderPage
+    uniqueID: 3551843589
     locked: 0
-  - name: Food
-    uniqueID: 929823937
-    locked: 0
-  - name: ProcessArea
-    uniqueID: 4068155435
-    locked: 0
-  - name: ProcessTool
-    uniqueID: 423949153
-    locked: 0
-  - name: Button
-    uniqueID: 2479323369
-    locked: 0
-  - name: InformationArea
-    uniqueID: 1367012693
+  - name: InformationCanvas
+    uniqueID: 3016187241
     locked: 0
