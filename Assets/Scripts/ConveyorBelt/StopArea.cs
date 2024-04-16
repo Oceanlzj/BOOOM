@@ -11,15 +11,15 @@ public class StopArea : MonoBehaviour
         {
             conveyorBelt.isFull = true;
         }
-        
+
     }
     void Start()
     {
-        
+
     }
     void Update()
     {
-         
+
     }
-    
+
 }
