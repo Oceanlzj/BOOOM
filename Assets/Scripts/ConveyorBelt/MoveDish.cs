@@ -41,15 +41,16 @@ public class MoveDish : MonoBehaviour
        //{
        //    mouseMove = false;
        //}
+       if (!mouseMove && onConveyorBelt && !arriveStop && !touchDish)
+       {
+           Move();
+       }
     }
 
-   // private void FixedUpdate()
-   // {
-   //     if (!mouseMove && onConveyorBelt && !arriveStop && !touchDish)
-   //     {
-   //        // Move();
-   //     }
-   // }
+   private void FixedUpdate()
+   {
+       
+   }
 
     private void OnMouseDown()
     {
@@ -73,61 +74,61 @@ public class MoveDish : MonoBehaviour
         transform.position += direction * Time.deltaTime * speed;
     }
     
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.tag == "Dish")
-    //    {
-    //        print("盘子停盘了");
-    //        touchDish = true;
-    //    }
-    //    else if (collision.tag == "StopArea")
-    //    {
-    //        print("盘子停止了");
-    //        arriveStop = true;
-    //    }
-    //    else if (collision.tag == "ConveyorBelt")
-    //    {
-    //        print("盘子进来了");
-    //        arriveStop = true;
-    //    }
-    //}
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Dish")
+        {
+            //print("盘子停盘了");
+            touchDish = true;
+        }
+        else if (collision.tag == "StopArea")
+        {
+           // print("盘子停止了");
+            arriveStop = true;
+        }
+        else if (collision.tag == "ConveyorBelt")
+        {
+            //print("盘子进来了");
+            arriveStop = true;
+        }
+    }
 
-    //private void OnTriggerExit(Collider collision)
-    //{
-    //    if (collision.tag == "Dish")
-    //    {
-    //        print("盘子不盘了");
-    //        touchDish = false;
-    //    }
-    //    else if (collision.tag == "StopArea")
-    //    {
-    //        print("盘子不停了");
-    //        arriveStop = false;
-    //    }
-    //    else if (collision.tag == "ConveyorBelt")
-    //    {
-    //        print("盘子出来了");
-    //        onConveyorBelt = false;
-    //    }
-    //    
-    //}
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.tag == "Dish")
+        {
+            //print("盘子不盘了");
+            touchDish = false;
+        }
+        else if (collision.tag == "StopArea")
+        {
+            //print("盘子不停了");
+            arriveStop = false;
+        }
+        else if (collision.tag == "ConveyorBelt")
+        {
+            //print("盘子出来了");
+            onConveyorBelt = false;
+        }
+        
+    }
 
-    //private void OnTriggerStay2D(Collider2D other)
-    //{
-    //    if (other.tag == "Dish")
-    //    {
-    //        print("Stay盘子不盘了");
-    //        //touchDish = false;
-    //    }
-    //    else if (other.tag == "StopArea")
-    //    {
-    //        print("Stay盘子不停了");
-    //        //arriveStop = false;
-    //    }
-    //    else if (other.tag == "ConveyorBelt")
-    //    {
-    //        print("Stay盘子出来了");
-    //        //onConveyorBelt = false;
-    //    }
-    //}
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag == "Dish")
+        {
+            print("Stay盘子不盘了");
+            touchDish = false;
+        }
+        else if (other.tag == "StopArea")
+        {
+            print("Stay盘子不停了");
+            arriveStop = false;
+        }
+        else if (other.tag == "ConveyorBelt")
+        {
+            print("Stay盘子出来了");
+            onConveyorBelt = false;
+        }
+    }
 }
