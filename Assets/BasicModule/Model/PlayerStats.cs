@@ -1,13 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-
-public class PlayerStats
+namespace Assets.BasicModule.Model
 {
-  public string Name { get; set; }
-  public string Description { get; set; }
+  [Serializable]
+  public class PlayerStats
+  {
+    public string Name { get; set; }
+    public string Description { get; set; }
 
-  public int Sanity {  get; set; }
- 
+    public List<Task> Tasks { get; set; }
+    public int CurrentDay { get; set; }
+
+    public List<Ingredient> Ingredients { get; set; }
+    public Dictionary<Dish, int> DishesInventory { get; set; }
+
+    
+
+    public double Sanity { get; set; }
+
+  }
 }
-  
-
