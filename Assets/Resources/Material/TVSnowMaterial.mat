@@ -71,9 +71,9 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NoiseSpeed: 1
-    - _NoiseStrength: 1000
+    - _NoiseStrength: 1
     - _OcclusionStrength: 1
-    - _Offset: 2.1258833
+    - _Offset: 5.136132
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
