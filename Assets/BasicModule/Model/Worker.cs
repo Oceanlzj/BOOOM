@@ -35,24 +35,6 @@ namespace Assets.BasicModule.Model
     public bool IsAlive { get; set; }
 
     public Worker() { }
-    public Worker(int iD, WorkerType type, string name, string description, double health, double basicHealthDecrease, double healthMultiplier, double satiety, double basicSatietyDecrease, double sanietyMultiplier, double sanity, double basicSanityDecrase, double sanityMultiplier, bool isAlive, Dictionary<FoodProperty, double> foodPopertyMultiplier)
-    {
-      ID = iD;
-      Type = type;
-      Name = name;
-      Description = description;
-      Health = health;
-      BasicHealthDecrease = basicHealthDecrease;
-      HealthMultiplier = healthMultiplier;
-      Satiety = satiety;
-      BasicSatietyDecrease = basicSatietyDecrease;
-      SanietyMultiplier = sanietyMultiplier;
-      Sanity = sanity;
-      BasicSanityDecrase = basicSanityDecrase;
-      SanityMultiplier = sanityMultiplier;
-      IsAlive = isAlive;
-      FoodPopertyMultiplier = foodPopertyMultiplier;
-    }
 
     public Dictionary<FoodProperty, double> FoodPopertyMultiplier { get; set; }
 

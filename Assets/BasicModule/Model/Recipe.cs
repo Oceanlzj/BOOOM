@@ -11,16 +11,8 @@ namespace Assets.BasicModule.Model
   [Serializable]
   public class Recipe
   {
-    private static Recipe SingleRecipe;
-    public Dictionary<string, int> Recipes { get; set; } = new Dictionary<string, int>();
-
-    public static Recipe Instance()
-    {
-      if (SingleRecipe == null)
-      {
-        SingleRecipe = new Recipe();
-      }
-      return SingleRecipe;
-    }
+    public int Ingredient_ID1;
+    public int Ingredient_ID2;
+    public int Dish_ID;
   }
 }
