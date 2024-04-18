@@ -234,8 +234,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tvMaterial: {fileID: 2100000, guid: da1d30d3facaf1b43b5542cdb98b3ab5, type: 2}
-  noiseStrength: 1000
-  noiseSpeed: 1
+  noiseStrength: 1
+  noiseSpeed: 0.00011
 --- !u!64 &67865310
 MeshCollider:
   m_ObjectHideFlags: 0
