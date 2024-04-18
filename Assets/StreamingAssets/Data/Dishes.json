@@ -1,0 +1,29 @@
+[
+  {
+    "ID": 0,
+    "Name": "Test0",
+    "Description": "TestDes0",
+    "DishHealth": 10.199999999999999,
+    "DishSanity": 3.2999999999999998,
+    "DishSatiety": 20,
+    "Successfulness": 1,
+    "Type": 1,
+    "Properties": [
+      0,
+      1
+    ]
+  },
+  {
+    "ID": 1,
+    "Name": "Test1",
+    "Description": "TestDes1",
+    "DishHealth": 10.6,
+    "DishSanity": 3.8999999999999999,
+    "DishSatiety": 28,
+    "Successfulness": 2,
+    "Type": 1,
+    "Properties": [
+      1
+    ]
+  }
+]
