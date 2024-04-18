@@ -1,134 +1,120 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using Object = UnityEngine.Object;
+
+public enum DishStatus{
+    Unknow, Creating, Waiting, Destroy
+}
 
 public class MoveDish : MonoBehaviour
 {
-    public float speed;//盘子移动速度 暂定为3
-    private Vector3 direction;//盘子带移动方向
-    private Vector2 mousePos;
-    private Vector2 distance;
-    private bool arriveStop = false;
-    private bool touchDish = false;
-    private bool onConveyorBelt = true;
-    private bool mouseMove = false;
     
     
-    // Start is called before the first frame update
+    public float createSpeed = 3f;         //盘子移动速度 暂定为3
+    public Vector3 stopPos;   //盘子停止位置
+    public int number;
+    private DishStatus _status;
+
+    private Vector2 _distance;
+    private Vector2 _mousePos;
+    private bool _mouseDown = false;
+    private Vector3 _velocity = Vector3.zero;
+    public float retrunTime = 0.3f;
+
+    private bool _canDestroy = false;
+
+    public void SetPos(Vector3 _stopPos)
+    {
+        stopPos = _stopPos;
+    }
+    
+    
+
+    public void SetStatu(DishStatus status)
+    {
+        _status = status;
+    }
+    
     void Start()
     {
-        direction = Vector3.right;
+       
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //print("mouseMove:" + mouseMove);
-        //print("onConveyorBelt:" + onConveyorBelt);
-        //print("arriveStop:" + arriveStop);
-        //print("touchDish:" + touchDish);
-       //if (Input.GetMouseButtonDown(0))
-       //{
-       //    print("mouseMove:" + mouseMove);
-       //    mouseMove = true;
-       //    distance = new Vector2(transform.position.x, transform.position.y) - mousePos;
-       //}
-       //else if (Input.GetMouseButtonUp(0))
-       //{
-       //    mouseMove = false;
-       //}
-       if (!mouseMove && onConveyorBelt && !arriveStop && !touchDish)
-       {
-           Move();
-       }
+        _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (_status == DishStatus.Creating && transform.position != stopPos)
+        {
+            float step = createSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, stopPos, step);
+        } 
+        else if(_status == DishStatus.Creating && transform.position == stopPos)
+        {
+            _status = DishStatus.Waiting;
+        }
+        else if (_status == DishStatus.Waiting && transform.position != stopPos)
+        {
+            if (!_mouseDown)
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, stopPos,ref _velocity, retrunTime);
+            }
+        }
+        else
+        {
+           
+        }
     }
-
-   private void FixedUpdate()
-   {
-       
-   }
+    private void Move(float speed)  //移动
+    {
+        
+        transform.position = Vector3.MoveTowards(transform.position, stopPos, speed);
+    }
 
     private void OnMouseDown()
     {
-        print("mouseMove:" + mouseMove);
-        mouseMove = true;
-        distance = new Vector2(transform.position.x, transform.position.y) - mousePos;
-    }
-
-    private void OnMouseDrag()
-    {
-        transform.position = mousePos + distance;
-    }
-    
-    private void OnMouseUp()
-    {
-        mouseMove = false;
-    }
-    
-    private void Move()//履带移动
-    {
-        transform.position += direction * Time.deltaTime * speed;
-    }
-    
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Dish")
+        if (_status == DishStatus.Waiting)
         {
-            //print("盘子停盘了");
-            touchDish = true;
-        }
-        else if (collision.tag == "StopArea")
-        {
-           // print("盘子停止了");
-            arriveStop = true;
-        }
-        else if (collision.tag == "ConveyorBelt")
-        {
-            //print("盘子进来了");
-            arriveStop = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider collision)
-    {
-        if (collision.tag == "Dish")
-        {
-            //print("盘子不盘了");
-            touchDish = false;
-        }
-        else if (collision.tag == "StopArea")
-        {
-            //print("盘子不停了");
-            arriveStop = false;
-        }
-        else if (collision.tag == "ConveyorBelt")
-        {
-            //print("盘子出来了");
-            onConveyorBelt = false;
+            _mouseDown = true;
+            _distance = new Vector2(transform.position.x, transform.position.y) - _mousePos;
         }
         
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnMouseDrag()
     {
-        if (other.tag == "Dish")
+        if (_status == DishStatus.Waiting)
         {
-            print("Stay盘子不盘了");
-            touchDish = false;
+            transform.position = _mousePos + _distance;
         }
-        else if (other.tag == "StopArea")
+    }
+
+    private void OnMouseUp()
+    {
+        _mouseDown = false;
+        if (_canDestroy)
         {
-            print("Stay盘子不停了");
-            arriveStop = false;
+            Destroy(this.gameObject);
         }
-        else if (other.tag == "ConveyorBelt")
+    }
+
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "DropPort")
         {
-            print("Stay盘子出来了");
-            onConveyorBelt = false;
+            _canDestroy = true;
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "DropPort")
+        {
+            _canDestroy = false;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        DishManager.Instance.RemoveDish(this);
     }
 }
