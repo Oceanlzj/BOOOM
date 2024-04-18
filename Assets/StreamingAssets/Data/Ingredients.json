@@ -1,0 +1,22 @@
+[
+  {
+    "ID": 0,
+    "Type": 0,
+    "Name": "Ing0",
+    "Description": "Desc0",
+    "IngredientHealth": 10,
+    "IngredientSanity": 20,
+    "IngredientSatiety": 30,
+    "IngredientProperty": 0
+  },
+  {
+    "ID": 1,
+    "Type": 2,
+    "Name": "Ing0",
+    "Description": "Desc0",
+    "IngredientHealth": 10,
+    "IngredientSanity": 20,
+    "IngredientSatiety": 30,
+    "IngredientProperty": 1
+  }
+]
