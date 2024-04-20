@@ -8,6 +8,8 @@ public class Pointer : MonoBehaviour
     public float speed = 0.1f;
 
     private bool _inArea = false;
+
+    private bool _vector = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,14 @@ public class Pointer : MonoBehaviour
     void Update()
     {
         if (_inArea && Input.GetMouseButtonDown(0))
+        {
+            _vector = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (_vector)
         {
             print("Vector");
         }
