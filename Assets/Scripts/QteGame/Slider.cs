@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Slider : MonoBehaviour
@@ -12,6 +13,8 @@ public class Slider : MonoBehaviour
 
     private Vector3 _areaPos;
     private float _areaSizeX;
+    
+    private bool _vector = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,16 +23,19 @@ public class Slider : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CheckVector())
-        {
-            print("Vector");
-            return;
-        }
-        
-        if (Input.GetMouseButtonDown(0))
+        CheckVector();
+        if (!_vector && Input.GetMouseButtonDown(0))
         {
             float step = force * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, _maxXPos, step);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (_vector)
+        {
+            print("Vector");
         }
         else
         {
@@ -72,13 +78,11 @@ public class Slider : MonoBehaviour
         _areaSizeX = sizeX;
     }
 
-    private bool CheckVector()
+    private void CheckVector()
     {
         if (transform.position.x-_sizeX/2 < _areaPos.x-_areaSizeX/2-interval && transform.position.x+_sizeX/2 > _areaPos.x+_areaSizeX/2+interval)
         {
-            return true;
+            _vector = true;
         }
-
-        return false;
     }
 }
