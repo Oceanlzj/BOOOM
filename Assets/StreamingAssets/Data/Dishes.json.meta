@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/QteGame.meta
+guid: 4c045b2e90352454fb3b098a6cba4a04
+folderAsset: yes
+========
 guid: 6a3ad4e58afcb60469bcb99746320829
+>>>>>>>> 0f68ae05a1b238f55c06e31b930374567c290e42:Assets/StreamingAssets/Data/Dishes.json.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

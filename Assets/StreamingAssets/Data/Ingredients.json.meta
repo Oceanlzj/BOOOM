@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/TestScene.meta
+guid: f589846af3e95934797d88f9d276ef7a
+folderAsset: yes
+========
 guid: e807d44dbbef1b74386c03db25e043ec
+>>>>>>>> 0f68ae05a1b238f55c06e31b930374567c290e42:Assets/StreamingAssets/Data/Ingredients.json.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
