@@ -16,7 +16,7 @@ namespace Assets.BasicModule.Factory
     private List<Ingredient> Ingredients;
     private List<Dish> Dishes;
     private List<Worker> Workers;
-    private List<Model.Task> Tasks;
+    private List<Model.Request> Tasks;
     private List<Recipe> RecipeFile;
     private Dictionary<(int, int), int> Recipes;
 
@@ -27,7 +27,7 @@ namespace Assets.BasicModule.Factory
         Ingredients = JsonReader<List<Ingredient>>.Read("Data\\Ingredients.json");
         Dishes = JsonReader<List<Dish>>.Read("Data\\Dishes.json");
         Workers = JsonReader<List<Worker>>.Read("Data\\Workers.json");
-        Tasks = JsonReader<List<Model.Task>>.Read("Data\\Tasks.json");
+        Tasks = JsonReader<List<Model.Request>>.Read("Data\\Tasks.json");
         RecipeFile = JsonReader<List<Recipe>>.Read("Data\\Recipes.json");
 
         Recipes = new Dictionary<(int, int), int>();
@@ -63,7 +63,7 @@ namespace Assets.BasicModule.Factory
       return Workers.Find(x => x.ID == ID);
     }
 
-    public Model.Task getTaskByID(int ID)
+    public Model.Request getTaskByID(int ID)
     {
       return Tasks.Find(x => x.ID == ID);
     }

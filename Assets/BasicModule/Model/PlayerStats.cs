@@ -9,7 +9,7 @@ namespace Assets.BasicModule.Model
     public string Name { get; set; }
     public string Description { get; set; }
 
-    public List<Task> Tasks { get; set; }
+    public List<Request> Tasks { get; set; }
     public int CurrentDay { get; set; }
 
     public List<Ingredient> Ingredients { get; set; }

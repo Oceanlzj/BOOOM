@@ -7,11 +7,13 @@ TagManager:
   - Dish
   - Food
   - DropPort
+  - StopArea
+  - ConveyorBelt
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - WorkBoi
   - Water
   - UI
   - 
