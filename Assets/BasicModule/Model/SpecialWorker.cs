@@ -9,7 +9,7 @@ namespace Assets.BasicModule.Model
   [Serializable]
   public class SpecialWorker : Worker
   {
-    public List<Task> Tasks { get; set; }
+    public List<Request> Tasks { get; set; }
 
   }
 }
