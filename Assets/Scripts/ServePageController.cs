@@ -36,6 +36,7 @@ public class ServePageController : MonoBehaviour
     }
     //end of temp block
     int currentDish = 0;
+    int order = 0;
     DishCount = playerStats.DishesInventory.Count;
     Vector3 Step = (End - Begin) / (DishCount - 1);
 
@@ -50,6 +51,11 @@ public class ServePageController : MonoBehaviour
         pack.InitPos = End - Step * packs.Count;
         pack.InitPos.x = X;
         pack.InitPos.y = Y;
+
+        pack.sr_Pack.sortingOrder = order;
+        order++;
+        pack.sr_sticker.sortingOrder = order;
+        order++;
 
         pack.DishID = item.Key.ID;
         packs.Add(pack);
@@ -66,7 +72,7 @@ public class ServePageController : MonoBehaviour
     {
       TextArea.text += dish.Name + " - " + dish.Description + "\n";
     }
-      TextArea.text += "就这样吗？";
+    TextArea.text += "就这样吗？";
   }
   private void OnTriggerEnter2D(Collider2D collision)
   {
