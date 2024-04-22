@@ -18,7 +18,7 @@ namespace Assets.BasicModule.Utility
     public static T Read(string FilePath)
     {
       string JsonFile = "";
-      using (StreamReader sr = new StreamReader(Application.dataPath + '\\' + FilePath))
+      using (StreamReader sr = new StreamReader(Application.streamingAssetsPath + '\\' + FilePath))
       {
         JsonFile = sr.ReadToEnd();
         sr.Close();
