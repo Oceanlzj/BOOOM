@@ -7,9 +7,25 @@ public class MainPageManager : MonoBehaviour
     public TVSnowEffect TVSnowEffect;
     public GameObject screen;
     private bool isStop=false;
+    private Coroutine tvSnow;
     void Start()
     {
-        StartCoroutine(stopTVSnow());
+        
+    
+    }
+    private void OnEnable()
+    {
+        if (tvSnow == null)
+        {
+            tvSnow = StartCoroutine(stopTVSnow());
+        }
+        else
+        {
+            StopCoroutine(stopTVSnow());
+            TVSnowEffect.noiseSpeed = 0.00011f;
+            isStop = false;
+            tvSnow = StartCoroutine(stopTVSnow());
+        }
     }
 
     // Update is called once per frame
@@ -17,6 +33,7 @@ public class MainPageManager : MonoBehaviour
     {
         if(isStop==false)
             TVSnowEffect.noiseSpeed += 10000*Time.deltaTime;
+        
     }
     public IEnumerator stopTVSnow()
     {
@@ -26,6 +43,6 @@ public class MainPageManager : MonoBehaviour
         TVSnowEffect.noiseSpeed = 0;
         yield return new WaitForSeconds(0.5f);
         screen.SetActive(true);
-        Destroy(TVSnowEffect.gameObject);
+        TVSnowEffect.gameObject.SetActive(false);
     }
 }
