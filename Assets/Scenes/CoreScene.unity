@@ -178,7 +178,7 @@ MonoBehaviour:
   seed: 0
   DishCount: 6
   DishPack: {fileID: 899884633816482437, guid: 84a6c34e50ee05841b991a4b9f681928, type: 3}
-  TextArea: {fileID: 0}
+  TextArea: {fileID: 259175395}
   packs: []
   DishOnPlate: []
 --- !u!50 &81082303
@@ -283,6 +283,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 184670439}
   m_CullTransparentMesh: 1
+--- !u!1001 &207765813
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.8534193
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593356650300885178, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5775798913591206760, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_Name
+      value: NoteBook
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015409867763690730, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015409867763690730, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_SortingOrder
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9015409867763690730, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 335612845
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ffc19dc82bfb9ca4d94082be04a580c1, type: 3}
 --- !u!1 &243748681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1710,7 +1779,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.995547
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2020,6 +2089,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1952813805}
+  - {fileID: 207765813}
   - {fileID: 1592214933}
   - {fileID: 2068097675}
   - {fileID: 243748684}
