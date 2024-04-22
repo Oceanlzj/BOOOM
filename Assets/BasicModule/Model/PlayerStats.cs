@@ -4,20 +4,17 @@ using System.Collections.Generic;
 namespace Assets.BasicModule.Model
 {
   [Serializable]
-  public class PlayerStats
+  public class PlayerStats 
   {
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public List<Request> Tasks { get; set; } = new List<Request>();
+    public int CurrentDay { get; set; } = 0;
 
-    public List<Request> Tasks { get; set; }
-    public int CurrentDay { get; set; }
+    public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+    public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
 
-    public List<Ingredient> Ingredients { get; set; }
-    public Dictionary<Dish, int> DishesInventory { get; set; }
 
-    
 
-    public double Sanity { get; set; }
+    public double Sanity { get; set; } = 50;
 
   }
 }
