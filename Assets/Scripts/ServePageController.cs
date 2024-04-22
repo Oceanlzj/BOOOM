@@ -3,6 +3,8 @@ using Assets.BasicModule.Model;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ServePageController : MonoBehaviour
@@ -13,9 +15,10 @@ public class ServePageController : MonoBehaviour
   public int seed = 0;
   public int DishCount = 5;
   public DishPack DishPack;
-  public GameObject PackFolder;
+  public TextMeshProUGUI TextArea;
 
   public PlayerStats playerStats;
+  public Worker worker;
 
 
   public List<DishPack> packs = new();
@@ -41,7 +44,7 @@ public class ServePageController : MonoBehaviour
       float X = Begin.x + Step.x * currentDish;
       for (int i = 0; i < item.Value; i++)
       {
-        DishPack pack = Instantiate(DishPack);
+        DishPack pack = Instantiate(DishPack, (Begin + End) / 2, Quaternion.identity);
         float Y = (float)(Begin.y - i * 0.4);
 
         pack.InitPos = End - Step * packs.Count;
@@ -56,6 +59,35 @@ public class ServePageController : MonoBehaviour
     DishOnPlate = new List<Dish>();
   }
 
+  private void UpdateText()
+  {
+    TextArea.text = "";
+    foreach (Dish dish in DishOnPlate)
+    {
+      TextArea.text += dish.Name + " - " + dish.Description + "\n";
+    }
+      TextArea.text += "¾ÍÕâÑùÂð£¿";
+  }
+  private void OnTriggerEnter2D(Collider2D collision)
+  {
+
+    if (collision.tag == "Dish")
+    {
+      DishPack dp = collision.gameObject.GetComponent<DishPack>();
+      DishOnPlate.Add(dp.dish);
+    }
+    UpdateText();
+  }
+
+  private void OnTriggerExit2D(Collider2D collision)
+  {
+    if (collision.tag == "Dish")
+    {
+      DishPack dp = collision.gameObject.GetComponent<DishPack>();
+      DishOnPlate.Remove(dp.dish);
+    }
+    UpdateText();
+  }
   // Update is called once per frame
   void Update()
   {
