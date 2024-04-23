@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class DialogManagement : MonoBehaviour
@@ -9,7 +10,8 @@ public class DialogManagement : MonoBehaviour
     private TabSelect nowStatus;
     public Button YesButton;
     public Button NoButton;
-    private int ButtonDownNum;
+    private int SettingButtonDownNum;
+    private int ExitButtonDownNum;
     public Text dialogContent;//电视机上的对话框里的文字部分
     public enum TabSelect
     {
@@ -21,7 +23,8 @@ public class DialogManagement : MonoBehaviour
     
     void Start()
     {
-        ButtonDownNum = 0;
+        SettingButtonDownNum = 0;
+        ExitButtonDownNum = 0;
         YesButton.onClick.AddListener(OnYesButtonClick);
         NoButton.onClick.AddListener(OnNoButtonClick);
     }
@@ -30,39 +33,42 @@ public class DialogManagement : MonoBehaviour
     {
         if(nowStatus==TabSelect.StartGame)
         {
-            if(ButtonDownNum==0)
-            {
-                Debug.Log("进入游戏");
-                //进入游戏界面逻辑
-                //
-                //
-            }
-            if (ButtonDownNum == 1)
-            {
-                Debug.Log("进入游戏");
-                //进入游戏界面逻辑
-                //
-                //
-            }
+            
+                SceneManager.LoadScene(2);
+            
+            
+                SceneManager.LoadScene(2);
+            
 
         }
         else if (nowStatus == TabSelect.ContinueGame)
         {
-            if (ButtonDownNum == 0)
-            {
-                Debug.Log("进入游戏");
-                //进入游戏界面逻辑
-                //存档读取
+            
                 //
-            }
+                //
+                //存档读取逻辑+跳转到相应的页面
+                SceneManager.LoadScene(2);
+            
         }
         else if (nowStatus == TabSelect.Setting)
         {
-
+            SettingButtonDownNum++;
+            if (SettingButtonDownNum >= 3)
+            {
+                dialogContent.text = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.ORIGINAL_TEXT = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.StartTypewriter();
+            }
         }
         else if (nowStatus == TabSelect.Exit)
         {
-
+            ExitButtonDownNum++;
+            if (ExitButtonDownNum >= 3)
+            {
+                dialogContent.text = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.ORIGINAL_TEXT = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.StartTypewriter();
+            }
         }
     }
     void OnNoButtonClick()
@@ -86,11 +92,23 @@ public class DialogManagement : MonoBehaviour
         }
         else if (nowStatus == TabSelect.Setting)
         {
-
+            SettingButtonDownNum++;
+            if (SettingButtonDownNum >= 3)
+            {
+                dialogContent.text = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.ORIGINAL_TEXT = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.StartTypewriter();
+            }
         }
         else if (nowStatus == TabSelect.Exit)
         {
-
+            ExitButtonDownNum++;
+            if (ExitButtonDownNum >= 3)
+            {
+                dialogContent.text = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.ORIGINAL_TEXT = "提示：为了减少维修成本，非必要情况请不要重复使用这些按钮";
+                //typeWriter.StartTypewriter();
+            }
         }
     }
     public void SwitchTabToStartGame()
