@@ -37,7 +37,7 @@ public class DialogManagement : MonoBehaviour
                 SceneManager.LoadScene(2);
             
             
-                SceneManager.LoadScene(2);
+                
             
 
         }
@@ -124,7 +124,7 @@ public class DialogManagement : MonoBehaviour
     public void SwitchTabToSetting()
     {
         nowStatus = TabSelect.Setting;
-        dialogContent.text = "提示：设置键在WORK BOY的右上方哦";
+        dialogContent.text = "提示：设置键在WORK BOY的右侧哦";
     }
     public void SwitchTabToExit()
     {
