@@ -13,21 +13,21 @@ public class QteGame1 : MonoBehaviour
     void Start()
     {
         Bounds progressScrollBounds = progressScroll.GetComponent<Renderer>().bounds;
-        Bounds sliderBounds = slider.GetComponent<Renderer>().bounds;
+        //Bounds sliderBounds = slider.GetComponent<Renderer>().bounds;
         Bounds areaBounds = area.GetComponent<Renderer>().bounds;
 
-        Vector3 minSliderPos = new Vector3(-progressScrollBounds.size.x / 2 + sliderBounds.size.x / 2, 0);
-        Vector3 maxSliderPos = new Vector3(progressScrollBounds.size.x / 2 - sliderBounds.size.x / 2, 0);
+        Vector3 minSliderPos = new Vector3(-progressScrollBounds.size.x / 2 + progressScroll.position.x, progressScroll.position.y);
+        Vector3 maxSliderPos = new Vector3(progressScrollBounds.size.x / 2 + progressScroll.position.x, progressScroll.position.y);
 
         float minAreaX = -progressScrollBounds.size.x / 2 + areaBounds.size.x / 2;
         float maxAreaX = progressScrollBounds.size.x / 2 - areaBounds.size.x / 2;
 
-        Vector3 areaPos =new Vector3(Random.Range(minAreaX, maxAreaX),0);
+        Vector3 areaPos =new Vector3(Random.Range(minAreaX, maxAreaX) + progressScroll.position.x, progressScroll.position.y);
         area.transform.position = areaPos;
         
-        slider.GetComponent<Slider>().SetPos(minSliderPos, maxSliderPos, sliderBounds.size.x);
+        slider.GetComponent<Slider>().SetPos(minSliderPos, maxSliderPos);
         slider.transform.position = minSliderPos;
-        slider.GetComponent<Slider>().SetAreaPos(areaPos, areaBounds.size.x);
+        //slider.GetComponent<Slider>().SetAreaPos(areaPos, areaBounds.size.x);
 
     }
 

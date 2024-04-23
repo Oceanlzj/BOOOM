@@ -195,7 +195,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 335612845
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: aeefdabc53344b441b389b61259d0e1f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -545,8 +545,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!68 &798251796
-EdgeCollider2D:
+--- !u!60 &798251796
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -574,19 +574,45 @@ EdgeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.8675231, y: 0.10871545}
+    oldSize: {x: 0.82, y: 1.02}
+    newSize: {x: 0.82, y: 1.02}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   m_Points:
-  - {x: -0.7113689, y: 0.9103944}
-  - {x: -0.31029755, y: 0.36493194}
-  - {x: -0.013417453, y: 0.019770443}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
+    m_Paths:
+    - - {x: 0.028631058, y: 0.10911026}
+      - {x: -0.041368943, y: 0.10911026}
+      - {x: -0.11136894, y: 0.20911026}
+      - {x: -0.33136892, y: 0.46911025}
+      - {x: -0.39136893, y: 0.5691103}
+      - {x: -0.5313689, y: 0.70911026}
+      - {x: -0.68136895, y: 0.90911025}
+      - {x: -0.7113689, y: 0.90911025}
+      - {x: -0.7113689, y: 0.85911024}
+      - {x: -0.5213689, y: 0.52911025}
+      - {x: -0.36136892, y: 0.37911025}
+      - {x: -0.11136894, y: 0.06911026}
+      - {x: -0.13136894, y: -0.050889738}
+      - {x: -0.061368942, y: -0.11088974}
+      - {x: 0.018631058, y: -0.11088974}
+      - {x: 0.098631054, y: -0.08088974}
+      - {x: 0.10863105, y: -0.06088974}
+      - {x: 0.10863105, y: 0.04911026}
+      - {x: 0.06863105, y: 0.11911026}
+    - - {x: -0.021368941, y: 0.00911026}
+      - {x: 0.008631057, y: 0.00911026}
+      - {x: 0.008631057, y: -0.01088974}
+      - {x: -0.011368942, y: -0.01088974}
+  m_UseDelaunayMesh: 0
 --- !u!1 &1642569647
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +642,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a181e3ea7f0d3469b9309b20f61d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poiter: {fileID: 798251793}
+  area: {fileID: 642995579}
+  maxGameNum: 3
 --- !u!4 &1642569649
 Transform:
   m_ObjectHideFlags: 0
