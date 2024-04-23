@@ -22,7 +22,6 @@ public class ServePageController : MonoBehaviour
   public DishPack DishPack;
   public TextMeshProUGUI TextArea;
 
-  public PlayerStats playerStats;
 
   public int WorkerID = 0;
   public Worker worker;
@@ -49,14 +48,14 @@ public class ServePageController : MonoBehaviour
     Random.InitState(seed);
     for (int i = 0; i < DishCount; i++)
     {
-      playerStats.DishesInventory.Add(DataFactory.Instance().GetDishByID(i), Random.Range(1, 5));
+      PlayerStats.Instance().DishesInventory.Add(DataFactory.Instance().GetDishByID(i), Random.Range(1, 5));
     }
     NextWorker();
 
     //end of temp block
     int currentDish = 0;
     int order = 0;
-    DishCount = playerStats.DishesInventory.Count;
+    DishCount = PlayerStats.Instance().DishesInventory.Count;
     Vector3 Step = (End - Begin) / (DishCount - 1);
 
     Snapped.Clear();
@@ -65,7 +64,7 @@ public class ServePageController : MonoBehaviour
       Snapped.Add(false);
     }
 
-    foreach (var item in playerStats.DishesInventory)
+    foreach (var item in PlayerStats.Instance().DishesInventory)
     {
       float X = Begin.x + Step.x * currentDish;
       for (int i = 0; i < item.Value; i++)

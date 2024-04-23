@@ -21,6 +21,9 @@ public class DishPack : MonoBehaviour
     OnPlate = 1,
   }
 
+  private int initSO_Sticker;
+  private int initSO_Pack;
+
   public List<Vector3> SnapPoints;
   public List<bool> Snapped;
   public bool isServing = false;
@@ -66,20 +69,24 @@ public class DishPack : MonoBehaviour
 
     _mouseDown = true;
     _distance = new Vector2(transform.position.x, transform.position.y) - _mousePos;
+    initSO_Pack = sr_Pack.sortingOrder;
+    initSO_Sticker = sr_sticker.sortingOrder;
 
+    sr_sticker.sortingOrder = 100;
+    sr_Pack.sortingOrder = 99;
 
   }
 
   public void Hide()
   {
-   this.gameObject.SetActive(false);
+    this.gameObject.SetActive(false);
   }
   public void UnServerFromPlate()
   {
     isServing = false;
     _status = PackStatus.OffPlate;
     stopPos = InitPos;
-    if(snappedIndex != -1)
+    if (snappedIndex != -1)
     {
       Snapped[snappedIndex] = false;
     }
@@ -125,7 +132,8 @@ public class DishPack : MonoBehaviour
       }
 
     }
-
+    sr_sticker.sortingOrder = initSO_Sticker;
+    sr_Pack.sortingOrder = initSO_Pack;
   }
 
 
@@ -143,16 +151,19 @@ public class DishPack : MonoBehaviour
     {
       stopPos = InitPos;
       _status = PackStatus.OffPlate;
-      Snapped[snappedIndex] = false;
+      if (snappedIndex != -1)
+      {
+        Snapped[snappedIndex] = false;
+      }
       snappedIndex = -1;
     }
   }
 
   public void OnDestroy()
   {
-    if(snappedIndex != -1)
+    if (snappedIndex != -1)
     {
-      Snapped[snappedIndex] = false ;
+      Snapped[snappedIndex] = false;
     }
     Destroy(gameObject);
   }
