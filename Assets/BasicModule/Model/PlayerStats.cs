@@ -12,6 +12,19 @@ namespace Assets.BasicModule.Model
     public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
 
+    private static PlayerStats playerStats;
+
+    private PlayerStats() { }
+    public static PlayerStats Instance()
+    {
+      if(playerStats == null)
+      {
+        playerStats = new PlayerStats();
+      }
+      return playerStats;
+    }
+
+
 
 
     public double Sanity { get; set; } = 50;

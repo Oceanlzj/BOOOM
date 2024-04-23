@@ -1,19 +1,28 @@
+using Assets.BasicModule.Factory;
+using Assets.BasicModule.Model;
 using System;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 public enum DishStatus
 {
   Unknow, Creating, Waiting, Destroy
 }
 
-public class MoveDish : MonoBehaviour
+public class IngredientItem : MonoBehaviour
 {
+  public int IngredientID = 0;
 
+  public Ingredient Ingredient;
+  public SpriteRenderer SR;
+  public SpriteLibraryAsset Asset;
 
   public float createSpeed = 3f;         //盘子移动速度 暂定为3
   public Vector3 stopPos;   //盘子停止位置
   public int number;
   private DishStatus _status;
+
+  private int OrderInLayerLast = 10;
 
   private Vector2 _distance;
   private Vector2 _mousePos;
@@ -37,7 +46,9 @@ public class MoveDish : MonoBehaviour
 
   void Start()
   {
-
+    Ingredient = DataFactory.Instance().GetIngedientByID(IngredientID);
+    SR.sprite = Asset.GetSprite("Ingredient", IngredientID.ToString());
+    OrderInLayerLast = SR.sortingOrder;
   }
 
   void Update()
@@ -76,6 +87,7 @@ public class MoveDish : MonoBehaviour
     {
       _mouseDown = true;
       _distance = new Vector2(transform.position.x, transform.position.y) - _mousePos;
+      SR.sortingOrder = 100;
     }
 
   }
@@ -91,10 +103,7 @@ public class MoveDish : MonoBehaviour
   private void OnMouseUp()
   {
     _mouseDown = false;
-    if (_canDestroy)
-    {
-      Destroy(this.gameObject);
-    }
+    SR.sortingOrder = OrderInLayerLast;
   }
 
 
@@ -116,6 +125,6 @@ public class MoveDish : MonoBehaviour
 
   private void OnDestroy()
   {
-    DishManager.Instance.RemoveDish(this);
+    ProcessSceneManager.Instance.RemoveDish(this);
   }
 }

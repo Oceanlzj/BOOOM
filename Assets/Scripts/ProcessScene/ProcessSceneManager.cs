@@ -8,13 +8,13 @@ public enum ManagerStutes{
     Unknow, Creating, Waiting, Destroy
 }
 
-public class DishManager : Singleton<DishManager>
+public class ProcessSceneManager : Singleton<ProcessSceneManager>
 {
-    public MoveDish dishProfab;
+    public IngredientItem dishProfab;
     //public Transform startPoint;
     public Transform[] Pipes;
 
-    private List<MoveDish> _dishesList;
+    private List<IngredientItem> _dishesList;
     private int _destroyNum;
     
     public float seconds;       // 创建时间间隔
@@ -24,7 +24,7 @@ public class DishManager : Singleton<DishManager>
     
     void Start()
     {
-        _dishesList = new List<MoveDish>();
+        _dishesList = new List<IngredientItem>();
         _stutes = ManagerStutes.Creating;
         StartCoroutine(StartNewDay());
     }
@@ -32,30 +32,6 @@ public class DishManager : Singleton<DishManager>
     // Update is called once per frame
     void Update()
     {
-       if (_stutes == ManagerStutes.Destroy && _dishesList.Count < Pipes.Length)
-       {
-           // 有盘子销毁
-          // bool frontFinish = true;
-           
-          // _dishesList.ForEach(dish =>
-          // {
-          //     if (dish.number - _destroyNum == 1)
-          //     {
-          //         frontFinish = false;
-          //         dish.SetPos(Pipes[_destroyNum].position);
-          //         dish.SetStatu(DishStatus.Creating);
-          //         dish.number--;
-          //         _destroyNum++;
-          //     }
-          // });
-           
-          //if (frontFinish)
-          //{
-          CreateDish(_destroyNum);
-          _destroyNum = 0;
-          _stutes = ManagerStutes.Waiting;
-           //}
-       }
     }
     
     private IEnumerator StartNewDay()
@@ -73,14 +49,14 @@ public class DishManager : Singleton<DishManager>
 
     private void CreateDish(int number)
     {
-        MoveDish dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position, Quaternion.identity);
+        IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position, Quaternion.identity);
         _dishesList.Add(dish);
-        dish.SetPos(Pipes[number].GetChild(1).position);
+        dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
         dish.number = number;
         dish.SetStatu(DishStatus.Creating);
     }
 
-    public void RemoveDish(MoveDish dish)
+    public void RemoveDish(IngredientItem dish)
     {
         _destroyNum = dish.number;
         _dishesList.Remove(dish);
