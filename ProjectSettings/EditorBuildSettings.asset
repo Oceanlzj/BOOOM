@@ -9,9 +9,21 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/MainPage.unity
+    path: Assets/Scenes/doudou/MainPage.unity
     guid: 4cf3da6e16427a24f83e9120190dcba6
   - enabled: 1
-    path: Assets/Scenes/SalePage.unity
+    path: Assets/Scenes/doudou/SalePage.unity
     guid: 8d1ec87fdb10a7d41a7ce99d9c06c11f
+  - enabled: 1
+    path: Assets/Scenes/StartPage.unity
+    guid: 9c3aff69d0ee5e84895e49523c442bb3
+  - enabled: 1
+    path: Assets/Scenes/QteGame1.unity
+    guid: c4a620077f8cd9c43a9052ebd2591d45
+  - enabled: 1
+    path: Assets/Scenes/QteGame2.unity
+    guid: fa52e9327910d2c44ade329a9e38f109
+  - enabled: 1
+    path: Assets/Scenes/ScenesManager.unity
+    guid: 997b770ac64e0ae4ebb93bfa3d8b6cd3
   m_configObjects: {}
