@@ -113,14 +113,14 @@ public class DialogManagement : MonoBehaviour
     {
         nowStatus = TabSelect.StartGame;
         //dialogContent.text = "【背景故事】";
-        typeWriter.ORIGINAL_TEXT = "【背景故事】";
+        typeWriter.ORIGINAL_TEXT = "【背景故事】\n按下'YES'键开始吧";
         typeWriter.StartTypewriter();
     }
     public void SwitchTabToContinueGame()
     {
         nowStatus = TabSelect.ContinueGame;
         //dialogContent.text = "又要开始新的一天的工作了吗？";
-        typeWriter.ORIGINAL_TEXT = "又要开始新的一天的工作了吗？";
+        typeWriter.ORIGINAL_TEXT = "又要开始新的一天的工作了吗？\n好吧\n按下'YES'键开始吧";
         typeWriter.StartTypewriter();
     }
     public void SwitchTabToSetting()
@@ -134,7 +134,7 @@ public class DialogManagement : MonoBehaviour
     {
         nowStatus = TabSelect.Exit;
         //dialogContent.text = "快按下那个红色的关机按钮吧";
-        typeWriter.ORIGINAL_TEXT = "快按下那个红色的关机按钮吧";
+        typeWriter.ORIGINAL_TEXT = "快按下那个红色的关机按钮吧\n提示：关机在屏幕正下方哦";
         typeWriter.StartTypewriter();
     }
 }
