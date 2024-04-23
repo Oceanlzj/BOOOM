@@ -29,6 +29,10 @@ public class CloseButtonController : MonoBehaviour
     public float IDcardSpeed;
 
     public TW_Regular typeWriter;
+
+    public Sprite Lighted;
+    public Sprite Darken;
+    private Image ButtonImage;
     void Start()
     {
         closeButton.onClick.AddListener(OnCloseButtonClick);
@@ -37,6 +41,8 @@ public class CloseButtonController : MonoBehaviour
         ExitButton.interactable = false;
         PlayIDcardIn = false;
         PlayIDcardOut = false;
+        ButtonImage = GetComponent<Button>().image;
+        ButtonImage.sprite= Darken;
     }
     private void Update()
     {
@@ -79,6 +85,8 @@ public class CloseButtonController : MonoBehaviour
 
             typeWriter.ORIGINAL_TEXT = "早上好，要开始今天的工作吗？";
             typeWriter.StartTypewriter();
+
+            ButtonImage.sprite = Darken;
         }
         else
         {
@@ -88,6 +96,7 @@ public class CloseButtonController : MonoBehaviour
 
 
             TVSnowEffect.SetActive(true);
+            ButtonImage.sprite= Lighted;
         }
     }
     private IEnumerator IDcardIn()
