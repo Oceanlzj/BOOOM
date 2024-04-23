@@ -17,6 +17,7 @@ public class CoreSceneController : MonoBehaviour
   public GameObject ServePage;
   public GameObject ConversationPage;
 
+
   private GameObject CurrentPage;
 
 
@@ -25,12 +26,18 @@ public class CoreSceneController : MonoBehaviour
     ServePageController page = ServePage.GetComponent<ServePageController>();
     // if ()//is special worker; 
     {
-      foreach(DishPack pack in page.packs)
+      foreach (DishPack pack in page.packs)
       {
         pack.Hide();
       }
       page.FlipAnimator.Play("ServePageOut");
+      page.MsgBox.SetActive(false);
+      page.MsgBoxAnimator.Play("MsgPopOut");
+      ConversationPage.SetActive(true);
+
+      CurrentPage = ConversationPage;
     }
+
   }
 
   public static void RemoveAllChildren(GameObject parent)
@@ -53,6 +60,11 @@ public class CoreSceneController : MonoBehaviour
   public void HandOutEnd()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
+    foreach (DishPack pack in page.packOnPlate)
+    {
+      page.packs.Remove(pack);
+    }
+
     RemoveAllChildren(page.PlateFolder);
     foreach (Dish dish in page.DishOnPlate)
     {
@@ -61,19 +73,54 @@ public class CoreSceneController : MonoBehaviour
     page.NextWorker();
   }
 
+  public void ConversationToServe()
+  {
+    ServePageController Spage = ServePage.GetComponent<ServePageController>();
+    ConversationController Cpage = ConversationPage.GetComponent<ConversationController>();
+
+    Spage.FlipAnimator.Play("ServePageIn");
+
+    foreach (DishPack pack in Spage.packs)
+    {
+      pack.gameObject.SetActive(true);
+    }
+    Spage.MsgBox.SetActive(true);
+    ConversationPage.SetActive(false);
+
+    CurrentPage = ServePage;
+  }
 
   public void OnYesClicked()
   {
+    ServePageController Spage = ServePage.GetComponent<ServePageController>();
+    ConversationController Cpage = ConversationPage.GetComponent<ConversationController>();
     if (CurrentPage == ServePage)
     {
-
-      ServePageController page = ServePage.GetComponent<ServePageController>();
-      foreach (DishPack pack in page.packOnPlate)
+      foreach (DishPack pack in Spage.packOnPlate)
       {
         pack.isServing = true;
       }
-      page.PlateHandAnimator.Play("HandPlateOut");
-      page.MsgBoxAnimator.Play("MsgPopOut");
+      Spage.PlateHandAnimator.Play("HandPlateOut");
+      Spage.MsgBoxAnimator.Play("MsgPopOut");
+      return;
+    }
+
+    if (CurrentPage == ConversationPage)
+    {
+
+      if (Cpage.ConversationEnd)
+      {
+        //Add effect
+        //return to serve
+        ConversationToServe();
+
+
+      }
+      else
+      {
+        Cpage.UpdateALine();
+
+      }
       return;
     }
   }
@@ -88,11 +135,21 @@ public class CoreSceneController : MonoBehaviour
       {
         pack.UnServerFromPlate();
       }
+      return;
     }
 
     if (CurrentPage == ConversationPage)
     {
-
+      ConversationController page = ConversationPage.GetComponent<ConversationController>();
+      if (page.ConversationEnd)
+      {
+        //add effect
+        //return to serve
+      }
+      else
+      {
+        page.UpdateALine();
+      }
     }
 
   }
