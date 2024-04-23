@@ -5,16 +5,30 @@ using UnityEngine;
 
 public class CoreSceneController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        //DataFactory.Instance().
-        
-    }
+  public GameObject ServePage;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  private GameObject CurrentPage;
+  // Start is called before the first frame update
+
+  public void OnYesClicked()
+  {
+
+  }
+
+  public void OnNoClicked()
+  {
+
+  }
+
+  void Start()
+  {
+    CurrentPage = ServePage;
+
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+
+  }
 }
