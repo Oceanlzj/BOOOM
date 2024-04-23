@@ -10,7 +10,8 @@ public class DishPack : MonoBehaviour
 {
   public int DishID = 0;
   public Dish dish;
-  public SpriteRenderer sr;
+  public SpriteRenderer sr_sticker;
+  public SpriteRenderer sr_Pack;
   public SpriteLibraryAsset lib;
   //-6 - 1.6
   private enum PackStatus
@@ -36,7 +37,7 @@ public class DishPack : MonoBehaviour
     stopPos = InitPos;
     dish = DataFactory.Instance().GetDishByID(DishID);
     _status = PackStatus.OffPlate;
-    sr.sprite = lib.GetSprite("Dish", DishID.ToString());
+    sr_sticker.sprite = lib.GetSprite("Dish", DishID.ToString());
   }
 
   // Update is called once per frame
