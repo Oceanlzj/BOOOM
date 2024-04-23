@@ -429,7 +429,10 @@ MonoBehaviour:
   WorkerID: 0
   PackFolder: {fileID: 400034331}
   PlateFolder: {fileID: 1802788539}
+  MsgBox: {fileID: 74999202}
   PlateHandAnimator: {fileID: 342399095}
+  MsgBoxAnimator: {fileID: 74999205}
+  FlipAnimator: {fileID: 81082304}
   HandSprite: {fileID: 733675865}
   HandLib: {fileID: 7108339969198208228, guid: 87e6881377cf34b48bda9a0af38fba06, type: 3}
   packs: []
@@ -881,7 +884,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d9d8410982ff5f5468d70f2d505c5d57, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -2152,7 +2155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ServePage: {fileID: 81082300}
   ConversationPage: {fileID: 2118536128}
-  MsgBox: {fileID: 74999202}
 --- !u!4 &1303358549
 Transform:
   m_ObjectHideFlags: 0
@@ -2951,7 +2953,7 @@ Transform:
   m_GameObject: {fileID: 2118536128}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5601019, y: 9.53, z: 1.8534191}
+  m_LocalPosition: {x: -0.61, y: -0.77, z: 1.8534191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2980,6 +2982,7 @@ MonoBehaviour:
   TaskID: 0
   TalkTextArea: {fileID: 29893149}
   NarratorArea: {fileID: 973288188}
+  ConversationEnd: 0
 --- !u!61 &2118536131
 BoxCollider2D:
   m_ObjectHideFlags: 0

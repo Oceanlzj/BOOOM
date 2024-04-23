@@ -31,6 +31,7 @@ public class ServePageController : MonoBehaviour
 
   public GameObject PackFolder;
   public GameObject PlateFolder;
+  public GameObject MsgBox;
 
   public Animator PlateHandAnimator;
   public Animator MsgBoxAnimator;
@@ -103,6 +104,7 @@ public class ServePageController : MonoBehaviour
     HandSprite.sprite = HandLib.GetSprite("Worker", WorkerID.ToString());
     PlateHandAnimator.Play("HandPlateIn");
     MsgBoxAnimator.Play("MsgPopIn");
+
   }
   private void UpdateText()
   {

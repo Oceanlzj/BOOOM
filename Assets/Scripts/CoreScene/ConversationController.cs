@@ -22,6 +22,7 @@ public class ConversationController : MonoBehaviour
   public Request Request;
 
   private int CurrentIndex = 0;
+  public bool ConversationEnd = false;
 
 
   public void UpdateALine()
@@ -37,6 +38,10 @@ public class ConversationController : MonoBehaviour
       TalkTextArea.text = "";
     }
     CurrentIndex++;
+    if(CurrentIndex >= Request.ConversationSentences.Count)
+    {
+      ConversationEnd = true;
+    }
   }
 
   // Start is called before the first frame update
