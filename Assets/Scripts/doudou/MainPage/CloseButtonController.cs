@@ -27,6 +27,8 @@ public class CloseButtonController : MonoBehaviour
     private bool PlayIDcardIn;
     private bool PlayIDcardOut;
     public float IDcardSpeed;
+
+    public TW_Regular typeWriter;
     void Start()
     {
         closeButton.onClick.AddListener(OnCloseButtonClick);
@@ -74,6 +76,9 @@ public class CloseButtonController : MonoBehaviour
             Pointer2.SetActive(false);
             Pointer3.SetActive(false);
             Pointer4.SetActive(false);
+
+            typeWriter.ORIGINAL_TEXT = "早上好，要开始今天的工作吗？";
+            typeWriter.StartTypewriter();
         }
         else
         {
