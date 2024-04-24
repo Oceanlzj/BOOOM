@@ -73,7 +73,7 @@ Material:
     - _NoiseSpeed: 1
     - _NoiseStrength: 0.6
     - _OcclusionStrength: 1
-    - _Offset: 0.52226806
+    - _Offset: 44973.883
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
