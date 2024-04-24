@@ -12,8 +12,6 @@ public class QteManager : Singleton<QteManager>
 {
     public CutQte CutQte;
     public CookQte CookQte;
-
-  public ProcessSceneManager ProcessSceneManager;
     
     private QteStatus _status;
 
@@ -24,43 +22,41 @@ public class QteManager : Singleton<QteManager>
     
     public void StartCutGame()
     {
-        //print("开始切菜");
-
-
+        print("开始切菜");
         _status = QteStatus.Cutting;
-        //CutQte.StartGame();
+        CutQte.StartGame();
     }
     
     public void FinishCutGame()
     {
         print("完成切菜");
         _status = QteStatus.FinishCutting;
-        //CutQte.StopGame();
+        CutQte.StopGame();
     }
     
     public void StopCutGame()
     {
         _status = QteStatus.Waiting;
-        //CutQte.StopGame();
+        CutQte.StopGame();
     }
     
     public void StartCookGame()
     {
         print("开始烹饪");
         _status = QteStatus.Cooking;
-        //CookQte.StartGame();
+        CookQte.StartGame();
     }
     
     public void FinishCookGame()
     {
         print("完成烹饪");
         _status = QteStatus.FinishCooking;
-        //CutQte.StopGame();
+        CutQte.StopGame();
     }
     public void StopCookGame()
     {
         _status = QteStatus.Waiting;
-        //CookQte.StopGame();
+        CookQte.StopGame();
     }
 
     public int GetCutVectorNum()

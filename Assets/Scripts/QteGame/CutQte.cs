@@ -18,7 +18,7 @@ public class CutQte : MonoBehaviour
         _vectorNum = 0;
         _gameNum = 0;
         _pointer = poiter.GetComponent<Pointer>();
-        InitGame();
+        area.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,6 +26,28 @@ public class CutQte : MonoBehaviour
     {
         //InitGame();
         //print(area.transform.rotation.z);
+    }
+
+    public void StartGame()
+    {
+        _vectorNum = 0;
+        _gameNum = 0;
+        _pointer.StartGame();
+        area.gameObject.SetActive(true);
+        InitGame();
+    }
+    
+    public void StopGame()
+    {
+        //_vectorNum = 0;
+        //_gameNum = 0;
+        area.gameObject.SetActive(false);
+        _pointer.StopGame();
+    }
+
+    public int GetVectorNum()
+    {
+        return _vectorNum;
     }
 
     public void InitGame()
@@ -45,7 +67,8 @@ public class CutQte : MonoBehaviour
 
         if (_gameNum >= maxGameNum)
         {
-            print("vector");
+            QteManager.Instance.FinishCutGame();
+            StopGame();
         }
         else
         {
