@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Pointer : MonoBehaviour
 {
+    
     public float speed = 0.1f;
 
+    private bool _isActive = false;
+    
     private bool _inArea = false;
 
     private bool _stop = false;
@@ -38,7 +41,7 @@ public class Pointer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (_isActive && Input.GetMouseButtonDown(0))
         {
             _stop = true;
             _parentGameObject.CheckVector(_inArea);
@@ -48,7 +51,7 @@ public class Pointer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_stop)
+        if (!_stop && _isActive)
         {
             // 实际测试获得 左侧0.608f，右侧-0.966f
             if (transform.rotation.z > 0.608f)
@@ -91,6 +94,16 @@ public class Pointer : MonoBehaviour
     public void Reset()
     {
         _stop = false;
+    }
+
+    public void StartGame()
+    {
+        _isActive = true;
+    }
+
+    public void StopGame()
+    {
+        _isActive = false;
     }
     
 }

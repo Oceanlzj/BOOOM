@@ -3,31 +3,40 @@ using UnityEngine;
 
 public class Slider : MonoBehaviour
 {
-    //public float force = 200f;
     public float speed = 3f;
     
     private Vector3 _minXPos;
     private Vector3 _maxXPos;
-    //private float _sizeX;
-    //private Vector3 _areaPos;
-    //private float _areaSizeX;
-    
     private bool _inArea = false;
-
     private bool _isRight = false;
-    
     private bool _stop = false;
-
+    private bool _isActive = false;
     private float _timeStart;
-    // Start is called before the first frame update
+    private CookQte _parentGameObject;
     void Start()
     {
+        // 获取父物体
+        Transform parentTransform = transform.parent;
+ 
+        // 如果父物体存在
+        if (parentTransform == null)
+        {
+           
+            Debug.Log("这是一个根物体，没有父物体。");
+        }
+        else
+        {
+            _parentGameObject = parentTransform.gameObject.GetComponent<CookQte>();
+        }
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-       // CheckVector();
+        if (!_isActive)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             _isRight = true;
@@ -43,6 +52,7 @@ public class Slider : MonoBehaviour
             if (_timeStart >= 3)
             {
                 _stop = true;
+                _parentGameObject.CheckVector();
             }
         }
         else
@@ -84,24 +94,7 @@ public class Slider : MonoBehaviour
     {
         _minXPos = minX;
         _maxXPos = maxX;
-        //_sizeX = sizeX;
-
     }
-
-    //public void SetAreaPos(Vector3 pos, float sizeX)
-    //{
-    //    _areaPos = pos;
-    //    _areaSizeX = sizeX;
-    //}
-
-    //private void CheckVector()
-    //{
-        //if (transform.position.x-_sizeX/2 < _areaPos.x-_areaSizeX/2 && transform.position.x+_sizeX/2 > _areaPos.x+_areaSizeX/2)
-        //{
-        //    _vector = true;
-        //}
-    //}
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -117,5 +110,23 @@ public class Slider : MonoBehaviour
         {
             _inArea = false;
         }
+    }
+
+    public void StartGame()
+    {
+        transform.position = _minXPos;
+        _isActive = true;
+    }
+
+    public void StopGame()
+    {
+        _isActive = false;
+        _inArea = false;
+        transform.position = _minXPos;
+    }
+
+    public float GetHoldTime()
+    {
+        return _timeStart;
     }
 }
