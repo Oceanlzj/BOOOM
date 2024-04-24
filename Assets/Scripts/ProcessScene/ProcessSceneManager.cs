@@ -22,6 +22,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public List<Vector3> SnapPoints;
   public List<bool> Snapped = new();
 
+  public Animator DoorAnimator;
+
   public TextMeshProUGUI TextArea;
 
   CookedDish cd;
