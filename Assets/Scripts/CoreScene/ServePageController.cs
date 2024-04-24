@@ -26,6 +26,8 @@ public class ServePageController : MonoBehaviour
   public int WorkerID = 0;
   public Worker worker;
 
+  public List<Worker> workers = new List<Worker>();
+  public SpecialWorker CurrentSpecialWorker;
 
 
   public GameObject PackFolder;
@@ -38,21 +40,43 @@ public class ServePageController : MonoBehaviour
   public SpriteRenderer HandSprite;
   public SpriteLibraryAsset HandLib;
 
+  public int Seed = 2039;
 
   public List<DishPack> packs = new();
   public List<DishPack> packOnPlate = new List<DishPack>();
   public List<Dish> DishOnPlate;
+
+  public int CurrentIndex = 0;
+  public bool AllDone = false;
+
+
   void Start()
   {
-    //current random inventory
-    Random.InitState(seed);
-    for (int i = 0; i < DishCount; i++)
-    {
-      PlayerStats.Instance().DishesInventory.Add(DataFactory.Instance().GetDishByID(i), Random.Range(1, 5));
-    }
-    NextWorker();
 
-    //end of temp block
+    //load Workers in
+
+    foreach (int WorkerID in PlayerStats.Instance().WorkersToday)
+    {
+      if (WorkerID >= 100)//special
+      {
+        workers.Add(PlayerStats.Instance().SpecialWorkers.Find(x => x.ID == WorkerID));
+      }
+      else
+      {
+        workers.Add(PlayerStats.Instance().Workers.Find(x => x.ID == WorkerID));
+      }
+    }
+
+    //System.Random random = new System.Random(seed);
+    //for (int i = workers.Count - 1; i >= 0; i--)
+    //{
+    //  int k = random.Next(0, i + 1);
+
+    //  Worker Temp = workers[k];
+    //  workers[k] = workers[i];
+    //  workers[i] = Temp;
+    //}
+
     int currentDish = 0;
     int order = 0;
     DishCount = PlayerStats.Instance().DishesInventory.Count;
@@ -93,17 +117,28 @@ public class ServePageController : MonoBehaviour
       currentDish++;
     }
     DishOnPlate = new List<Dish>();
+    NextWorker();
+
   }
 
   public void NextWorker()
   {
-    WorkerID = Random.Range(0, 7);
-    worker = DataFactory.Instance().GetWorkerByID(WorkerID);
-
-    HandSprite.sprite = HandLib.GetSprite("Worker", WorkerID.ToString());
+    if(CurrentIndex +1 >= workers.Count)
+    {
+      TextArea.text = "没有别的人了……\n\n结束一天……？";
+      AllDone = true;
+      return;
+    }
+    worker = workers[CurrentIndex];
+    HandSprite.sprite = HandLib.GetSprite("Worker", worker.ID.ToString());
     PlateHandAnimator.Play("HandPlateIn");
-    MsgBoxAnimator.Play("MsgPopIn");
-
+    if (worker is SpecialWorker)
+    {
+      CurrentSpecialWorker = (SpecialWorker)worker;
+      HandSprite.sprite = HandLib.GetSprite("Special", worker.ID.ToString());
+      MsgBox.SetActive(true);
+      MsgBoxAnimator.Play("MsgPopIn");
+    }
   }
   private void UpdateText()
   {

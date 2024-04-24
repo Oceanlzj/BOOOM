@@ -17,6 +17,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 {
   public IngredientItem dishProfab;
   public CookedDish CookedDish;
+  public QteManager qteManager;
   //public Transform startPoint;
   public Transform[] Pipes;
   public Animator[] PipeAnimator;
@@ -49,8 +50,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public int PipeNum1;
   public int PipeNum2;
 
-  private List<IngredientItem> _dishesList;
+  public List<IngredientItem> _dishesList;
   public int CurrentIndex = 0;
+
 
   public float seconds;       // 创建时间间隔
 
@@ -110,7 +112,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     if (CurrentIndex < PlayerStats.Instance().Ingredients.Count)
     {
       PipeAnimator[number].Play("PipeOut");
-      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position - new Vector3(0, 3, 0), Quaternion.identity);
+      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position + new Vector3(0, 0.5f, 0), Quaternion.identity);
       dish.Ingredient = PlayerStats.Instance().Ingredients[CurrentIndex];
       _dishesList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
@@ -182,7 +184,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       {
         StopText = true;
         TextArea.text = "无效的配方，请重试！";
-        if(_dishesList.Count == 2)
+        if(_dishesList.Count <= 3)
         {
           
           TextArea.text = "没有更多可料理的了……\n\n 去服务窗口吧";
