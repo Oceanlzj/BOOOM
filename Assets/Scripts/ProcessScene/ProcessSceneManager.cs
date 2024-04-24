@@ -18,6 +18,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public CookedDish CookedDish;
   //public Transform startPoint;
   public Transform[] Pipes;
+  public Animator[] PipeAnimator;
 
   public List<Vector3> SnapPoints;
   public List<bool> Snapped = new();
@@ -68,28 +69,23 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
     _dishesList = new List<IngredientItem>();
     _stutes = ManagerStutes.Creating;
-    StartCoroutine(StartNewDay());
+    StartNewDay();
+    DoorAnimator.Play("DoorOpen");
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (CurrentIndex < PlayerStats.Instance().Ingredients.Count && _stutes == ManagerStutes.Destroy && _dishesList.Count < Pipes.Length)
-    {
-      //CreateDish(_destroyNum);
-      //_destroyNum = 0;
-      //_stutes = ManagerStutes.Waiting;
-    }
+
   }
 
-  private IEnumerator StartNewDay()
+  private void StartNewDay()
   {
     int curNum = 0;
     while (curNum < Pipes.Length)
     {
       CreateIngredient(curNum);
       curNum++;
-      yield return new WaitForSeconds(seconds);
     }
 
     _stutes = ManagerStutes.Waiting;
@@ -108,7 +104,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   {
     if (CurrentIndex < PlayerStats.Instance().Ingredients.Count)
     {
-      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position, Quaternion.identity);
+      PipeAnimator[number].Play("PipeOut");
+      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position - new Vector3(0, 3, 0), Quaternion.identity);
       dish.Ingredient = PlayerStats.Instance().Ingredients[CurrentIndex];
       _dishesList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
