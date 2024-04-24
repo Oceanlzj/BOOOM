@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 08321cd91aff65e40b46d81da9abb926
+guid: fd60352f2d391a44fac0d615ecd09a9f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,22 +123,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pipe cap_0
+      name: a bunch of pipe_1
       rect:
         serializedVersion: 2
-        x: 165
-        y: 27
-        width: 205
-        height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 170
+        y: 9
+        width: 220
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4399edd4deef94b49a4a596a17dabc8d
-      internalID: 609372317
+      spriteID: 0f62694faf648f041abcc042ccfee4ec
+      internalID: 1055490507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: a bunch of pipe_2
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 11
+        width: 220
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d53f62de1964a4cb1eaaca9f50f8fa
+      internalID: -191985306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: a bunch of pipe_3
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 9
+        width: 220
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ce5e7cea86f2384a99870c829473d16
+      internalID: -904589305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: a bunch of pipe_4
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 9
+        width: 220
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eb37786d2f718749b645febab96614c
+      internalID: 1518101825
       vertices: []
       indices: 
       edges: []
@@ -154,10 +217,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      pipe cap_0: 609372317
-      pipe cap_1: 1517280887
-      pipe cap_2: 1968907433
-      pipe cap_3: 663344517
+      a bunch of pipe_0: 1375116772
+      a bunch of pipe_1: 1055490507
+      a bunch of pipe_2: -191985306
+      a bunch of pipe_3: -904589305
+      a bunch of pipe_4: 1518101825
+      a bunch of pipe_5: -1133157790
+      a bunch of pipe_6: -979637551
+      a bunch of pipe_7: -1213616937
+      a bunch of pipe_8: 2144992388
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
