@@ -44,7 +44,7 @@ public class Pointer : MonoBehaviour
         if (_isActive && Input.GetMouseButtonDown(0))
         {
             _stop = true;
-            _parentGameObject.CheckVector(_inArea);
+           // _parentGameObject.CheckVector(_inArea);
             
         }
     }
