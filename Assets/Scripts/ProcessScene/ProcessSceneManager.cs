@@ -24,6 +24,10 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   public TextMeshProUGUI TextArea;
 
+  CookedDish cd;
+
+  public bool StopText = false;
+
 
   public GameObject MachineFolder;
   public GameObject PrepFolder;
@@ -34,6 +38,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public List<Ingredient> IngredientsOnMachine;
 
   private bool NoMoreIngredient = false;
+  private bool GoNext = false;
+  private int Portion = 0;
 
   //public List
   public int PipeNum1;
@@ -132,26 +138,70 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   public void OnYesClicked()
   {
-    //cook ani
-    //cook destory
-    if (IngsOnMachine.Count < 2) { return; }
-    PipeNum1 = IngsOnMachine[0].PipeNum;
-    PipeNum2 = IngsOnMachine[1].PipeNum;
-    Dish dish = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
+    if (GoNext)
+    {
+      //goto serve scene(CoreScene)
 
-    Destroy(IngsOnMachine[1].gameObject);
-    Destroy(IngsOnMachine[0].gameObject);
+      return;
+    }
 
-    //cook Dish
-    CookedDish cd = Instantiate(CookedDish);
-    cd.Dish = dish;
-    IngredientsOnMachine.Clear();
+    if (Machine.enabled)
+    {
+      //cook ani
+      //cook destory
+      if (IngsOnMachine.Count < 2) { return; }
+      PipeNum1 = IngsOnMachine[0].PipeNum;
+      PipeNum2 = IngsOnMachine[1].PipeNum;
+      try
+      {
+        Dish dish = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
+        Portion = Random.Range(1, 3);
 
-    //new 
-    CreateIngredient(PipeNum1);
-    CreateIngredient(PipeNum2);
+        Destroy(IngsOnMachine[1].gameObject);
+        Destroy(IngsOnMachine[0].gameObject);
+
+        //cook Dish
+        cd = Instantiate(CookedDish);
+        cd.Dish = dish;
+        IngredientsOnMachine.Clear();
+        Machine.enabled = false;
+
+        //new 
+        CreateIngredient(PipeNum1);
+        CreateIngredient(PipeNum2);
+
+        TextArea.text = "确定压缩？";
 
 
+      }
+      catch
+      {
+        StopText = true;
+        TextArea.text = "无效的配方，请重试！";
+        if(_dishesList.Count == 2)
+        {
+          
+          TextArea.text = "没有更多可料理的了……\n\n 去服务窗口吧";
+          GoNext = true;
+        }
+        OnNoClicked();
+      }
+    }
+    else
+    {
+
+      PlayerStats.Instance().DishesInventory.Add(cd.Dish, Portion);
+      Destroy(cd.gameObject);
+      if (NoMoreIngredient && _dishesList.Count < 2)
+      {
+        TextArea.text = "没有更多食材了……\n\n 去服务窗口吧";
+        GoNext = true;
+      }
+      else
+      {
+        Machine.enabled = true;
+      }
+    }
 
 
 
@@ -159,9 +209,17 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   }
   public void OnNoClicked()
   {
-    foreach (IngredientItem item in IngsOnMachine)
+    if (Machine.enabled)
     {
-      item.UnSelect();
+      foreach (IngredientItem item in IngsOnMachine)
+      {
+        item.UnSelect();
+
+      }
+      IngredientsOnMachine.Clear();
+    }
+    else
+    {
 
     }
   }
