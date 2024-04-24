@@ -14,6 +14,10 @@ public class DialogManagement : MonoBehaviour
     private int ExitButtonDownNum;
     //public Text dialogContent;//电视机上的对话框里的文字部分
     public TW_Regular typeWriter;
+
+    private Coroutine ContinueCoroutine;
+    private Coroutine StartCoroutine;
+    private Coroutine ExitCoroutine;
     public enum TabSelect
     {
         StartGame,
@@ -113,15 +117,33 @@ public class DialogManagement : MonoBehaviour
     {
         nowStatus = TabSelect.StartGame;
         //dialogContent.text = "【背景故事】";
-        typeWriter.ORIGINAL_TEXT = "【背景故事】\n按下'YES'键开始吧";
-        typeWriter.StartTypewriter();
+        //typeWriter.ORIGINAL_TEXT = "【背景故事】\n按下'YES'键开始吧";
+        //typeWriter.StartTypewriter();
+        if (StartCoroutine == null)
+        {
+            StartCoroutine = StartCoroutine(StartGameTypeWriter());
+        }
+        else
+        {
+            StopCoroutine(StartCoroutine);
+            StartCoroutine = StartCoroutine(StartGameTypeWriter());
+        }
     }
     public void SwitchTabToContinueGame()
     {
         nowStatus = TabSelect.ContinueGame;
         //dialogContent.text = "又要开始新的一天的工作了吗？";
-        typeWriter.ORIGINAL_TEXT = "又要开始新的一天的工作了吗？\n好吧\n按下'YES'键开始吧";
-        typeWriter.StartTypewriter();
+        //typeWriter.ORIGINAL_TEXT = "又要开始新的一天的工作了吗？\n好吧\n按下'YES'键开始吧";
+        //typeWriter.StartTypewriter();
+        if(ContinueCoroutine==null)
+        {
+            ContinueCoroutine = StartCoroutine(ContinueGameTypeWriter());
+        }
+        else
+        {
+            StopCoroutine(ContinueCoroutine);
+            ContinueCoroutine = StartCoroutine(ContinueGameTypeWriter());
+        }
     }
     public void SwitchTabToSetting()
     {
@@ -134,7 +156,44 @@ public class DialogManagement : MonoBehaviour
     {
         nowStatus = TabSelect.Exit;
         //dialogContent.text = "快按下那个红色的关机按钮吧";
-        typeWriter.ORIGINAL_TEXT = "快按下那个红色的关机按钮吧\n提示：关机在屏幕正下方哦";
+        //typeWriter.ORIGINAL_TEXT = "快按下那个红色的关机按钮吧\n提示：关机在屏幕正下方哦";
+        //typeWriter.StartTypewriter();
+        if (ExitCoroutine == null)
+        {
+            ExitCoroutine = StartCoroutine(ExitGameTypeWriter());
+        }
+        else
+        {
+            StopCoroutine(ExitCoroutine);
+            ExitCoroutine = StartCoroutine(ExitGameTypeWriter());
+        }
+    }
+    private IEnumerator ContinueGameTypeWriter()
+    {
+        typeWriter.ORIGINAL_TEXT = "又要开始新的一天的工作了吗？";
         typeWriter.StartTypewriter();
+        yield return new WaitForSeconds(1.5f);
+        typeWriter.ORIGINAL_TEXT = "好吧";
+        typeWriter.StartTypewriter();
+        yield return new WaitForSeconds(0.6f);
+        typeWriter.ORIGINAL_TEXT = "按下'YES'键开始吧";
+        typeWriter.StartTypewriter();
+    }
+    private IEnumerator StartGameTypeWriter()
+    {
+        typeWriter.ORIGINAL_TEXT = "【背景故事】";
+        typeWriter.StartTypewriter();
+        yield return new WaitForSeconds(1.2f);
+        typeWriter.ORIGINAL_TEXT = "按下'YES'键开始吧";
+        typeWriter.StartTypewriter();
+    }
+    private IEnumerator ExitGameTypeWriter()
+    {
+        typeWriter.ORIGINAL_TEXT = "快按下那个红色的关机按钮吧";
+        typeWriter.StartTypewriter();
+        yield return new WaitForSeconds(1.3f);
+        typeWriter.ORIGINAL_TEXT = "提示：关机在屏幕正下方哦";
+        typeWriter.StartTypewriter();
+        
     }
 }
