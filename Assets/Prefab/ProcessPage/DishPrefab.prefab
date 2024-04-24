@@ -116,12 +116,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.4
+  m_Radius: 1
 --- !u!114 &7137081075857367799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,12 +134,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d1f154a3e39f544a43ea3a24574b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IngredientID: 0
+  initPos: {x: 0, y: 0, z: 0}
+  machine: {fileID: 0}
+  SnapPoints: []
+  Snapped: 
+  snappedIndex: -1
+  PipeNum: 0
   SR: {fileID: 1938928073491689277}
   Asset: {fileID: 7108339969198208228, guid: 420c037bf07701443919097eabf6cba1, type: 3}
   createSpeed: 5
   stopPos: {x: 0, y: 0, z: 0}
-  number: 0
   retrunTime: 0.3
 --- !u!50 &151329469053397021
 Rigidbody2D:
