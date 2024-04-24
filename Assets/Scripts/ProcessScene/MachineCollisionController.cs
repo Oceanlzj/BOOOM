@@ -10,7 +10,7 @@ public class MachineCollisionController : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-
+    ProcessSceneManager.StopText = false;
     if (collision.tag == "Dish")
     {
       IngredientItem ig = collision.gameObject.GetComponent<IngredientItem>();
@@ -33,7 +33,8 @@ public class MachineCollisionController : MonoBehaviour
       ProcessSceneManager.IngsOnMachine.Remove(ig);
       ProcessSceneManager.IngredientsOnMachine.Remove(ig.Ingredient);
     }
-    ProcessSceneManager.UpdateText();
+    if (!ProcessSceneManager.StopText)
+    { ProcessSceneManager.UpdateText(); }
   }
 
 

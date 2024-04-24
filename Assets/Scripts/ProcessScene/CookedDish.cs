@@ -1,6 +1,8 @@
 using Assets.BasicModule.Model;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 
@@ -23,6 +25,31 @@ public class CookedDish : MonoBehaviour
   {
 
   }
+  private void OnMouseDown()
+  {
+
+  }
+
+  private void OnMouseDrag()
+  {
+
+  }
+  private void OnMouseUp()
+  {
+
+  }
+
+  private void OnTriggerEnter2D(Collider2D collision)
+  {
+    
+  }
+
+  private void OnTriggerExit2D(Collider2D collision)
+  {
+    
+  }
+
+
 
 
 }
