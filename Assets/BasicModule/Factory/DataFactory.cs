@@ -58,6 +58,7 @@ namespace Assets.BasicModule.Factory
       return Dishes.Find(x => x.ID == Recipes[key]);
     }
 
+    
     public Worker GetWorkerByID(int ID)
     {
       return Workers.Find(x => x.ID == ID);
@@ -73,6 +74,11 @@ namespace Assets.BasicModule.Factory
       return Ingredients.Find(x => x.ID == ID);
     }
 
+    public int GetIngredientCount()
+    {
+      return Ingredients.Count();
+    }
+
     public static DataFactory Instance()
     {
       if (_DataFactory == null)
@@ -81,5 +87,22 @@ namespace Assets.BasicModule.Factory
       }
       return _DataFactory;
     }
+
+    public List<Worker> GetWorksers()
+    {
+      return _DataFactory.Workers;
+    }
+
+    public SpecialWorker GetSpecialWorker(int ID)
+    {
+      SpecialWorker worker = new SpecialWorker(GetWorkerByID(ID));
+      Request request = Tasks.Find(x => x.WorkerID == ID);
+      worker.BeginingTask = request;
+      worker.CurrentTaskID = request;
+
+      return worker;
+    }
+
+
   }
 }
