@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.BasicModule.Factory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -21,11 +22,21 @@ namespace Assets.BasicModule.Model
     public SpecialWorker(Worker worker)
     {
       object val;
-      foreach(var item in worker.GetType().GetProperties())
+      foreach (var item in worker.GetType().GetProperties())
       {
         val = item.GetValue(worker);
         item.SetValue(this, val);
       }
+
+      BeginingTask = DataFactory.Instance().getInitTaskByWorkerID(ID);
+      CurrentTaskID = BeginingTask;
+    }
+
+    public void NextRequest(bool IsYes)
+    {
+      CurrentTaskID = IsYes ?
+        DataFactory.Instance().getTaskByID(CurrentTaskID.NextID_Yes)
+        : DataFactory.Instance().getTaskByID(CurrentTaskID.NextID_No);
     }
   }
 }
