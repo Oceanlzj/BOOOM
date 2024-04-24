@@ -178,7 +178,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
         TextArea.text = "确定压缩？";
 
-
+        QteManager.Instance.StartQteGame();
       }
       catch
       {
