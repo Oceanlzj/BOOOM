@@ -26,11 +26,11 @@ public class DishPack : MonoBehaviour
 
   public List<Vector3> SnapPoints;
   public List<bool> Snapped;
-  public bool isServing = false;
   private Vector3 stopPos;   //≈Ã◊”Õ£÷πŒª÷√
   public Vector3 InitPos;   //≈Ã◊”Õ£÷πŒª÷√
   private Vector2 _distance;
 
+  public bool isServing = false;
   private Vector2 _mousePos;
   private PackStatus _status;
   private bool _mouseDown = false;

@@ -16,6 +16,16 @@ namespace Assets.BasicModule.Model
     [Category("Task"), Description("当前任务")]
     public Request CurrentTaskID { get; set; }
 
+    public SpecialWorker() { }
 
+    public SpecialWorker(Worker worker)
+    {
+      object val;
+      foreach(var item in worker.GetType().GetProperties())
+      {
+        val = item.GetValue(worker);
+        item.SetValue(this, val);
+      }
+    }
   }
 }

@@ -62,6 +62,7 @@ namespace Assets.BasicModule.Model
     [Category("Type"), Description("≤À∆∑ Ù–‘±∂¬ ")]
     public List<WorkerFoodFavor> FoodPopertyMultiplier { get; set; } = new List<WorkerFoodFavor>();
 
+
     public void Eat(Dish dish)
     {
       double mul = 0.0;
