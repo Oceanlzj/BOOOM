@@ -72,16 +72,16 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 335612845
   m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: ac6e41dd913f7944996adec86cce012d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.34, y: 0.15}
+  m_Size: {x: 30.000002, y: 30.000002}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6669409946202617809
@@ -220,8 +220,11 @@ MonoBehaviour:
   sr_sticker: {fileID: 588521692207813728}
   sr_Pack: {fileID: 338730595136419158}
   lib: {fileID: 7108339969198208228, guid: 420c037bf07701443919097eabf6cba1, type: 3}
+  SnapPoints: []
+  Snapped: 
+  isServing: 0
   InitPos: {x: 0, y: 0, z: 0}
-  retrunTime: 0.3
+  retrunTime: 0.1
 --- !u!50 &6638551764159736690
 Rigidbody2D:
   serializedVersion: 4
@@ -292,5 +295,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.2, y: 3.88}
+  m_Size: {x: 2.17, y: 3.75}
   m_EdgeRadius: 0
