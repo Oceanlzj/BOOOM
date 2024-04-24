@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public enum ManagerStutes
@@ -76,7 +77,11 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   // Update is called once per frame
   void Update()
   {
+    if(GoNext)
+    {
+      float alphaChange = 0.5f * Time.deltaTime;
 
+    }
   }
 
   private void StartNewDay()
@@ -140,7 +145,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     if (GoNext)
     {
       //goto serve scene(CoreScene)
-
+      SceneManager.LoadScene(4);
       return;
     }
 
