@@ -4,6 +4,7 @@ using Assets.BasicModule.Factory;
 using Assets.BasicModule.Model;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 public class CoreSceneController : MonoBehaviour
 {
@@ -30,10 +31,13 @@ public class CoreSceneController : MonoBehaviour
       {
         pack.Hide();
       }
+
+      ConversationPage.GetComponent<ConversationController>().NewIn();
       page.FlipAnimator.Play("ServePageOut");
       page.MsgBox.SetActive(false);
       page.MsgBoxAnimator.Play("MsgPopOut");
       ConversationPage.SetActive(true);
+
 
       CurrentPage = ConversationPage;
     }
@@ -78,13 +82,14 @@ public class CoreSceneController : MonoBehaviour
     ServePageController Spage = ServePage.GetComponent<ServePageController>();
     ConversationController Cpage = ConversationPage.GetComponent<ConversationController>();
 
+    Spage.MsgBox.SetActive(false);
     Spage.FlipAnimator.Play("ServePageIn");
 
     foreach (DishPack pack in Spage.packs)
     {
       pack.gameObject.SetActive(true);
     }
-    Spage.MsgBox.SetActive(true);
+    Spage.MsgBox.SetActive(false);
     ConversationPage.SetActive(false);
 
     CurrentPage = ServePage;
@@ -94,15 +99,26 @@ public class CoreSceneController : MonoBehaviour
   {
     ServePageController Spage = ServePage.GetComponent<ServePageController>();
     ConversationController Cpage = ConversationPage.GetComponent<ConversationController>();
+
     if (CurrentPage == ServePage)
     {
-      foreach (DishPack pack in Spage.packOnPlate)
+      if (Spage.AllDone)
       {
-        pack.isServing = true;
+        //cut to next
       }
-      Spage.PlateHandAnimator.Play("HandPlateOut");
-      Spage.MsgBoxAnimator.Play("MsgPopOut");
-      return;
+      else
+      {
+        foreach (DishPack pack in Spage.packOnPlate)
+        {
+          pack.isServing = true;
+        }
+        Spage.MsgBox.SetActive(false);
+        Spage.PlateHandAnimator.Play("HandPlateOut");
+        Spage.MsgBoxAnimator.Play("MsgPopOut");
+
+        Spage.CurrentIndex++;
+        return;
+      }
     }
 
     if (CurrentPage == ConversationPage)
@@ -112,6 +128,7 @@ public class CoreSceneController : MonoBehaviour
       {
         //Add effect
         //return to serve
+        Spage.CurrentSpecialWorker.NextRequest(true);
         ConversationToServe();
 
 
@@ -121,34 +138,37 @@ public class CoreSceneController : MonoBehaviour
         Cpage.UpdateALine();
 
       }
+
       return;
     }
   }
 
   public void OnNoClicked()
   {
+    ServePageController Spage = ServePage.GetComponent<ServePageController>();
+    ConversationController Cpage = ConversationPage.GetComponent<ConversationController>();
     if (CurrentPage == ServePage)
     {
-      ServePageController page = ServePage.GetComponent<ServePageController>();
-
-      foreach (DishPack pack in page.packOnPlate)
+      foreach (DishPack pack in Spage.packOnPlate)
       {
         pack.UnServerFromPlate();
       }
+
       return;
     }
 
     if (CurrentPage == ConversationPage)
     {
-      ConversationController page = ConversationPage.GetComponent<ConversationController>();
-      if (page.ConversationEnd)
+      if (Cpage.ConversationEnd)
       {
         //add effect
+        Spage.CurrentSpecialWorker.NextRequest(false);
         //return to serve
+        ConversationToServe();
       }
       else
       {
-        page.UpdateALine();
+        Cpage.UpdateALine();
       }
     }
 

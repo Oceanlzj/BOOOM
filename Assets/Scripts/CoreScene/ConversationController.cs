@@ -18,7 +18,7 @@ public class ConversationController : MonoBehaviour
   public TextMeshProUGUI TalkTextArea;
   public TextMeshProUGUI NarratorArea;
 
-  public Worker Worker;
+  public SpecialWorker Worker;
   public Request Request;
 
   private int CurrentIndex = 0;
@@ -27,6 +27,12 @@ public class ConversationController : MonoBehaviour
 
   public void UpdateALine()
   {
+    if (CurrentIndex + 1 > Request.ConversationSentences.Count)
+    {
+      ConversationEnd = true;
+      return;
+    }
+
     if (Request.ConversationSentences[CurrentIndex].IsTalk)
     {
       TalkTextArea.text = Request.ConversationSentences[CurrentIndex].Line;
@@ -38,26 +44,31 @@ public class ConversationController : MonoBehaviour
       TalkTextArea.text = "";
     }
     CurrentIndex++;
-    if(CurrentIndex >= Request.ConversationSentences.Count)
-    {
-      ConversationEnd = true;
-    }
+
+  }
+
+  public void NewIn()
+  {
+    ServePageController sp = ServeScene.GetComponent<ServePageController>();
+    Worker = sp.CurrentSpecialWorker;
+    Request = sp.CurrentSpecialWorker.CurrentTaskID;
+    WorkerSprite.sprite = SpriteLibrary.GetSprite(Worker.ID.ToString(), "0");
+    UpdateALine();
   }
 
   // Start is called before the first frame update
   void Start()
   {
-    Worker = DataFactory.Instance().GetWorkerByID(0);
-    Request = DataFactory.Instance().getTaskByID(TaskID);
+    NewIn();
 
-    WorkerSprite.sprite = SpriteLibrary.GetSprite(WorkerID.ToString(), "0");
-    UpdateALine();
+
+
   }
 
 
   private void OnMouseDown()
   {
-    UpdateALine() ;
+    UpdateALine();
   }
 
   // Update is called once per frame

@@ -9,7 +9,7 @@ using UnityEngine.U2D.Animation;
 
 public enum DishStatus
 {
-  Unknow, Creating, Waiting, Destroy
+  Unknow, Creating, Waiting, Destroy, Returning
 }
 
 public class IngredientItem : MonoBehaviour
@@ -46,7 +46,10 @@ public class IngredientItem : MonoBehaviour
   private Vector3 _velocity = Vector3.zero;
   public float retrunTime = 0.3f;
 
-  private bool OnMachine = false;
+  public bool OnMachine = false;
+
+  public float OnMouseDownScale;
+  public Transform Transform;
 
   public void SetPos(Vector3 _stopPos)
   {
@@ -91,12 +94,12 @@ public class IngredientItem : MonoBehaviour
     {
       if (!_mouseDown)
       {
+        ///_status = DishStatus.Returning;
         transform.position = Vector3.SmoothDamp(transform.position, stopPos, ref _velocity, retrunTime);
       }
     }
     else
     {
-
     }
   }
 
@@ -111,6 +114,16 @@ public class IngredientItem : MonoBehaviour
 
   }
 
+  private void OnMouseEnter()
+  {
+    Transform.localScale += Vector3.one * OnMouseDownScale;
+  }
+
+  private void OnMouseExit()
+  {
+    Transform.localScale -= Vector3.one * OnMouseDownScale;
+  }
+
   private void OnMouseDrag()
   {
     if (_status == DishStatus.Waiting)
@@ -121,6 +134,7 @@ public class IngredientItem : MonoBehaviour
 
   private void OnMouseUp()
   {
+
     _mouseDown = false;
     SR.sortingOrder = OrderInLayerLast;
 
@@ -134,19 +148,24 @@ public class IngredientItem : MonoBehaviour
 
       int index = Distance.IndexOf(Distance.Min());
 
-      if (Snapped[index])
+      if (snappedIndex == -1)
       {
-        OnMachine = false;
-      }
-      else
-      {
-        if (snappedIndex != -1)
+        if (Snapped[index])
         {
-          Snapped[snappedIndex] = false;
+          OnMachine = false;
         }
-        stopPos = SnapPoints[index];
-        Snapped[index] = true;
-        snappedIndex = index;
+        else
+        {
+          if (snappedIndex != -1)
+          {
+            Snapped[snappedIndex] = false;
+          }
+          stopPos = SnapPoints[index];
+          Snapped[index] = true;
+          snappedIndex = index;
+        }
+
+
       }
 
       //stopPos = transform.position;
@@ -158,18 +177,19 @@ public class IngredientItem : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D other)
   {
-    if (other == machine)
+    if (other.tag == "Machine")
     {
       OnMachine = true;
     }
   }
 
+
   private void OnTriggerExit2D(Collider2D other)
   {
-    if (other ==  machine)
+    if (other.tag == "Machine" && OnMachine)
     {
-      OnMachine = false;
       stopPos = initPos;
+      OnMachine = false;
 
       if (snappedIndex != -1)
       {

@@ -2,6 +2,7 @@ using Assets.BasicModule.Factory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 namespace Assets.BasicModule.Model
 {
   [Serializable]
@@ -14,8 +15,10 @@ namespace Assets.BasicModule.Model
     public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
 
     private static PlayerStats playerStats;
-    private static int Seed = 20;
+    private static int Seed = 1024;
     private static Random rand = new Random(Seed);
+
+    public int CurrentWorkerID;
 
     public void SetSeed(int seed)
     {
@@ -70,21 +73,21 @@ namespace Assets.BasicModule.Model
       for (int i = 0; i < WorkersCountsToday; i++)
       {
         int index = rand.Next(0, Workers.Count);
-        while (WorkersToday.Contains(index))
+        while (WorkersToday.Contains(Workers[index].ID))
         {
           index = rand.Next(0, Workers.Count);
         }
-        WorkersToday.Add(index);
+        WorkersToday.Add(Workers[index].ID);
       }
 
       for (int i = 0; i < SpecialWorkerCountsToday; i++)
       {
-        int index = rand.Next(100, 100 + SpecialWorkers.Count);
-        while (WorkersToday.Contains(index))
+        int index = rand.Next(0, SpecialWorkers.Count);
+        while (WorkersToday.Contains(SpecialWorkers[index].ID))
         {
-          index = rand.Next(100, 100 + SpecialWorkers.Count);
+          index = rand.Next(0, SpecialWorkers.Count);
         }
-        WorkersToday.Add(index);
+        WorkersToday.Add(SpecialWorkers[index].ID);
       }
 
       for(int i = 0; i < IngredientCountToday; i++)
