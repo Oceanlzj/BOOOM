@@ -38,14 +38,14 @@ public class DialogManagement : MonoBehaviour
     {
         if(nowStatus==TabSelect.StartGame)
         {
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(3);
         }
         else if (nowStatus == TabSelect.ContinueGame)
         {
                 //
                 //
                 //存档读取逻辑+跳转到相应的页面
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene(3);
         }
         else if (nowStatus == TabSelect.Setting)
         {
