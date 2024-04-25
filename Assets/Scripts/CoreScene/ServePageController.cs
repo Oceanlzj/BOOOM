@@ -123,7 +123,7 @@ public class ServePageController : MonoBehaviour
 
   public void NextWorker()
   {
-    if(CurrentIndex +1 >= workers.Count)
+    if(CurrentIndex +1 > workers.Count)
     {
       TextArea.text = "没有别的人了……\n\n结束一天……？";
       AllDone = true;

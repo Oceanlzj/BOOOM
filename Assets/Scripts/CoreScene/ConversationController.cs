@@ -27,7 +27,7 @@ public class ConversationController : MonoBehaviour
 
   public void UpdateALine()
   {
-    if (CurrentIndex + 1 >= Request.ConversationSentences.Count)
+    if (CurrentIndex + 1 > Request.ConversationSentences.Count)
     {
       ConversationEnd = true;
       return;
