@@ -5,6 +5,7 @@ using Assets.BasicModule.Model;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.SceneManagement;
 
 public class CoreSceneController : MonoBehaviour
 {
@@ -104,7 +105,7 @@ public class CoreSceneController : MonoBehaviour
     {
       if (Spage.AllDone)
       {
-        //cut to next
+                SceneManager.LoadScene(2);
       }
       else
       {
