@@ -58,7 +58,7 @@ namespace Assets.BasicModule.Factory
       return Dishes.Find(x => x.ID == Recipes[key]);
     }
 
-    
+
     public Worker GetWorkerByID(int ID)
     {
       return Workers.Find(x => x.ID == ID);
@@ -67,6 +67,11 @@ namespace Assets.BasicModule.Factory
     public Model.Request getTaskByID(int ID)
     {
       return Tasks.Find(x => x.ID == ID);
+    }
+
+    public Request getInitTaskByWorkerID(int ID)
+    {
+      return Tasks.Find(x => x.WorkerID == ID);
     }
 
     public Ingredient GetIngedientByID(int ID)
