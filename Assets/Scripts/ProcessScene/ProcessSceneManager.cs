@@ -60,8 +60,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   private ManagerStutes _stutes;
 
   void Start()
-  {
-    PlayerStats.Instance().NewDay();
+  {    PlayerStats.Instance().NewDay();
 
     Snapped.Clear();
     for (int j = 0; j < SnapPoints.Count; j++)
