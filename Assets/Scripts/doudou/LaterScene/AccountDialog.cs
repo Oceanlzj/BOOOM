@@ -48,7 +48,8 @@ public class AccountDialog : MonoBehaviour
         }
         else if (nowStatus == TabSelect.NewDay)
         {
-            
+
+            SceneManager.LoadScene(3);
         }
         else if(nowStatus==TabSelect.Close)
         {
