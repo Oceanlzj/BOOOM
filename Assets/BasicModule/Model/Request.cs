@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.Rendering;
 
 namespace Assets.BasicModule.Model
 {
@@ -26,11 +22,11 @@ namespace Assets.BasicModule.Model
     public List<Conversation> ConversationSentences { get; set; } = new List<Conversation>();
 
     [Category("Effect_Yes"), Description("健康度影响")]
-    public double HealthEffect_Yes { get; set; }
+    public double HealthEffect_Yes { get; set; } = 0;
     [Category("Effect_Yes"), Description("饱食度影响")]
-    public double SatietyEffect_Yes { get; set; }
+    public double SatietyEffect_Yes { get; set; } = 0;
     [Category("Effect_Yes"), Description("San值影响")]
-    public double SanityEffect_Yes { get; set; }
+    public double SanityEffect_Yes { get; set; } = 0;
 
     [Category("Effect_NO"), Description("健康度影响")]
     public double HealthEffect_NO { get; set; } = 0;

@@ -11,21 +11,32 @@ namespace Assets.BasicModule.Model
     public List<Request> Tasks { get; set; } = new List<Request>();
     public int CurrentDay { get; set; } = 0;
 
-    public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-    public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
+    public double Revolt { get; set; } = 10;
+
 
     private static PlayerStats playerStats;
-    private static int Seed = 1024;
-    private static Random rand = new Random(Seed);
+    private static Random rand;
+
 
     public int CurrentWorkerID;
+    public double Sanity { get; set; } = 50;
 
-    public void SetSeed(int seed)
-    {
-      Seed = seed;
-    }
+
+    public int WorkersCountsToday { get; set; } = 1;
+    public int SpecialWorkerCountsToday { get; set; } = 3;
+    public int IngredientCountToday { get; set; } = 8;
+
+
+    public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+    public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
+    public List<Worker> Workers { get; set; } = new();
+    public List<SpecialWorker> SpecialWorkers { get; set; } = new();
+    public HashSet<int> WorkersToday { get; set; } = new();
+
+
     private PlayerStats()
     {
+      rand = new Random((int)DateTime.Now.Ticks);
       foreach (Worker worker in DataFactory.Instance().GetWorksers())
       {
         if (worker.ID >= 100)
@@ -49,20 +60,11 @@ namespace Assets.BasicModule.Model
       return playerStats;
     }
 
+    public double UpdateRevolt()
+    {
 
-
-
-    public double Sanity { get; set; } = 50;
-
-    public List<Worker> Workers { get; set; } = new();
-    public List<SpecialWorker> SpecialWorkers { get; set; } = new();
-
-    public int WorkersCountsToday { get; set; } = 1;
-    public int SpecialWorkerCountsToday { get; set; } = 2;
-    public int IngredientCountToday { get; set; } = 6;
-    public HashSet<int> WorkersToday { get; set; } = new();
-
-
+      return Revolt;
+    }
 
     public void NewDay()
     {
@@ -90,7 +92,7 @@ namespace Assets.BasicModule.Model
         WorkersToday.Add(SpecialWorkers[index].ID);
       }
 
-      for(int i = 0; i < IngredientCountToday; i++)
+      for (int i = 0; i < IngredientCountToday; i++)
       {
         Ingredients.Add(DataFactory.Instance().GetIngedientByID(rand.Next(0, DataFactory.Instance().GetIngredientCount())));
       }

@@ -60,7 +60,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   private ManagerStutes _stutes;
 
   void Start()
-  {    PlayerStats.Instance().NewDay();
+  {
+    PlayerStats.Instance().NewDay();
 
     Snapped.Clear();
     for (int j = 0; j < SnapPoints.Count; j++)
@@ -78,7 +79,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   // Update is called once per frame
   void Update()
   {
-    if(GoNext)
+    if (GoNext)
     {
       float alphaChange = 0.5f * Time.deltaTime;
 
@@ -183,9 +184,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       {
         StopText = true;
         TextArea.text = "无效的配方，请重试！";
-        if(_dishesList.Count <= 3)
+        if (_dishesList.Count <= 3)
         {
-          
+
           TextArea.text = "没有更多可料理的了……\n\n 去服务窗口吧";
           GoNext = true;
         }
@@ -194,8 +195,14 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     }
     else
     {
-
-      PlayerStats.Instance().DishesInventory.Add(cd.Dish, Portion);
+      if (PlayerStats.Instance().DishesInventory.ContainsKey(cd.Dish))
+      {
+        PlayerStats.Instance().DishesInventory[cd.Dish] += Portion;
+      }
+      else
+      {
+        PlayerStats.Instance().DishesInventory.Add(cd.Dish, Portion);
+      }
       Destroy(cd.gameObject);
       if (NoMoreIngredient && _dishesList.Count < 2)
       {

@@ -10,6 +10,7 @@ namespace Assets.BasicModule.Model
   {
     Normal = 0,
     Acid = 1,
-    Mechanical = 2//and more...
+    Mechanical = 2,
+    RadioActive = 3//and more...
   }
 }
