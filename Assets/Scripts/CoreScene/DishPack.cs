@@ -81,6 +81,11 @@ public class DishPack : MonoBehaviour
   {
     this.gameObject.SetActive(false);
   }
+
+  public void UnHide()
+  {
+    this.gameObject.SetActive(true);
+  }
   public void UnServerFromPlate()
   {
     isServing = false;
