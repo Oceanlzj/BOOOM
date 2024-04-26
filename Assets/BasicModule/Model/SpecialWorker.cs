@@ -15,7 +15,7 @@ namespace Assets.BasicModule.Model
     public Request BeginingTask { get; set; }
 
     [Category("Task"), Description("当前任务")]
-    public Request CurrentTaskID { get; set; }
+    public Request CurrentTask { get; set; }
 
     public SpecialWorker() { }
 
@@ -29,14 +29,14 @@ namespace Assets.BasicModule.Model
       }
 
       BeginingTask = DataFactory.Instance().getInitTaskByWorkerID(ID);
-      CurrentTaskID = BeginingTask;
+      CurrentTask = BeginingTask;
     }
 
     public void NextRequest(bool IsYes)
     {
-      CurrentTaskID = IsYes ?
-        DataFactory.Instance().getTaskByID(CurrentTaskID.NextID_Yes)
-        : DataFactory.Instance().getTaskByID(CurrentTaskID.NextID_No);
+      CurrentTask = IsYes ?
+        DataFactory.Instance().getTaskByID(CurrentTask.NextID_Yes)
+        : DataFactory.Instance().getTaskByID(CurrentTask.NextID_No);
     }
   }
 }

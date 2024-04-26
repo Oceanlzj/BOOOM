@@ -21,12 +21,6 @@ namespace Assets.BasicModule.Model
     [Category("Description"), Description("食材名")]
     public string Name { get; set; }
     [Category("Description"), Description("食材描述")]
-    public string Description { get; set; }
-    [Category("Value"), Description("食材健康值")]
-    public double IngredientHealth { get; set; }
-    [Category("Value"), Description("食材San值")]
-    public double IngredientSanity { get; set; }
-    [Category("Value"), Description("食材饱食度")]
     public double IngredientSatiety { get; set; }
     [Category("Type"), Description("食材特殊属性")]
     public FoodProperty IngredientProperty { get; set; }
@@ -37,9 +31,7 @@ namespace Assets.BasicModule.Model
       ID = iD;
       Type = type;
       Name = name;
-      Description = description;
-      IngredientHealth = ingredientHealth;
-      IngredientSanity = ingredientSanity;
+      Name = name;
       IngredientSatiety = ingredientSatiety;
       IngredientProperty = ingredientProperty;
     }

@@ -427,6 +427,7 @@ MonoBehaviour:
   DishPack: {fileID: 899884633816482437, guid: 84a6c34e50ee05841b991a4b9f681928, type: 3}
   TextArea: {fileID: 259175395}
   WorkerID: 0
+  workers: []
   PackFolder: {fileID: 400034331}
   PlateFolder: {fileID: 1802788539}
   MsgBox: {fileID: 74999202}
@@ -435,9 +436,12 @@ MonoBehaviour:
   FlipAnimator: {fileID: 81082304}
   HandSprite: {fileID: 733675865}
   HandLib: {fileID: 7108339969198208228, guid: 87e6881377cf34b48bda9a0af38fba06, type: 3}
+  Seed: 2039
   packs: []
   packOnPlate: []
   DishOnPlate: []
+  CurrentIndex: 0
+  AllDone: 0
 --- !u!50 &81082303
 Rigidbody2D:
   serializedVersion: 4
@@ -2155,6 +2159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ServePage: {fileID: 81082300}
   ConversationPage: {fileID: 2118536128}
+  PlateCollider: {fileID: 564135676}
 --- !u!4 &1303358549
 Transform:
   m_ObjectHideFlags: 0

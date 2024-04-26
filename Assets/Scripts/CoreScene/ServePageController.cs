@@ -67,15 +67,15 @@ public class ServePageController : MonoBehaviour
       }
     }
 
-    //System.Random random = new System.Random(seed);
-    //for (int i = workers.Count - 1; i >= 0; i--)
-    //{
-    //  int k = random.Next(0, i + 1);
+    System.Random random = new System.Random(seed);
+    for (int i = workers.Count - 1; i >= 0; i--)
+    {
+      int k = random.Next(0, i + 1);
 
-    //  Worker Temp = workers[k];
-    //  workers[k] = workers[i];
-    //  workers[i] = Temp;
-    //}
+      Worker Temp = workers[k];
+      workers[k] = workers[i];
+      workers[i] = Temp;
+    }
 
     int currentDish = 0;
     int order = 0;
@@ -123,7 +123,7 @@ public class ServePageController : MonoBehaviour
 
   public void NextWorker()
   {
-    if(CurrentIndex +1 > workers.Count)
+    if (CurrentIndex + 1 > workers.Count)
     {
       TextArea.text = "没有别的人了……\n\n结束一天……？";
       AllDone = true;
@@ -136,8 +136,11 @@ public class ServePageController : MonoBehaviour
     {
       CurrentSpecialWorker = (SpecialWorker)worker;
       HandSprite.sprite = HandLib.GetSprite("Special", worker.ID.ToString());
-      MsgBox.SetActive(true);
-      MsgBoxAnimator.Play("MsgPopIn");
+      if (CurrentSpecialWorker.CurrentTask != null)
+      {
+        MsgBox.SetActive(true);
+        MsgBoxAnimator.Play("MsgPopIn");
+      }
     }
   }
   private void UpdateText()
@@ -151,12 +154,9 @@ public class ServePageController : MonoBehaviour
   }
   private void OnTriggerEnter2D(Collider2D collision)
   {
-
     if (collision.tag == "Dish")
     {
       DishPack dp = collision.gameObject.GetComponent<DishPack>();
-
-
       dp.transform.parent = PlateFolder.transform;
       packOnPlate.Add(dp);
       DishOnPlate.Add(dp.dish);
@@ -170,6 +170,7 @@ public class ServePageController : MonoBehaviour
     {
       DishPack dp = collision.gameObject.GetComponent<DishPack>();
       dp.transform.parent = PackFolder.transform;
+      packOnPlate.Remove(dp);
       DishOnPlate.Remove(dp.dish);
     }
     UpdateText();

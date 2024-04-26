@@ -103,7 +103,7 @@ namespace Assets.BasicModule.Factory
       SpecialWorker worker = new SpecialWorker(GetWorkerByID(ID));
       Request request = Tasks.Find(x => x.WorkerID == ID);
       worker.BeginingTask = request;
-      worker.CurrentTaskID = request;
+      worker.CurrentTask = request;
 
       return worker;
     }
