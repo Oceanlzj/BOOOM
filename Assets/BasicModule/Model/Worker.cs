@@ -1,7 +1,8 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using Unity.Mathematics;
 
 namespace Assets.BasicModule.Model
 {
@@ -11,7 +12,7 @@ namespace Assets.BasicModule.Model
     public enum WorkerType
     {
       None = 0,
-      Human = 1,//and more£¬
+      Human = 1,//and moreï¼Œ
     }
 
     public enum WorkerStatus
@@ -26,97 +27,97 @@ namespace Assets.BasicModule.Model
       public double Multiplier { get; set; }
     }
 
-    [Category("[0] ID"), Description("Î¨Ò»ID")]
+    [Category("[0] ID"), Description("å”¯ä¸€ID")]
     public int ID { get; set; }
 
-    [Category("[1] Description"), Description("Ô±¹¤Ãû")]
+    [Category("[1] Description"), Description("å‘˜å·¥å")]
     public string Name { get; set; }
-    [Category("[1] Description"), Description("Ô±¹¤ÃèÊö")]
+    [Category("[1] Description"), Description("å‘˜å·¥æè¿°")]
     public string Description { get; set; }
 
-    //½¡¿µ¶È
-    [Category("[2] Health"), Description("³õÊ¼½¡¿µÖµ"), DisplayName("[0] Health")]
+    //å¥åº·åº¦
+    [Category("[2] Health"), Description("åˆå§‹å¥åº·å€¼"), DisplayName("[0] Health")]
     public double Health { get; set; }
-    [Category("[2] Health"), Description("½¡¿µÖµÉÏÏŞ"), DisplayName("[1] HealthMax")]
+    [Category("[2] Health"), Description("å¥åº·å€¼ä¸Šé™"), DisplayName("[1] HealthMax")]
     public double HealthMax { get; set; }
-    [Category("[2] Health"), Description("½¡¿µÖµ±ä»¯Á¿"), DisplayName("[2] BasicHealthDecrease")]
+    [Category("[2] Health"), Description("å¥åº·å€¼å˜åŒ–é‡"), DisplayName("[2] BasicHealthDecrease")]
     public double BasicHealthDecrease { get; set; }
-    [Category("[2] San"), Description("±ê×¼»¯HPµÍ±ê×¼ : ([0, 1])"), DisplayName("[3] NormalizedLowHealthBar")]
+    [Category("[2] San"), Description("æ ‡å‡†åŒ–HPä½æ ‡å‡† : ([0, 1])"), DisplayName("[3] NormalizedLowHealthBar")]
     public double NormalizedLowHealthBar { get; set; }
 
-    [Category("[2] Health"), Description("´æ»î")]
+    [Category("[2] Health"), Description("å­˜æ´»")]
     public bool IsAlive { get; set; } = true;
 
-    //±¥Ê³¶È
-    [Category("[3] Satiety"), Description("³õÊ¼±¥Ê³¶È"), DisplayName("[0] Satiety")]
+    //é¥±é£Ÿåº¦
+    [Category("[3] Satiety"), Description("åˆå§‹é¥±é£Ÿåº¦"), DisplayName("[0] Satiety")]
     public double Satiety { get; set; }
-    [Category("[3] Satiety"), Description("±¥Ê³¶ÈÉÏÏŞ"), DisplayName("[1] SatietyMax")]
+    [Category("[3] Satiety"), Description("é¥±é£Ÿåº¦ä¸Šé™"), DisplayName("[1] SatietyMax")]
     public double SatietyMax { get; set; }
-    [Category("[3] Satiety"), Description("±¥Ê³¶È±ä»¯Á¿"), DisplayName("[2] BasicSatietyDecrease")]
+    [Category("[3] Satiety"), Description("é¥±é£Ÿåº¦å˜åŒ–é‡"), DisplayName("[2] BasicSatietyDecrease")]
     public double BasicSatietyDecrease { get; set; }
-    [Category("[3] San"), Description("±ê×¼»¯SatµÍ±ê×¼ : ([0, 1])"), DisplayName("[3] NormalizedLowSatietyBar")]
+    [Category("[3] San"), Description("æ ‡å‡†åŒ–Satä½æ ‡å‡† : ([0, 1])"), DisplayName("[3] NormalizedLowSatietyBar")]
     public double NormalizedLowSatietyBar { get; set; }
 
 
     //San
-    [Category("[4] San"), Description("SanÖµ"), DisplayName("[0] Sanity")]
+    [Category("[4] San"), Description("Sanå€¼"), DisplayName("[0] Sanity")]
     public double Sanity { get; set; }
-    [Category("[4] San"), Description("SanÖµÉÏÏŞ"), DisplayName("[1] SanityMax")]
+    [Category("[4] San"), Description("Sanå€¼ä¸Šé™"), DisplayName("[1] SanityMax")]
     public double SanityMax { get; set; }
-    [Category("[4] San"), Description("SanÖµ±ä»¯Á¿"), DisplayName("[2] BasicSanityDecrase")]
+    [Category("[4] San"), Description("Sanå€¼å˜åŒ–é‡"), DisplayName("[2] BasicSanityDecrase")]
     public double BasicSanityDecrase { get; set; }
-    [Category("[4] San"), Description("±ê×¼»¯SanµÍ±ê×¼ : ([0, 1])"), DisplayName("[3] NormalizedLowSanityBar")]
+    [Category("[4] San"), Description("æ ‡å‡†åŒ–Sanä½æ ‡å‡† : ([0, 1])"), DisplayName("[3] NormalizedLowSanityBar")]
     public double NormalizedLowSanBar { get; set; }
 
 
 
-    [Category("[5] Type"), Description("Ô±¹¤ÉúÎïÀàĞÍ(used)")]
+    [Category("[5] Type"), Description("å‘˜å·¥ç”Ÿç‰©ç±»å‹(used)")]
     public WorkerType Type { get; set; }
-    [Category("[5] Type"), Description("²ËÆ·ÊôĞÔ±¶ÂÊ")]
+    [Category("[5] Type"), Description("èœå“å±æ€§å€ç‡")]
     public List<WorkerFoodFavor> FoodPopertyMultiplier { get; set; } = new List<WorkerFoodFavor>();
 
-    [Category("[6] Revolt"), Description("Ô±¹¤ÊÇ·ñ·´¿¹")]
+    [Category("[6] Revolt"), Description("å‘˜å·¥æ˜¯å¦åæŠ—")]
     public bool WillRevolt { get; set; }
 
 
-    [Category("[7] Lines"), Description("Ô±¹¤±ê×¼¶Ô»° - ³õ´Î¼ûÃæ"), DisplayName("[0] HelloLines")]
+    [Category("[7] Lines"), Description("å‘˜å·¥æ ‡å‡†å¯¹è¯ - åˆæ¬¡è§é¢"), DisplayName("[0] HelloLines")]
     public List<string> HelloLines { get; set; } = new List<string>();
 
-    [Category("[7] Lines"), Description("Ô±¹¤±ê×¼¶Ô»° - SanÕı³£"), DisplayName("[1] StandardLines_NormalSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥æ ‡å‡†å¯¹è¯ - Sanæ­£å¸¸"), DisplayName("[1] StandardLines_NormalSAN")]
     public List<string> StandardLines_NormalSAN { get; set; } = new List<string>();
-    [Category("[7] Lines"), Description("Ô±¹¤±ê×¼¶Ô»° - SanµÍÏÂ"), DisplayName("[2] StandardLines_LowlSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥æ ‡å‡†å¯¹è¯ - Sanä½ä¸‹"), DisplayName("[2] StandardLines_LowlSAN")]
     public List<string> StandardLines_LowlSAN { get; set; } = new();
 
 
-    [Category("[7] Lines"), Description("Ô±¹¤µÍ½¡¿µ¶È¶Ô»° - SanÕı³£"), DisplayName("[3] LowHealthLines_NormalSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥ä½å¥åº·åº¦å¯¹è¯ - Sanæ­£å¸¸"), DisplayName("[3] LowHealthLines_NormalSAN")]
     public List<string> LowHealthLines_NormalSAN { get; set; } = new();
-    [Category("[7] Lines"), Description("Ô±¹¤µÍ½¡¿µ¶È¶Ô»° - SanµÍÏÂ"), DisplayName("[4] LowHealthLines_LowSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥ä½å¥åº·åº¦å¯¹è¯ - Sanä½ä¸‹"), DisplayName("[4] LowHealthLines_LowSAN")]
     public List<string> LowHealthLines_LowSAN { get; set; } = new();
 
-    [Category("[7] Lines"), Description("Ô±¹¤µÍ±¥Ê³¶È¶Ô»° - SanÕı³£"), DisplayName("[5] LowSatietyLines_NormalSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥ä½é¥±é£Ÿåº¦å¯¹è¯ - Sanæ­£å¸¸"), DisplayName("[5] LowSatietyLines_NormalSAN")]
     public List<string> LowSatietyLines_NormalSAN { get; set; } = new();
-    [Category("[7] Lines"), Description("Ô±¹¤µÍ±¥Ê³¶È¶Ô»° - SanµÍÏÂ"), DisplayName("[6] LowSatietyLines_LowSAN")]
+    [Category("[7] Lines"), Description("å‘˜å·¥ä½é¥±é£Ÿåº¦å¯¹è¯ - Sanä½ä¸‹"), DisplayName("[6] LowSatietyLines_LowSAN")]
     public List<string> LowSatietyLines_LowSAN { get; set; } = new();
 
-    [Category("[8] Lines"), Description("Ô±¹¤0San¶Ô»° "), DisplayName("[7] ZeroSatietyLines")]
+    [Category("[8] Lines"), Description("å‘˜å·¥0Sanå¯¹è¯ "), DisplayName("[7] ZeroSatietyLines")]
     public List<string> ZeroSatietyLines { get; set; } = new();
 
-    [Category("[8] Lines"), Description("Ô±¹¤±©ÂÒ¶Ô»° - SanÕı³£"), DisplayName("[7] RevoltLine_NormalSAN")]
+    [Category("[8] Lines"), Description("å‘˜å·¥æš´ä¹±å¯¹è¯ - Sanæ­£å¸¸"), DisplayName("[7] RevoltLine_NormalSAN")]
     public List<string> RevoltLine_NormalSAN { get; set; } = new();
-    [Category("[8] Lines"), Description("Ô±¹¤0San¶Ô»° - SanµÍÏÂ"), DisplayName("[7] RevoltLine_LowSAN")]
+    [Category("[8] Lines"), Description("å‘˜å·¥0Sanå¯¹è¯ - Sanä½ä¸‹"), DisplayName("[7] RevoltLine_LowSAN")]
     public List<string> RevoltLine_LowSAN { get; set; } = new();
 
 
 
 
-    [Category("[8] Events"), Description("Ô±¹¤San¹éÁãÊÂ¼ş")]
+    [Category("[8] Events"), Description("å‘˜å·¥Sanå½’é›¶äº‹ä»¶")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public GameEventManager.GameEvent OnSanIsZero { get; set; } = new();
-    [Category("[8] Events"), Description("Ô±¹¤ËÀÍöÊÂ¼ş")]
+    [Category("[8] Events"), Description("å‘˜å·¥æ­»äº¡äº‹ä»¶")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public GameEventManager.GameEvent OnDead { get; set; } = new();
 
-    public double RivoltPoint
+    public double RevoltPoint
     {
       get
       {
@@ -125,7 +126,7 @@ namespace Assets.BasicModule.Model
       }
     }
 
-    private bool Met = false;
+    public bool Met = false;
 
 
 
@@ -152,7 +153,11 @@ namespace Assets.BasicModule.Model
         }
       }
 
-      Sanity += dish.DishSanity * mul;
+      if (Sanity > 0)
+      {
+        Sanity += dish.DishSanity * mul;
+      }
+
       Health += dish.DishHealth * mul;
       Satiety += dish.DishSatiety;
     }
@@ -170,7 +175,6 @@ namespace Assets.BasicModule.Model
       if (!Met)
       {
         LineBank.Add(HelloLines[GameManager.Instance.RNG.Next(HelloLines.Count)]);
-        Met = true;
       }
 
       //Dying
@@ -242,9 +246,9 @@ namespace Assets.BasicModule.Model
       }
 
       //On Revolt
-      if(GameManager.Instance.IsOnRevolt)
+      if (GameManager.Instance.IsOnRevolt)
       {
-        if(NormalizedSanity < NormalizedLowSanBar)
+        if (NormalizedSanity < NormalizedLowSanBar)
         {
           LineBank.Add(RevoltLine_LowSAN[GameManager.Instance.RNG.Next(RevoltLine_LowSAN.Count)]);
         }
@@ -253,6 +257,7 @@ namespace Assets.BasicModule.Model
           LineBank.Add(RevoltLine_NormalSAN[GameManager.Instance.RNG.Next(RevoltLine_NormalSAN.Count)]);
         }
       }
+      if (!Met) { Met = true; }
 
 
 
@@ -261,13 +266,61 @@ namespace Assets.BasicModule.Model
 
 
     }
+
+    public void EndDay()
+    {
+      Health = Health + BasicHealthDecrease < 0 ? 0 : Health + BasicHealthDecrease;
+      Sanity = Sanity + BasicSanityDecrase < 0 ? 0 : Sanity + BasicSanityDecrase;
+      Satiety = Satiety + BasicSatietyDecrease < 0 ? 0 : Satiety + BasicSanityDecrase;
+    }
     public void UpdateStatus()
     {
+      EndDay();
 
       double HealthAdjustment = (NormalizedSatiety - 0.3) * 40 + (NormalizedSanity - 0.3) * 20;
       Health = HealthAdjustment + Health > HealthMax ? HealthMax : HealthAdjustment + Health;
 
+      if (Health <= 0)
+      {
+        IsAlive = false;
+        OnDead.Raise();
+      }
+
+      if (Sanity <= 0)
+      {
+        Sanity = 0;
+        if (GameManager.Instance.RNG.Next(0, 10) < 3)
+        {
+          OnSanIsZero.Raise();
+        }
+        SanityMax = 1;
+      }
+
     }
 
+    override public string ToString()
+    {
+      string HPBar = "â˜¤[";
+      string SatBar = "â˜•[";
+      string SanBar = "â›¯[";
+
+      for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '*'; }
+      while (HPBar.Length < 12) { HPBar += '-'; }
+      HPBar += "]\n";
+
+      for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '*'; }
+      while (SatBar.Length < 12) { SatBar += "-"; }
+      SatBar += "]\n";
+
+      for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "*"; }
+      while (SanBar.Length < 12) { SanBar += "-"; }
+      SanBar += "]\n";
+
+
+      string a = Name + "\n" + HPBar + SatBar + SanBar;
+      return a;
+    }
   }
+
+
 }

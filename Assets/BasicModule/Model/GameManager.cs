@@ -14,7 +14,7 @@ namespace Assets.BasicModule.Model
     public bool IsEndgame { get; set; } = false;
 
 
-    private static Lazy<GameManager> _Inastance;
+    private static Lazy<GameManager> _Inastance = new Lazy<GameManager>(() => new GameManager());
     public static GameManager Instance
     {
       get { return _Inastance.Value; }
@@ -28,7 +28,7 @@ namespace Assets.BasicModule.Model
 
 
     public int WorkersCountsToday { get; set; } = 1;
-    public int SpecialWorkerCountsToday { get; set; } = 3;
+    public int SpecialWorkerCountsToday { get; set; } = 0;
     public int IngredientCountToday { get; set; } = 8;
 
 
@@ -69,15 +69,22 @@ namespace Assets.BasicModule.Model
 
     public double UpdateRevolt()
     {
+      int MetCount = 0;
+      int DeadCount = 0;
+      double RevoltSum = 0;
       foreach (Worker wk in Workers)
       {
-
+        if(wk.Met)
+        {
+          MetCount++;
+          RevoltSum += wk.RevoltPoint;
+          if(!wk.IsAlive)
+          {
+            DeadCount++;
+          }
+        }
       }
-
-      if (Revolt > RevoltAlertBar * RevoltBar)
-      {
-
-      }
+      Revolt = (RevoltSum + 3 * (DeadCount  / MetCount));
       return Revolt;
     }
 
@@ -113,6 +120,21 @@ namespace Assets.BasicModule.Model
       }
 
       CurrentDay++;
+    }
+
+
+    public void Accounting()
+    {
+      foreach(Worker worker in Workers)
+      {
+        if(worker.Met)
+        {
+          if(WorkersToday.Contains(worker.ID))
+          {
+            worker.UpdateStatus();
+          }
+        }
+      }
     }
 
   }
