@@ -61,7 +61,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   void Start()
   {
-    PlayerStats.Instance().NewDay();
+    GameManager.Instance.NewDay();
 
     Snapped.Clear();
     for (int j = 0; j < SnapPoints.Count; j++)
@@ -109,11 +109,11 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   private void CreateIngredient(int number)
   {
-    if (CurrentIndex < PlayerStats.Instance().Ingredients.Count)
+    if (CurrentIndex < GameManager.Instance.Ingredients.Count)
     {
       PipeAnimator[number].Play("PipeOut");
       IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-      dish.Ingredient = PlayerStats.Instance().Ingredients[CurrentIndex];
+      dish.Ingredient = GameManager.Instance.Ingredients[CurrentIndex];
       _dishesList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
       dish.PipeNum = number;
@@ -195,13 +195,13 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     }
     else
     {
-      if (PlayerStats.Instance().DishesInventory.ContainsKey(cd.Dish))
+      if (GameManager.Instance.DishesInventory.ContainsKey(cd.Dish))
       {
-        PlayerStats.Instance().DishesInventory[cd.Dish] += Portion;
+        GameManager.Instance.DishesInventory[cd.Dish] += Portion;
       }
       else
       {
-        PlayerStats.Instance().DishesInventory.Add(cd.Dish, Portion);
+        GameManager.Instance.DishesInventory.Add(cd.Dish, Portion);
       }
       Destroy(cd.gameObject);
       if (NoMoreIngredient && _dishesList.Count < 2)

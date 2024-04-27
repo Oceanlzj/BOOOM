@@ -6,16 +6,21 @@ using System.Linq;
 namespace Assets.BasicModule.Model
 {
   [Serializable]
-  public class PlayerStats
+  public class GameManager
   {
-    public List<Request> Tasks { get; set; } = new List<Request>();
     public int CurrentDay { get; set; } = 0;
-
     public double Revolt { get; set; } = 10;
 
+    public bool IsEndgame { get; set; } = false;
 
-    private static PlayerStats playerStats;
-    private static Random rand;
+
+    private static Lazy<GameManager> _Inastance;
+    public static GameManager Instance
+    {
+      get { return _Inastance.Value; }
+    }
+
+    public Random RNG { get; private set; }
 
 
     public int CurrentWorkerID;
@@ -32,37 +37,47 @@ namespace Assets.BasicModule.Model
     public List<Worker> Workers { get; set; } = new();
     public List<SpecialWorker> SpecialWorkers { get; set; } = new();
     public HashSet<int> WorkersToday { get; set; } = new();
+    public List<EventWorkerLine> EventWorkerLines { get; set; }
+
+    public double RevoltBar { get; set; } = 50.0;
+    public double RevoltAlertBar { get; set; } = 0.8;
+
+    public bool IsOnRevolt { get { return Revolt > RevoltBar * RevoltAlertBar; } }
 
 
-    private PlayerStats()
+    private GameManager()
     {
-      rand = new Random((int)DateTime.Now.Ticks);
+      RNG = new Random((int)DateTime.Now.Ticks);
       foreach (Worker worker in DataFactory.Instance().GetWorksers())
       {
         if (worker.ID >= 100)
         {
-          SpecialWorkers.Add(DataFactory.Instance().GetSpecialWorker(worker.ID));
+          SpecialWorker sw = DataFactory.Instance().GetSpecialWorker(worker.ID);
+          SpecialWorkers.Add(sw);
+          Workers.Add(sw);
         }
         else
         {
           Workers.Add(worker);
         }
       }
+      EventWorkerLines = new List<EventWorkerLine>();
     }
 
 
-    public static PlayerStats Instance()
-    {
-      if (playerStats == null)
-      {
-        playerStats = new PlayerStats();
-      }
-      return playerStats;
-    }
+
 
     public double UpdateRevolt()
     {
+      foreach (Worker wk in Workers)
+      {
 
+      }
+
+      if (Revolt > RevoltAlertBar * RevoltBar)
+      {
+
+      }
       return Revolt;
     }
 
@@ -74,27 +89,27 @@ namespace Assets.BasicModule.Model
       WorkersToday.Clear();
       for (int i = 0; i < WorkersCountsToday; i++)
       {
-        int index = rand.Next(0, Workers.Count);
+        int index = RNG.Next(0, Workers.Count);
         while (WorkersToday.Contains(Workers[index].ID))
         {
-          index = rand.Next(0, Workers.Count);
+          index = RNG.Next(0, Workers.Count);
         }
         WorkersToday.Add(Workers[index].ID);
       }
 
       for (int i = 0; i < SpecialWorkerCountsToday; i++)
       {
-        int index = rand.Next(0, SpecialWorkers.Count);
+        int index = RNG.Next(0, SpecialWorkers.Count);
         while (WorkersToday.Contains(SpecialWorkers[index].ID))
         {
-          index = rand.Next(0, SpecialWorkers.Count);
+          index = RNG.Next(0, SpecialWorkers.Count);
         }
         WorkersToday.Add(SpecialWorkers[index].ID);
       }
 
       for (int i = 0; i < IngredientCountToday; i++)
       {
-        Ingredients.Add(DataFactory.Instance().GetIngedientByID(rand.Next(0, DataFactory.Instance().GetIngredientCount())));
+        Ingredients.Add(DataFactory.Instance().GetIngedientByID(RNG.Next(0, DataFactory.Instance().GetIngredientCount())));
       }
 
       CurrentDay++;
