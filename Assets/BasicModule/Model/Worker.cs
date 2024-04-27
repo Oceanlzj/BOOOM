@@ -233,7 +233,7 @@ namespace Assets.BasicModule.Model
         }
 
       }
-      else if (Met)
+      else if (Met && !GameManager.Instance.IsOnRevolt)
       {
         if (NormalizedSanity < NormalizedLowSanBar)
         {
