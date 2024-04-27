@@ -1,11 +1,13 @@
 using Assets.BasicModule.Factory;
 using Assets.BasicModule.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.U2D.Animation;
 
 public class ServePageController : MonoBehaviour
@@ -33,6 +35,7 @@ public class ServePageController : MonoBehaviour
   public GameObject PackFolder;
   public GameObject PlateFolder;
   public GameObject MsgBox;
+  public TextMeshProUGUI MsgBoxArea;
 
   public Animator PlateHandAnimator;
   public Animator MsgBoxAnimator;
@@ -48,6 +51,10 @@ public class ServePageController : MonoBehaviour
 
   public int CurrentIndex = 0;
   public bool AllDone = false;
+
+  public int CurrentLineIndex = 0;
+  public List<string> CurrentLines = new List<string>();
+  public bool TalkDone = false;
 
 
   void Start()
@@ -121,8 +128,37 @@ public class ServePageController : MonoBehaviour
 
   }
 
+  public void UpdateMsgBoxLine()
+  {
+    if (CurrentLineIndex + 1 > CurrentLines.Count)
+    {
+      TalkDone = true;
+      return;
+    }
+
+    if (CurrentLines[CurrentLineIndex][0] == '+')
+    {
+      MsgBoxArea.fontSize = 0.4f;
+      CurrentLines[CurrentLineIndex] = CurrentLines[CurrentLineIndex].Remove(0, 1);
+    }
+    else if (CurrentLines[CurrentLineIndex][0] == '-')
+    {
+      MsgBoxArea.fontSize = 0.2f;
+      CurrentLines[CurrentLineIndex] = CurrentLines[CurrentLineIndex].Remove(0, 1);
+    }
+    else
+    {
+      MsgBoxArea.fontSize = 0.3f;
+    }
+    MsgBoxArea.text = CurrentLines[CurrentLineIndex];
+    CurrentLineIndex++;
+  }
+
+
   public void NextWorker()
   {
+    UpdateText();
+    MsgBoxArea.text = "......";
     if (CurrentIndex + 1 > workers.Count)
     {
       TextArea.text = "没有别的人了……\n\n结束一天……？";
@@ -132,25 +168,38 @@ public class ServePageController : MonoBehaviour
     worker = workers[CurrentIndex];
     HandSprite.sprite = HandLib.GetSprite("Worker", worker.ID.ToString());
     PlateHandAnimator.Play("HandPlateIn");
+    worker.LoadBank();
+    foreach (string line in worker.LineBank)
+    {
+      foreach (string MiniLine in line.Split('|'))
+      {
+        if (MiniLine == "")
+        { continue; }
+        CurrentLines.Add(MiniLine);
+      }
+    }
+
     if (worker is SpecialWorker)
     {
       CurrentSpecialWorker = (SpecialWorker)worker;
       HandSprite.sprite = HandLib.GetSprite("Special", worker.ID.ToString());
+
       if (CurrentSpecialWorker.CurrentTask != null)
       {
-        MsgBox.SetActive(true);
-        MsgBoxAnimator.Play("MsgPopIn");
       }
     }
+    UpdateMsgBoxLine();
+    MsgBox.SetActive(true);
+    MsgBoxAnimator.Play("MsgPopIn");
   }
   private void UpdateText()
   {
-    TextArea.text = "";
+    TextArea.text = worker.ToString();
     foreach (Dish dish in DishOnPlate)
     {
       TextArea.text += dish.Name + " - " + dish.Description + "\n";
     }
-    TextArea.text += "就这样吗？";
+    TextArea.text += "";
   }
   private void OnTriggerEnter2D(Collider2D collision)
   {

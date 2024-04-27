@@ -27,7 +27,7 @@ namespace Assets.BasicModule.Model
 
     }
 
-    private static Lazy<GameEventManager> gameEventManager;
+    private static Lazy<GameEventManager> gameEventManager = new Lazy<GameEventManager>(() => new GameEventManager());
     public static GameEventManager Instance
     {
       get {
