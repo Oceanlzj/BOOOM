@@ -55,15 +55,15 @@ public class ServePageController : MonoBehaviour
 
     //load Workers in
 
-    foreach (int WorkerID in PlayerStats.Instance().WorkersToday)
+    foreach (int WorkerID in GameManager.Instance.WorkersToday)
     {
       if (WorkerID >= 100)//special
       {
-        workers.Add(PlayerStats.Instance().SpecialWorkers.Find(x => x.ID == WorkerID));
+        workers.Add(GameManager.Instance.SpecialWorkers.Find(x => x.ID == WorkerID));
       }
       else
       {
-        workers.Add(PlayerStats.Instance().Workers.Find(x => x.ID == WorkerID));
+        workers.Add(GameManager.Instance.Workers.Find(x => x.ID == WorkerID));
       }
     }
 
@@ -79,7 +79,7 @@ public class ServePageController : MonoBehaviour
 
     int currentDish = 0;
     int order = 0;
-    DishCount = PlayerStats.Instance().DishesInventory.Count;
+    DishCount = GameManager.Instance.DishesInventory.Count;
     Vector3 Step = (End - Begin) / (DishCount - 1);
 
     Snapped.Clear();
@@ -88,7 +88,7 @@ public class ServePageController : MonoBehaviour
       Snapped.Add(false);
     }
 
-    foreach (var item in PlayerStats.Instance().DishesInventory)
+    foreach (var item in GameManager.Instance.DishesInventory)
     {
       float X = Begin.x + Step.x * currentDish;
       for (int i = 0; i < item.Value; i++)
