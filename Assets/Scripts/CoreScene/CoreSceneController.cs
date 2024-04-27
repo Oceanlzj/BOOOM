@@ -27,7 +27,7 @@ public class CoreSceneController : MonoBehaviour
   public void OnMsgBoxClicked()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
-    // if ()//is special worker; 
+    if (page.worker is SpecialWorker)
     {
       PlateCollider.enabled = false;
 
@@ -42,6 +42,10 @@ public class CoreSceneController : MonoBehaviour
 
 
       CurrentPage = ConversationPage;
+    }
+    else
+    {
+      page.UpdateMsgBoxLine();
     }
 
   }
@@ -108,18 +112,25 @@ public class CoreSceneController : MonoBehaviour
       }
       else
       {
-        foreach (DishPack pack in Spage.packOnPlate)
+        if (Spage.TalkDone)
         {
-          pack.isServing = true;
+          foreach (DishPack pack in Spage.packOnPlate)
+          {
+            pack.isServing = true;
+          }
+
+
+          Spage.MsgBox.SetActive(false);
+          Spage.PlateHandAnimator.Play("HandPlateOut");
+          Spage.MsgBoxAnimator.Play("MsgPopOut");
+
+          Spage.CurrentIndex++;
+          return;
         }
-
-
-        Spage.MsgBox.SetActive(false);
-        Spage.PlateHandAnimator.Play("HandPlateOut");
-        Spage.MsgBoxAnimator.Play("MsgPopOut");
-
-        Spage.CurrentIndex++;
-        return;
+        else
+        {
+          Spage.UpdateMsgBoxLine();
+        }
       }
     }
 

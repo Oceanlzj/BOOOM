@@ -25,8 +25,11 @@ namespace Assets.BasicModule.Model
       object val;
       foreach (var item in worker.GetType().GetProperties())
       {
-        val = item.GetValue(worker);
-        item.SetValue(this, val);
+        if (item.CanWrite)
+        {
+          val = item.GetValue(worker);
+          item.SetValue(this, val);
+        }
       }
 
       BeginingTask = DataFactory.Instance().getInitTaskByWorkerID(ID);

@@ -19,6 +19,8 @@ namespace Assets.BasicModule.Factory
     private List<Model.Request> Tasks;
     private List<Recipe> RecipeFile;
     private Dictionary<(int, int), int> Recipes;
+    private List<GameEventManager.GameEvent> GameEvents;
+    private List<EventWorkerLine> EventWorkerLines;
 
     private DataFactory()
     {
@@ -29,6 +31,8 @@ namespace Assets.BasicModule.Factory
         Workers = JsonReader<List<Worker>>.Read("Data\\Workers.json");
         Tasks = JsonReader<List<Model.Request>>.Read("Data\\Tasks.json");
         RecipeFile = JsonReader<List<Recipe>>.Read("Data\\Recipes.json");
+        GameEvents = JsonReader<List<GameEventManager.GameEvent>>.Read("Data\\Events.json");
+        EventWorkerLines = JsonReader<List<EventWorkerLine>>.Read("Data\\EventLineBinds.json");
 
         Recipes = new Dictionary<(int, int), int>();
         foreach (var rec in RecipeFile)

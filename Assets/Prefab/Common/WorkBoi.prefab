@@ -532,7 +532,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[*****-----]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d4891e6eb5c0e7445b6bfa66a3cef5c0, type: 2}
   m_sharedMaterial: {fileID: -5150176214779815450, guid: d4891e6eb5c0e7445b6bfa66a3cef5c0, type: 2}
@@ -559,8 +559,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.3
-  m_fontSizeBase: 0.3
+  m_fontSize: 0.4
+  m_fontSizeBase: 0.4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
