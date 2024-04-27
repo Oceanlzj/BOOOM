@@ -17,6 +17,7 @@ namespace Assets.BasicModule.Model
     [Category("Task"), Description("当前任务")]
     public Request CurrentTask { get; set; }
 
+
     public SpecialWorker() { }
 
     public SpecialWorker(Worker worker)
