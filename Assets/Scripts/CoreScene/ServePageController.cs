@@ -192,7 +192,8 @@ public class ServePageController : MonoBehaviour
   }
   private void UpdateText()
   {
-    TextArea.text = worker.ToString();
+    TextArea.text = "Ô±¹¤Êý£º" + (CurrentIndex + 1).ToString() + " / " + workers.Count.ToString() + '\n';
+    TextArea.text += worker.ToString();
     foreach (Dish dish in DishOnPlate)
     {
       TextArea.text += dish.Name + " - " + dish.Description + "\n";
