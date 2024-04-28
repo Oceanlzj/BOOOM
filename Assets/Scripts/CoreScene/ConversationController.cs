@@ -51,8 +51,9 @@ public class ConversationController : MonoBehaviour
   {
     ServePageController sp = ServeScene.GetComponent<ServePageController>();
     Worker = sp.CurrentSpecialWorker;
-    Request = sp.CurrentSpecialWorker.CurrentTaskID;
+    Request = sp.CurrentSpecialWorker.CurrentTask;
     WorkerSprite.sprite = SpriteLibrary.GetSprite(Worker.ID.ToString(), "0");
+    CurrentIndex = 0;
     UpdateALine();
   }
 

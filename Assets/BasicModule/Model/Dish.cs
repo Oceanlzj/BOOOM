@@ -27,8 +27,6 @@ namespace Assets.BasicModule.Model
     [Category("Value"), Description("菜品饱食度")]
     public double DishSatiety { get; set; }
     //料理成功度系数
-    [Category("Value"), Description("菜品成功度系数")]
-    public double Successfulness { get; set; } = 1.0;
     [Category("Type"), Description("菜品类型")]
     public DishType Type { get; set; }
     [Category("Type"), Description("菜品特殊属性")]

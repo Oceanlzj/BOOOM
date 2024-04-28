@@ -167,9 +167,6 @@ public class IngredientItem : MonoBehaviour
 
 
       }
-
-      //stopPos = transform.position;
-      //Destroy(this.gameObject);
     }
 
   }
