@@ -18,6 +18,7 @@ public class CoreSceneController : MonoBehaviour
   }
   public GameObject ServePage;
   public GameObject ConversationPage;
+  public Collider2D PlateCollider;
 
 
   private GameObject CurrentPage;
@@ -26,21 +27,25 @@ public class CoreSceneController : MonoBehaviour
   public void OnMsgBoxClicked()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
-    // if ()//is special worker; 
+    if (page.worker is SpecialWorker)
     {
-      foreach (DishPack pack in page.packs)
-      {
-        pack.Hide();
-      }
+      PlateCollider.enabled = false;
+
+      page.PlateFolder.gameObject.SetActive(false);
+      page.PackFolder.gameObject.SetActive(false);
 
       ConversationPage.GetComponent<ConversationController>().NewIn();
       page.FlipAnimator.Play("ServePageOut");
-      page.MsgBox.SetActive(false);
+      //page.MsgBox.SetActive(false);
       page.MsgBoxAnimator.Play("MsgPopOut");
       ConversationPage.SetActive(true);
 
 
       CurrentPage = ConversationPage;
+    }
+    else
+    {
+      page.UpdateMsgBoxLine();
     }
 
   }
@@ -65,12 +70,9 @@ public class CoreSceneController : MonoBehaviour
   public void HandOutEnd()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
-    foreach (DishPack pack in page.packOnPlate)
-    {
-      page.packs.Remove(pack);
-    }
 
     RemoveAllChildren(page.PlateFolder);
+
     foreach (Dish dish in page.DishOnPlate)
     {
       page.worker.Eat(dish);
@@ -86,12 +88,13 @@ public class CoreSceneController : MonoBehaviour
     Spage.MsgBox.SetActive(false);
     Spage.FlipAnimator.Play("ServePageIn");
 
-    foreach (DishPack pack in Spage.packs)
-    {
-      pack.gameObject.SetActive(true);
-    }
+    Spage.PlateFolder.gameObject.SetActive(true);
+    Spage.PackFolder.gameObject.SetActive(true);
+
     Spage.MsgBox.SetActive(false);
+    PlateCollider.enabled = true;
     ConversationPage.SetActive(false);
+
 
     CurrentPage = ServePage;
   }
@@ -105,20 +108,29 @@ public class CoreSceneController : MonoBehaviour
     {
       if (Spage.AllDone)
       {
-                SceneManager.LoadScene(2);
+        SceneManager.LoadScene(2);
       }
       else
       {
-        foreach (DishPack pack in Spage.packOnPlate)
+        if (Spage.TalkDone)
         {
-          pack.isServing = true;
-        }
-        Spage.MsgBox.SetActive(false);
-        Spage.PlateHandAnimator.Play("HandPlateOut");
-        Spage.MsgBoxAnimator.Play("MsgPopOut");
+          foreach (DishPack pack in Spage.packOnPlate)
+          {
+            pack.isServing = true;
+          }
 
-        Spage.CurrentIndex++;
-        return;
+
+          Spage.MsgBox.SetActive(false);
+          Spage.PlateHandAnimator.Play("HandPlateOut");
+          Spage.MsgBoxAnimator.Play("MsgPopOut");
+
+          Spage.CurrentIndex++;
+          return;
+        }
+        else
+        {
+          Spage.UpdateMsgBoxLine();
+        }
       }
     }
 

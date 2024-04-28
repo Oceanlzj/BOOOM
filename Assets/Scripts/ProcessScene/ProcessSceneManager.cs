@@ -42,6 +42,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public List<IngredientItem> IngsOnMachine;
   public List<Ingredient> IngredientsOnMachine;
 
+  public Transform CookedDishPos;
+
   private bool NoMoreIngredient = false;
   private bool GoNext = false;
   private int Portion = 0;
@@ -61,7 +63,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   void Start()
   {
-    PlayerStats.Instance().NewDay();
+    GameManager.Instance.NewDay();
 
     Snapped.Clear();
     for (int j = 0; j < SnapPoints.Count; j++)
@@ -79,7 +81,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   // Update is called once per frame
   void Update()
   {
-    if(GoNext)
+    if (GoNext)
     {
       float alphaChange = 0.5f * Time.deltaTime;
 
@@ -102,18 +104,17 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     TextArea.text = "";
     foreach (Ingredient dish in IngredientsOnMachine)
     {
-      TextArea.text += dish.Name + " - " + dish.Description + "\n";
+      TextArea.text += dish.ToString();
     }
-    TextArea.text += "就这样吗？";
   }
 
   private void CreateIngredient(int number)
   {
-    if (CurrentIndex < PlayerStats.Instance().Ingredients.Count)
+    if (CurrentIndex < GameManager.Instance.Ingredients.Count)
     {
       PipeAnimator[number].Play("PipeOut");
-      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-      dish.Ingredient = PlayerStats.Instance().Ingredients[CurrentIndex];
+      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position /*+ new Vector3(0, 0.5f, 0)*/, Quaternion.identity);
+      dish.Ingredient = GameManager.Instance.Ingredients[CurrentIndex];
       _dishesList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
       dish.PipeNum = number;
@@ -167,7 +168,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
         Destroy(IngsOnMachine[0].gameObject);
 
         //cook Dish
-        cd = Instantiate(CookedDish);
+        cd = Instantiate(CookedDish, CookedDishPos);
         cd.Dish = dish;
         IngredientsOnMachine.Clear();
         Machine.enabled = false;
@@ -184,9 +185,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       {
         StopText = true;
         TextArea.text = "无效的配方，请重试！";
-        if(_dishesList.Count <= 3)
+        if (_dishesList.Count <= 3)
         {
-          
+
           TextArea.text = "没有更多可料理的了……\n\n 去服务窗口吧";
           GoNext = true;
         }
@@ -195,8 +196,14 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     }
     else
     {
-
-      PlayerStats.Instance().DishesInventory.Add(cd.Dish, Portion);
+      if (GameManager.Instance.DishesInventory.ContainsKey(cd.Dish))
+      {
+        GameManager.Instance.DishesInventory[cd.Dish] += Portion;
+      }
+      else
+      {
+        GameManager.Instance.DishesInventory.Add(cd.Dish, Portion);
+      }
       Destroy(cd.gameObject);
       if (NoMoreIngredient && _dishesList.Count < 2)
       {
