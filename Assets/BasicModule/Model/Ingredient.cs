@@ -26,5 +26,10 @@ namespace Assets.BasicModule.Model
     public FoodProperty IngredientProperty { get; set; }
 
     public Ingredient() { }
+    public override string ToString()
+    {
+      string a = Name + " : " + FoodPropertyString.FoodPropertyName(IngredientProperty) + '\n' + Description;
+      return a;
+    }
   }
 }

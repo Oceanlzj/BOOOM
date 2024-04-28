@@ -42,6 +42,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public List<IngredientItem> IngsOnMachine;
   public List<Ingredient> IngredientsOnMachine;
 
+  public Transform CookedDishPos;
+
   private bool NoMoreIngredient = false;
   private bool GoNext = false;
   private int Portion = 0;
@@ -102,9 +104,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     TextArea.text = "";
     foreach (Ingredient dish in IngredientsOnMachine)
     {
-      TextArea.text += dish.Name + " - " + dish.Description + "\n";
+      TextArea.text += dish.ToString();
     }
-    TextArea.text += "就这样吗？";
   }
 
   private void CreateIngredient(int number)
@@ -112,7 +113,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     if (CurrentIndex < GameManager.Instance.Ingredients.Count)
     {
       PipeAnimator[number].Play("PipeOut");
-      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+      IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position /*+ new Vector3(0, 0.5f, 0)*/, Quaternion.identity);
       dish.Ingredient = GameManager.Instance.Ingredients[CurrentIndex];
       _dishesList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
@@ -167,7 +168,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
         Destroy(IngsOnMachine[0].gameObject);
 
         //cook Dish
-        cd = Instantiate(CookedDish);
+        cd = Instantiate(CookedDish, CookedDishPos);
         cd.Dish = dish;
         IngredientsOnMachine.Clear();
         Machine.enabled = false;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7137081075857367799}
   - component: {fileID: 151329469053397021}
   m_Layer: 7
-  m_Name: DishPrefab
+  m_Name: IngredientPrefab
   m_TagString: Dish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,15 +76,15 @@ SpriteRenderer:
   m_SortingLayerID: 335612845
   m_SortingLayer: 1
   m_SortingOrder: 20
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 13f151a4d02bef0469b4c07d975e4ea8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.63, y: 2.63}
+  m_Size: {x: 20.48, y: 20.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!58 &7803067346357802220
