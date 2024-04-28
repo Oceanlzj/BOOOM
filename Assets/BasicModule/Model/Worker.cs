@@ -164,103 +164,105 @@ namespace Assets.BasicModule.Model
     public void LoadBank()
     {
       LineBank.Clear();
-
-      if (Sanity == 0)
+      try
       {
-        LineBank.Add(ZeroSatietyLines[GameManager.Instance.RNG.Next(ZeroSatietyLines.Count)]);
-        return;
+        if (Sanity == 0)
+        {
+          LineBank.Add(ZeroSatietyLines[GameManager.Instance.RNG.Next(ZeroSatietyLines.Count)]);
+          return;
+        }
+
+        //first met
+        if (!Met)
+        {
+          LineBank.Add(HelloLines[GameManager.Instance.RNG.Next(HelloLines.Count)]);
+        }
+
+        //Dying
+        if (NormalizedHealth < NormalizedLowHealthBar)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(LowHealthLines_LowSAN[GameManager.Instance.RNG.Next(LowHealthLines_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(LowHealthLines_NormalSAN[GameManager.Instance.RNG.Next(LowHealthLines_NormalSAN.Count)]);
+          }
+          return;
+        }
+
+        //low sat
+        if (NormalizedSatiety < NormalizedLowSatietyBar)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(LowSatietyLines_LowSAN[GameManager.Instance.RNG.Next(LowSatietyLines_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(LowSatietyLines_NormalSAN[GameManager.Instance.RNG.Next(LowSatietyLines_NormalSAN.Count)]);
+          }
+        }
+
+        //event
+        GameEventManager.GameEvent CurrentMostEvent = new();
+        foreach (GameEventManager.GameEvent Event in GameEventManager.Instance.Events)
+        {
+          if (!TriggeredGameEvents.Contains(Event))
+          {
+            CurrentMostEvent = Event;
+            break;
+          }
+        }
+
+        if (CurrentMostEvent.ID > 500)//is presist or not
+        {
+          TriggeredGameEvents.Add(CurrentMostEvent);
+        }
+
+        EventWorkerLine ewl = GameManager.Instance.EventWorkerLines.Find(x => x.WorkerID == ID && x.EventID == CurrentMostEvent.ID);
+        if (ewl != null)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(ewl.Lines_LowSan[GameManager.Instance.RNG.Next(ewl.Lines_LowSan.Count)]);
+          }
+          else
+          {
+            LineBank.Add(ewl.Lines_NormalSan[GameManager.Instance.RNG.Next(ewl.Lines_NormalSan.Count)]);
+          }
+
+        }
+        else if (Met && !GameManager.Instance.IsOnRevolt)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(StandardLines_LowlSAN[GameManager.Instance.RNG.Next(StandardLines_LowlSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(StandardLines_NormalSAN[GameManager.Instance.RNG.Next(StandardLines_NormalSAN.Count)]);
+          }
+        }
+
+        //On Revolt
+        if (GameManager.Instance.IsOnRevolt)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(RevoltLine_LowSAN[GameManager.Instance.RNG.Next(RevoltLine_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(RevoltLine_NormalSAN[GameManager.Instance.RNG.Next(RevoltLine_NormalSAN.Count)]);
+          }
+        }
+        if (!Met) { Met = true; }
+
+
       }
-
-      //first met
-      if (!Met)
-      {
-        LineBank.Add(HelloLines[GameManager.Instance.RNG.Next(HelloLines.Count)]);
-      }
-
-      //Dying
-      if (NormalizedHealth < NormalizedLowHealthBar)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(LowHealthLines_LowSAN[GameManager.Instance.RNG.Next(LowHealthLines_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(LowHealthLines_NormalSAN[GameManager.Instance.RNG.Next(LowHealthLines_NormalSAN.Count)]);
-        }
-        return;
-      }
-
-      //low sat
-      if (NormalizedSatiety < NormalizedLowSatietyBar)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(LowSatietyLines_LowSAN[GameManager.Instance.RNG.Next(LowSatietyLines_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(LowSatietyLines_NormalSAN[GameManager.Instance.RNG.Next(LowSatietyLines_NormalSAN.Count)]);
-        }
-      }
-
-      //event
-      GameEventManager.GameEvent CurrentMostEvent = new();
-      foreach (GameEventManager.GameEvent Event in GameEventManager.Instance.Events)
-      {
-        if (!TriggeredGameEvents.Contains(Event))
-        {
-          CurrentMostEvent = Event;
-          break;
-        }
-      }
-
-      if (CurrentMostEvent.ID > 500)//is presist or not
-      {
-        TriggeredGameEvents.Add(CurrentMostEvent);
-      }
-
-      EventWorkerLine ewl = GameManager.Instance.EventWorkerLines.Find(x => x.WorkerID == ID && x.EventID == CurrentMostEvent.ID);
-      if (ewl != null)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(ewl.Lines_LowSan[GameManager.Instance.RNG.Next(ewl.Lines_LowSan.Count)]);
-        }
-        else
-        {
-          LineBank.Add(ewl.Lines_NormalSan[GameManager.Instance.RNG.Next(ewl.Lines_NormalSan.Count)]);
-        }
-
-      }
-      else if (Met && !GameManager.Instance.IsOnRevolt)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(StandardLines_LowlSAN[GameManager.Instance.RNG.Next(StandardLines_LowlSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(StandardLines_NormalSAN[GameManager.Instance.RNG.Next(StandardLines_NormalSAN.Count)]);
-        }
-      }
-
-      //On Revolt
-      if (GameManager.Instance.IsOnRevolt)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(RevoltLine_LowSAN[GameManager.Instance.RNG.Next(RevoltLine_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(RevoltLine_NormalSAN[GameManager.Instance.RNG.Next(RevoltLine_NormalSAN.Count)]);
-        }
-      }
-      if (!Met) { Met = true; }
-
-
-
+      catch { }
 
 
 

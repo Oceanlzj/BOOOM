@@ -27,7 +27,7 @@ public class CoreSceneController : MonoBehaviour
   public void OnMsgBoxClicked()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
-    if (page.worker is SpecialWorker)
+    if (page.worker is SpecialWorker && page.CurrentSpecialWorker.CurrentTask != null)
     {
       PlateCollider.enabled = false;
 
