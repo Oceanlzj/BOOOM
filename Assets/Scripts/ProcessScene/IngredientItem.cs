@@ -9,7 +9,7 @@ using UnityEngine.U2D.Animation;
 
 public enum DishStatus
 {
-  Unknow, Creating, Waiting, Destroy, Returning
+  Unknow, Creating, Waiting, Destroy, Cooking
 }
 
 public class IngredientItem : MonoBehaviour
@@ -34,16 +34,16 @@ public class IngredientItem : MonoBehaviour
   public SpriteRenderer SR;
   public SpriteLibraryAsset Asset;
 
-  public float createSpeed = 3f;         //盘子移动速度 暂定为3
-  public Vector3 stopPos;   //盘子停止位置
-  private DishStatus _status;
+  public float createSpeed = 3f;      
+  public Vector3 stopPos;  
+  public DishStatus _status;
 
   private int OrderInLayerLast = 10;
 
   private Vector2 _distance;
   private Vector2 _mousePos;
-  private bool _mouseDown = false;
-  private Vector3 _velocity = Vector3.zero;
+  public bool _mouseDown = false;
+  private Vector2 _velocity = Vector2.zero;
   public float retrunTime = 0.3f;
 
   public bool OnMachine = false;
@@ -81,25 +81,27 @@ public class IngredientItem : MonoBehaviour
   void Update()
   {
     _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
     if (_status == DishStatus.Creating && transform.position != stopPos)
     {
       float step = createSpeed * Time.deltaTime;
       transform.position = Vector3.MoveTowards(transform.position, stopPos, step);
+      return;
     }
-    else if (_status == DishStatus.Creating && transform.position == stopPos)
+
+    if (_status == DishStatus.Creating && transform.position == stopPos)
     {
       _status = DishStatus.Waiting;
+      return;
     }
-    else if (_status == DishStatus.Waiting && transform.position != stopPos)
+
+    if (transform.position != stopPos)
     {
       if (!_mouseDown)
       {
         ///_status = DishStatus.Returning;
-        transform.position = Vector3.SmoothDamp(transform.position, stopPos, ref _velocity, retrunTime);
+        transform.position = Vector2.SmoothDamp(transform.position, stopPos, ref _velocity, retrunTime);
       }
-    }
-    else
-    {
     }
   }
 
@@ -148,25 +150,23 @@ public class IngredientItem : MonoBehaviour
 
       int index = Distance.IndexOf(Distance.Min());
 
-      if (snappedIndex == -1)
+      if (Snapped[index])
       {
-        if (Snapped[index])
-        {
-          OnMachine = false;
-        }
-        else
-        {
-          if (snappedIndex != -1)
-          {
-            Snapped[snappedIndex] = false;
-          }
-          stopPos = SnapPoints[index];
-          Snapped[index] = true;
-          snappedIndex = index;
-        }
-
-
+        OnMachine = false;
       }
+      else
+      {
+        if (snappedIndex != -1)
+        {
+          Snapped[snappedIndex] = false;
+        }
+        stopPos = SnapPoints[index];
+        Snapped[index] = true;
+        snappedIndex = index;
+      }
+
+
+
     }
 
   }
@@ -174,7 +174,7 @@ public class IngredientItem : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D other)
   {
-    if (other.tag == "Machine")
+    if (other.tag == "Machine" && _mouseDown)
     {
       OnMachine = true;
     }
@@ -183,7 +183,7 @@ public class IngredientItem : MonoBehaviour
 
   private void OnTriggerExit2D(Collider2D other)
   {
-    if (other.tag == "Machine" && OnMachine)
+    if (other.tag == "Machine" && _mouseDown)
     {
       stopPos = initPos;
       OnMachine = false;
@@ -204,6 +204,6 @@ public class IngredientItem : MonoBehaviour
     {
       Snapped[snappedIndex] = false;
     }
-    ProcessSceneManager.Instance.RemoveIngerdient(this);
+    Destroy(gameObject);
   }
 }

@@ -27,8 +27,8 @@ namespace Assets.BasicModule.Model
     public double Sanity { get; set; } = 50;
 
 
-    public int WorkersCountsToday { get; set; } = 1;
-    public int SpecialWorkerCountsToday { get; set; } = 0;
+    public int WorkersCountsToday { get; set; } = 3;
+    public int SpecialWorkerCountsToday { get; set; } = 2;
     public int IngredientCountToday { get; set; } = 8;
 
 

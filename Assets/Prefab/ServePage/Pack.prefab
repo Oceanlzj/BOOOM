@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 335612845
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: ac6e41dd913f7944996adec86cce012d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 49ad5d8703561f74b8754a79fb3b079b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -222,8 +222,8 @@ MonoBehaviour:
   lib: {fileID: 7108339969198208228, guid: 420c037bf07701443919097eabf6cba1, type: 3}
   SnapPoints: []
   Snapped: 
-  isServing: 0
   InitPos: {x: 0, y: 0, z: 0}
+  isServing: 0
   retrunTime: 0.1
 --- !u!50 &6638551764159736690
 Rigidbody2D:
