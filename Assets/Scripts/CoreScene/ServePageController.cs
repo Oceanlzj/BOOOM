@@ -157,7 +157,7 @@ public class ServePageController : MonoBehaviour
 
   public void NextWorker()
   {
-    UpdateText();
+    
     MsgBoxArea.text = "......";
     if (CurrentIndex + 1 > workers.Count)
     {
@@ -184,11 +184,9 @@ public class ServePageController : MonoBehaviour
       CurrentSpecialWorker = (SpecialWorker)worker;
       HandSprite.sprite = HandLib.GetSprite("Special", worker.ID.ToString());
 
-      if (CurrentSpecialWorker.CurrentTask != null)
-      {
-      }
     }
     UpdateMsgBoxLine();
+    UpdateText();
     MsgBox.SetActive(true);
     MsgBoxAnimator.Play("MsgPopIn");
   }
