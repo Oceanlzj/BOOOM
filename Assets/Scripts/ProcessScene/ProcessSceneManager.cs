@@ -56,7 +56,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public int CurrentIndex = 0;
 
 
-  public float seconds;       // 创建时间间隔
+  public float seconds;
+  private bool IsCompressing = false;
 
 
 
@@ -96,6 +97,24 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       return;
     }
 
+    if (IsCompressing && DoorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0)
+    {
+      TextArea.text = "";
+      Destroy(cd.gameObject);
+      if (NoMoreIngredient && IngerdientItemList.Count < 2)
+      {
+        TextArea.text = "没有更多食材了……\n\n去服务窗口吧";
+        GoNext = true;
+      }
+      else
+      {
+        Machine.enabled = true;
+      }
+
+      IsCompressing = false;
+      DoorAnimator.Play("DoorOpen");
+    }
+
   }
 
   private void StartNewDay()
@@ -113,7 +132,20 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     TextArea.text = "";
     foreach (Ingredient dish in IngredientsOnMachine)
     {
-      TextArea.text += dish.ToString();
+      TextArea.text += '\u2b24' + dish.ToString() + '\n';
+    }
+    if (IngredientsOnMachine.Count == 2)
+    {
+      Dish d = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
+      if (GameManager.Instance.CookedDish.Exists(x => x.ID == d.ID))
+      {
+
+        TextArea.text += "\n--------\n\n" + d.ToString();
+      }
+      else
+      {
+        TextArea.text += "\n--------\n\n" + d.ToFirstString();
+      }
     }
   }
 
@@ -154,7 +186,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   {
 
     Dish dish = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
-
+    GameManager.Instance.CookedDish.Add(dish);
     Destroy(IngsOnMachine[1].gameObject);
     Destroy(IngsOnMachine[0].gameObject);
 
@@ -205,7 +237,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
     }
     else if (qteManager.Status == QteStatus.WaitingForCompress)
     {
-      
+
       if (GameManager.Instance.DishesInventory.ContainsKey(cd.Dish))
       {
         GameManager.Instance.DishesInventory[cd.Dish] += Portion;
@@ -215,19 +247,11 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
         GameManager.Instance.DishesInventory.Add(cd.Dish, Portion);
       }
 
-
+      DoorAnimator.Play("DoorClose");
+      IsCompressing = true;
       qteManager.Status = QteStatus.Waiting;
-      TextArea.text = "";
-      Destroy(cd.gameObject);
-      if (NoMoreIngredient && IngerdientItemList.Count < 2)
-      {
-        TextArea.text = "没有更多食材了……\n\n 去服务窗口吧";
-        GoNext = true;
-      }
-      else
-      {
-        Machine.enabled = true;
-      }
+
+
 
     }
 
