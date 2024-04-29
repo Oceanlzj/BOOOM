@@ -67,6 +67,8 @@ public class DishPack : MonoBehaviour
     initSO_Pack = sr_Pack.sortingOrder;
     initSO_Sticker = sr_sticker.sortingOrder;
 
+
+
     sr_sticker.sortingOrder = 100;
     sr_Pack.sortingOrder = 99;
 

@@ -302,21 +302,21 @@ namespace Assets.BasicModule.Model
 
     override public string ToString()
     {
-      string HPBar = "☤[";
-      string SatBar = "☕[";
-      string SanBar = "⛯[";
+      string HPBar = "健康\u2624";
+      string SatBar = "饱食\u2615";
+      string SanBar = "理智\u26ef";
 
-      for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '*'; }
-      while (HPBar.Length < 12) { HPBar += '-'; }
-      HPBar += "]\n";
+      for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '\u2b1b'; }
+      while (HPBar.Length < 12) { HPBar += '\u2b1c'; }
+      HPBar += "\n";
 
-      for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '*'; }
-      while (SatBar.Length < 12) { SatBar += "-"; }
-      SatBar += "]\n";
+      for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '\u2b1b'; }
+      while (SatBar.Length < 12) { SatBar += "\u2b1c"; }
+      SatBar += "\n";
 
-      for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "*"; }
-      while (SanBar.Length < 12) { SanBar += "-"; }
-      SanBar += "]\n";
+      for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "\u2b1b"; }
+      while (SanBar.Length < 12) { SanBar += "\u2b1c"; }
+      SanBar += "\n";
 
 
       string a = Name + "\n" + HPBar + SatBar + SanBar;

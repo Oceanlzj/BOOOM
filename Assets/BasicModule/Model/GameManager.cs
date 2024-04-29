@@ -21,14 +21,15 @@ namespace Assets.BasicModule.Model
     }
 
     public Random RNG { get; private set; }
+    public List<Dish> CookedDish { get; set; }
 
 
     public int CurrentWorkerID;
     public double Sanity { get; set; } = 50;
 
 
-    public int WorkersCountsToday { get; set; } = 3;
-    public int SpecialWorkerCountsToday { get; set; } = 2;
+    public int WorkersCountsToday { get; set; } = 1;
+    public int SpecialWorkerCountsToday { get; set; } = 0;
     public int IngredientCountToday { get; set; } = 8;
 
 
@@ -48,6 +49,7 @@ namespace Assets.BasicModule.Model
     private GameManager()
     {
       RNG = new Random((int)DateTime.Now.Ticks);
+      CookedDish = new();
       foreach (Worker worker in DataFactory.Instance().GetWorksers())
       {
         if (worker.ID >= 100)

@@ -192,11 +192,11 @@ public class ServePageController : MonoBehaviour
   }
   private void UpdateText()
   {
-    TextArea.text = "员工数：" + (CurrentIndex + 1).ToString() + " / " + workers.Count.ToString() + '\n';
-    TextArea.text += worker.ToString();
+    TextArea.text = "员工数：" + (CurrentIndex + 1).ToString() + " / " + workers.Count.ToString() + "\n--------\n";
+    TextArea.text += worker.ToString() + "--------" + '\n';
     foreach (Dish dish in DishOnPlate)
     {
-      TextArea.text += dish.Name + " - " + dish.Description + "\n";
+      TextArea.text += dish.ToString();
     }
     TextArea.text += "";
   }
