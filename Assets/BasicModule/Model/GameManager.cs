@@ -1,8 +1,11 @@
 using Assets.BasicModule.Factory;
+using Assets.BasicModule.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Assets.BasicModule.Model
 {
   [Serializable]
@@ -14,7 +17,7 @@ namespace Assets.BasicModule.Model
     public bool IsEndgame { get; set; } = false;
 
 
-    private static Lazy<GameManager> _Inastance = new Lazy<GameManager>(() => new GameManager());
+    private static Lazy<GameManager> _Inastance = new(() => new GameManager());
     public static GameManager Instance
     {
       get { return _Inastance.Value; }
@@ -28,27 +31,42 @@ namespace Assets.BasicModule.Model
     public double Sanity { get; set; } = 50;
 
 
-    public int WorkersCountsToday { get; set; } = 1;
-    public int SpecialWorkerCountsToday { get; set; } = 0;
+    public int AddInWorkersCountsToday { get; set; } = 0;
+    public int AddInSpecialWorkerCountsToday { get; set; } = 0;
     public int IngredientCountToday { get; set; } = 8;
 
 
     public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+    [JsonIgnore]
     public Dictionary<Dish, int> DishesInventory { get; set; } = new Dictionary<Dish, int>();
     public List<Worker> Workers { get; set; } = new();
     public List<SpecialWorker> SpecialWorkers { get; set; } = new();
+
     public HashSet<int> WorkersToday { get; set; } = new();
     public List<EventWorkerLine> EventWorkerLines { get; set; }
+    public List<GameEventManager.GameEvent> GameEvents { get; set; }
 
     public double RevoltBar { get; set; } = 50.0;
     public double RevoltAlertBar { get; set; } = 0.8;
+    public int NutrientSolutionCount { get; set; } = 5;
 
+    public int seed { get; set; }
+    public int BigEventBeginDay { get; set; }
+    public int TotalDays { get; set; } = 20;
     public bool IsOnRevolt { get { return Revolt > RevoltBar * RevoltAlertBar; } }
-
-
+    public List<int> BigEventPool { get; set; } = new() { 10001 };
+    public List<int> NewWorkerAddCount { get; set; } = new()
+    { 3,1,0,0,0,0,0,
+      2,1,0,0,0,1,0,
+      0,0,0,0,0,0 };
+    public List<int> NewSpecialWorkerCount { get; set; } = new()
+    { 1,0,0,0,1,0,0,
+      0,1,0,0,0,1,0,
+      0,0,0,0,0,0 };
     private GameManager()
     {
-      RNG = new Random((int)DateTime.Now.Ticks);
+      seed = (int)DateTime.Now.Ticks;
+      RNG = new Random(seed);
       CookedDish = new();
       foreach (Worker worker in DataFactory.Instance().GetWorksers())
       {
@@ -63,12 +81,11 @@ namespace Assets.BasicModule.Model
           Workers.Add(worker);
         }
       }
+      WorkersToday.Clear();
+      BigEventBeginDay = RNG.Next(7, 10);
+      GameEvents = DataFactory.Instance().GetGameEvents();
       EventWorkerLines = new List<EventWorkerLine>();
     }
-
-
-
-
     public double UpdateRevolt()
     {
       int MetCount = 0;
@@ -76,27 +93,55 @@ namespace Assets.BasicModule.Model
       double RevoltSum = 0;
       foreach (Worker wk in Workers)
       {
-        if(wk.Met)
+        if (wk.Met)
         {
           MetCount++;
           RevoltSum += wk.RevoltPoint;
-          if(!wk.IsAlive)
+          if (!wk.IsAlive)
           {
             DeadCount++;
           }
         }
       }
-      Revolt = (RevoltSum + 3 * (DeadCount  / MetCount));
+      Revolt = (RevoltSum + 3 * (DeadCount / MetCount));
       return Revolt;
     }
-
     public void NewDay()
+    {
+      NewDayDish();
+      NewDayWorkers();
+      NewDayEvent();
+
+      CurrentDay++;
+    }
+    public void NewDayDish()
     {
       Ingredients.Clear();
       DishesInventory.Clear();
 
-      WorkersToday.Clear();
-      for (int i = 0; i < WorkersCountsToday; i++)
+      DishesInventory.Add(DataFactory.Instance().GetDishByID(0), NutrientSolutionCount);
+      for (int i = 0; i < IngredientCountToday; i++)
+      {
+        Ingredients.Add(DataFactory.Instance().GetIngedientByID(RNG.Next(0, DataFactory.Instance().GetIngredientCount())));
+      }
+
+    }
+    public void NewDayWorkers()
+    {
+      AddInWorkersCountsToday = NewWorkerAddCount[CurrentDay];
+      AddInSpecialWorkerCountsToday = NewSpecialWorkerCount[CurrentDay];
+
+      if (WorkersToday.Count(x => x < 100) + AddInWorkersCountsToday > Workers.Count(x => x.ID < 100))
+      {
+        AddInWorkersCountsToday = WorkersToday.Count(x => x < 100) - Workers.Count(x => x.ID < 100);
+      }
+
+      if (WorkersToday.Count(x => x > 100) + AddInSpecialWorkerCountsToday > Workers.Count(x => x.ID > 100))
+      {
+        AddInSpecialWorkerCountsToday = WorkersToday.Count(x => x > 100) - Workers.Count(x => x.ID > 100);
+      }
+
+      for (int i = 0; i < AddInWorkersCountsToday; i++)
       {
         int index = RNG.Next(0, Workers.Count);
         while (WorkersToday.Contains(Workers[index].ID))
@@ -106,7 +151,7 @@ namespace Assets.BasicModule.Model
         WorkersToday.Add(Workers[index].ID);
       }
 
-      for (int i = 0; i < SpecialWorkerCountsToday; i++)
+      for (int i = 0; i < AddInSpecialWorkerCountsToday; i++)
       {
         int index = RNG.Next(0, SpecialWorkers.Count);
         while (WorkersToday.Contains(SpecialWorkers[index].ID))
@@ -115,29 +160,44 @@ namespace Assets.BasicModule.Model
         }
         WorkersToday.Add(SpecialWorkers[index].ID);
       }
-
-      for (int i = 0; i < IngredientCountToday; i++)
-      {
-        Ingredients.Add(DataFactory.Instance().GetIngedientByID(RNG.Next(0, DataFactory.Instance().GetIngredientCount())));
-      }
-
-      CurrentDay++;
     }
-
-
-    public void Accounting()
+    public void NewDayEvent()
     {
-      foreach(Worker worker in Workers)
+      foreach (GameEventManager.GameEvent e in GameEventManager.Instance.Events)
       {
-        if(worker.Met)
+        if (e.NextID != -1)
         {
-          if(WorkersToday.Contains(worker.ID))
+          if (GameEvents.Find(x => x.ID == e.NextID) != null)
           {
-            worker.UpdateStatus();
+            GameEvents.Find(x => x.ID == e.NextID).Raise();
+            e.Clear();
           }
         }
       }
+
+      if (CurrentDay == BigEventBeginDay)
+      {
+        int BigEventID = BigEventPool[RNG.Next(BigEventPool.Count)];
+        GameEvents.Find(x => x.ID == BigEventID).Raise();
+      }
+
     }
+    public void Accounting()
+    {
+      foreach (int i in WorkersToday)
+      {
+        Workers[Workers.IndexOf(Workers.Find(x => x.ID == i))].UpdateStatus();
+      }
+    }
+    public void Save()
+    {
+      JsonWriter<GameManager>.Write(this, "Save.json");
+    }
+    public void Load()
+    {
+      JsonReader<GameManager>.Read("Save.json");
+    }
+
 
   }
 }

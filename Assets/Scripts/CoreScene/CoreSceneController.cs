@@ -27,7 +27,7 @@ public class CoreSceneController : MonoBehaviour
   public void OnMsgBoxClicked()
   {
     ServePageController page = ServePage.GetComponent<ServePageController>();
-    if (page.worker is SpecialWorker && page.CurrentSpecialWorker.CurrentTask != null)
+    if (page.worker is SpecialWorker && page.CurrentSpecialWorker.CurrentTask != null && page.CurrentSpecialWorker.CurrentTask.RoundBeforeTrigger <= 0)
     {
       PlateCollider.enabled = false;
 
@@ -73,10 +73,7 @@ public class CoreSceneController : MonoBehaviour
 
     RemoveAllChildren(page.PlateFolder);
 
-    foreach (Dish dish in page.DishOnPlate)
-    {
-      page.worker.Eat(dish);
-    }
+   
     page.NextWorker();
   }
 
@@ -94,6 +91,7 @@ public class CoreSceneController : MonoBehaviour
     Spage.MsgBox.SetActive(false);
     PlateCollider.enabled = true;
     ConversationPage.SetActive(false);
+
 
 
     CurrentPage = ServePage;
@@ -119,6 +117,19 @@ public class CoreSceneController : MonoBehaviour
             pack.isServing = true;
           }
 
+          if (Spage.worker is SpecialWorker && Spage.CurrentSpecialWorker.CurrentTask != null && Spage.CurrentSpecialWorker.CurrentTask.RoundBeforeTrigger > 0)
+          {
+            Spage.CurrentSpecialWorker.CurrentTask.RoundBeforeTrigger--;
+          }
+
+          foreach (Dish dish in Spage.DishOnPlate)
+          {
+            Spage.worker.Eat(dish);
+            if (dish.ID == 0)
+            {
+              GameManager.Instance.NutrientSolutionCount--;
+            }
+          }
 
           Spage.MsgBox.SetActive(false);
           Spage.PlateHandAnimator.Play("HandPlateOut");
@@ -129,7 +140,7 @@ public class CoreSceneController : MonoBehaviour
         }
         else
         {
-          Spage.UpdateMsgBoxLine();
+          //Spage.UpdateMsgBoxLine();
         }
       }
     }
@@ -139,16 +150,20 @@ public class CoreSceneController : MonoBehaviour
 
       if (Cpage.ConversationEnd)
       {
-        //Add effect
-        //return to serve
-        Spage.CurrentSpecialWorker.NextRequest(true);
+        if (Cpage.NeedToShowCGYes)
+        {
+          Cpage.CGSprite.sprite = Cpage.CGSpriteLib.GetSprite("CG", Spage.CurrentSpecialWorker.CurrentTask.CGID_Yes.ToString());
+          Cpage.CGSprite.enabled = true;
+          Cpage.NeedToShowCGYes = false;
+          Spage.CurrentSpecialWorker.ApplyEffect(true);
+          Spage.CurrentSpecialWorker.NextRequest(true);
+          return;
+        }
         ConversationToServe();
-
-
       }
       else
       {
-        Cpage.UpdateALine();
+        //Cpage.UpdateALine();
 
       }
 
@@ -174,14 +189,21 @@ public class CoreSceneController : MonoBehaviour
     {
       if (Cpage.ConversationEnd)
       {
-        //add effect
-        Spage.CurrentSpecialWorker.NextRequest(false);
+        if (Cpage.NeedToShowCGNo)
+        {
+          Cpage.CGSprite.sprite = Cpage.CGSpriteLib.GetSprite("CG", Spage.CurrentSpecialWorker.CurrentTask.CGID_NO.ToString());
+          Cpage.CGSprite.enabled = true;
+          Cpage.NeedToShowCGNo = false;
+          Spage.CurrentSpecialWorker.ApplyEffect(false);
+          Spage.CurrentSpecialWorker.NextRequest(false);
+          return;
+        }
         //return to serve
         ConversationToServe();
       }
       else
       {
-        Cpage.UpdateALine();
+        //Cpage.UpdateALine();
       }
     }
 
