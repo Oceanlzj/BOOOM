@@ -42,5 +42,15 @@ namespace Assets.BasicModule.Model
         DataFactory.Instance().getTaskByID(CurrentTask.NextID_Yes)
         : DataFactory.Instance().getTaskByID(CurrentTask.NextID_No);
     }
+
+    public void ApplyEffect(bool IsYes)
+    {
+      Health += IsYes ? CurrentTask.HealthEffect_Yes : CurrentTask.HealthEffect_NO;
+      Sanity += IsYes ? CurrentTask.SanityEffect_Yes : CurrentTask.SanityEffect_NO;
+      if (Sanity > 0)
+      {
+        Satiety += IsYes ? CurrentTask.SatietyEffect_Yes : CurrentTask.SatietyEffect_NO;
+      }
+    }
   }
 }

@@ -55,6 +55,7 @@ public class ServePageController : MonoBehaviour
   public int CurrentLineIndex = 0;
   public List<string> CurrentLines = new List<string>();
   public bool TalkDone = false;
+  public bool Tasked = true;
 
 
   void Start()
@@ -67,6 +68,7 @@ public class ServePageController : MonoBehaviour
       if (WorkerID >= 100)//special
       {
         workers.Add(GameManager.Instance.SpecialWorkers.Find(x => x.ID == WorkerID));
+
       }
       else
       {
@@ -227,5 +229,10 @@ public class ServePageController : MonoBehaviour
   void Update()
   {
 
+  }
+
+  private void OnMouseDown()
+  {
+    UpdateMsgBoxLine();
   }
 }

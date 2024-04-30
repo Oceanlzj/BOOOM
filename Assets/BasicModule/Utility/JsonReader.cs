@@ -27,6 +27,17 @@ namespace Assets.BasicModule.Utility
       return JsonSerializer.Deserialize<T>(JsonFile);
     }
 
+    public static T ReadFromPersistent(string FilePath)
+    {
+      string JsonFile = "";
+      using (StreamReader sr = new StreamReader(Application.persistentDataPath + '\\' + FilePath))
+      {
+        JsonFile = sr.ReadToEnd();
+        sr.Close();
+        sr.Dispose();
+      }
+      return JsonSerializer.Deserialize<T>(JsonFile);
+    }
 
 
   }

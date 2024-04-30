@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -63,6 +64,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   void Start()
   {
+    GameManager.Instance.Save();
     GameManager.Instance.NewDay();
 
     Snapped.Clear();
@@ -261,7 +263,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   }
   public void OnNoClicked()
   {
-    if (Machine.enabled)
+    if (Machine.enabled && qteManager.Status == QteStatus.Waiting)
     {
       foreach (IngredientItem item in IngsOnMachine)
       {

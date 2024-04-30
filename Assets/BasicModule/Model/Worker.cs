@@ -130,6 +130,7 @@ namespace Assets.BasicModule.Model
 
 
 
+
     public double NormalizedHealth { get { return Health / HealthMax; } }
     public double NormalizedSatiety { get { return Satiety / SatietyMax; } }
     public double NormalizedSanity { get { return Sanity / SanityMax; } }
@@ -141,7 +142,7 @@ namespace Assets.BasicModule.Model
 
     public void Eat(Dish dish)
     {
-      double mul = 0.0;
+      double mul = 1.0;
       foreach (FoodProperty fp in dish.Properties)
       {
         foreach (WorkerFoodFavor favor in FoodPopertyMultiplier)
@@ -156,10 +157,13 @@ namespace Assets.BasicModule.Model
       if (Sanity > 0)
       {
         Sanity += dish.DishSanity * mul;
+        Sanity = Sanity > SanityMax ? SanityMax : Sanity;
       }
 
       Health += dish.DishHealth * mul;
+      Health = Health > HealthMax ? HealthMax : Health;
       Satiety += dish.DishSatiety;
+      Satiety = Satiety > SatietyMax ? SatietyMax : Satiety;
     }
     public void LoadBank()
     {
@@ -216,7 +220,7 @@ namespace Assets.BasicModule.Model
           }
         }
 
-        if (CurrentMostEvent.ID > 500)//is presist or not
+        if (CurrentMostEvent.ID < 10000)//is presist or not
         {
           TriggeredGameEvents.Add(CurrentMostEvent);
         }
@@ -279,8 +283,11 @@ namespace Assets.BasicModule.Model
     {
       EndDay();
 
-      double HealthAdjustment = (NormalizedSatiety - 0.3) * 40 + (NormalizedSanity - 0.3) * 20;
-      Health = HealthAdjustment + Health > HealthMax ? HealthMax : HealthAdjustment + Health;
+      double HealthAdjustment = (6 * (NormalizedSatiety - 0.85) * (NormalizedSatiety - 0.85) * (NormalizedSatiety - 0.85) +
+                                  5.6 * (NormalizedSanity - 0.85) * (NormalizedSanity - 0.85) * (NormalizedSanity - 0.85)) * HealthMax;
+      Health += HealthAdjustment;
+
+
 
       if (Health <= 0)
       {
@@ -295,7 +302,7 @@ namespace Assets.BasicModule.Model
         {
           OnSanIsZero.Raise();
         }
-        SanityMax = 1;
+        SanityMax = 999999;
       }
 
     }

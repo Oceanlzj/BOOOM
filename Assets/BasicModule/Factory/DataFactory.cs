@@ -112,6 +112,10 @@ namespace Assets.BasicModule.Factory
       return worker;
     }
 
+    public List<GameEventManager.GameEvent> GetGameEvents()
+    {
+      return _DataFactory.GameEvents;
+    }
 
   }
 }
