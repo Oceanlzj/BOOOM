@@ -283,8 +283,8 @@ namespace Assets.BasicModule.Model
     {
       EndDay();
 
-      double HealthAdjustment = (6 * (NormalizedSatiety - 0.85) * (NormalizedSatiety - 0.85) * (NormalizedSatiety - 0.85) +
-                                  5.6 * (NormalizedSanity - 0.85) * (NormalizedSanity - 0.85) * (NormalizedSanity - 0.85)) * HealthMax;
+      double HealthAdjustment = (3 * (NormalizedSatiety - 1.05) * (NormalizedSatiety - 1.05) * (NormalizedSatiety - 1.05) +
+                                  2.8 * (NormalizedSanity - 1.05) * (NormalizedSanity - 1.05) * (NormalizedSanity - 1.05)) * HealthMax;
       Health += HealthAdjustment;
 
 
@@ -314,15 +314,15 @@ namespace Assets.BasicModule.Model
       string SanBar = "理智\u26ef";
 
       for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '\u2b1b'; }
-      while (HPBar.Length < 12) { HPBar += '\u2b1c'; }
+      while (HPBar.Length < 13) { HPBar += '\u2b1c'; }
       HPBar += "\n";
 
       for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '\u2b1b'; }
-      while (SatBar.Length < 12) { SatBar += "\u2b1c"; }
+      while (SatBar.Length < 13) { SatBar += "\u2b1c"; }
       SatBar += "\n";
 
       for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "\u2b1b"; }
-      while (SanBar.Length < 12) { SanBar += "\u2b1c"; }
+      while (SanBar.Length < 13) { SanBar += "\u2b1c"; }
       SanBar += "\n";
 
 

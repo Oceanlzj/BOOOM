@@ -15,6 +15,11 @@ namespace Assets.BasicModule.Model
     [Category("Sentences"), Description("对话内容")]
     public List<string> ConversationSentences { get; set; } = new List<string>();
 
+    [Category("Sentences"), Description("后对话内容——YES")]
+    public List<string> ConversationSentences_Yes { get; set; } = new List<string>();
+    [Category("Sentences"), Description("后对话内容——NO")]
+    public List<string> ConversationSentences_NO { get; set; } = new List<string>();
+
     [Category("Effect_Yes"), Description("健康度影响")]
     public double HealthEffect_Yes { get; set; } = 0;
     [Category("Effect_Yes"), Description("饱食度影响")]

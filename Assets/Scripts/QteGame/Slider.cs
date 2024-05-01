@@ -17,6 +17,7 @@ public class Slider : MonoBehaviour
   private bool _totalTimerStarted = false;
   private float GameTimeToFinish = 2.0f;
   private CookQte _parentGameObject;
+  public Animator HintAnimator;
   void Start()
   {
     // 获取父物体
@@ -41,12 +42,14 @@ public class Slider : MonoBehaviour
     {
       return;
     }
-    if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
+    if (Input.GetKeyDown(KeyCode.Space))
     {
+      _parentGameObject.transform.position -= new Vector3(0, 0.05f, 0);
       _isRight = true;
     }
-    else if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Space))
+    else if (Input.GetKeyUp(KeyCode.Space))
     {
+      _parentGameObject.transform.position += new Vector3(0, 0.05f, 0);
       _isRight = false;
     }
 
@@ -110,6 +113,10 @@ public class Slider : MonoBehaviour
         _totalTimerStarted = true;
         _timeBegin = Time.time;
       }
+      if(!_isRight)
+      {
+        HintAnimator.Play("MouseHint");
+      }
     }
 
   }
@@ -120,10 +127,19 @@ public class Slider : MonoBehaviour
     {
       _inArea = false;
     }
+    if(_isRight)
+    {
+      HintAnimator.Play("MouseIdle");
+    }
+    else
+    {
+      HintAnimator.Play("MouseHint");
+    }
   }
 
   public void StartGame()
   {
+    HintAnimator.Play("MouseHint");
     transform.position = _minXPos;
     _isActive = true;
     _stop = false;
@@ -136,7 +152,7 @@ public class Slider : MonoBehaviour
     _inArea = false;
     transform.position = _minXPos;
     _timeEnd = Time.time;
-
+    HintAnimator.Play("MouseIdle");
   }
 
   public float GetTotalTime()

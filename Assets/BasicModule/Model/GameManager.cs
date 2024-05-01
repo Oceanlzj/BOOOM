@@ -48,7 +48,7 @@ namespace Assets.BasicModule.Model
 
     public double RevoltBar { get; set; } = 50.0;
     public double RevoltAlertBar { get; set; } = 0.8;
-    public int NutrientSolutionCount { get; set; } = 5;
+    public int NutrientSolutionCount { get; set; } = 1;
 
     public int seed { get; set; }
     public int BigEventBeginDay { get; set; }
@@ -56,12 +56,12 @@ namespace Assets.BasicModule.Model
     public bool IsOnRevolt { get { return Revolt > RevoltBar * RevoltAlertBar; } }
     public List<int> BigEventPool { get; set; } = new() { 10001 };
     public List<int> NewWorkerAddCount { get; set; } = new()
-    { 3,1,0,0,0,0,0,
+    { 3,1,0,1,0,1,0,
       2,1,0,0,0,1,0,
       0,0,0,0,0,0 };
     public List<int> NewSpecialWorkerCount { get; set; } = new()
-    { 1,0,0,0,1,0,0,
-      0,1,0,0,0,1,0,
+    { 1,0,0,0,1,0,1,
+      0,1,0,0,0,0,0,
       0,0,0,0,0,0 };
     private GameManager()
     {

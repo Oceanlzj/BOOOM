@@ -53,7 +53,7 @@ public class CutQte : MonoBehaviour
   public void InitGame()
   {
     //30~-155
-    area.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-155f, 30f));
+    area.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-150f, 30f));
     _pointer.Reset();
   }
 

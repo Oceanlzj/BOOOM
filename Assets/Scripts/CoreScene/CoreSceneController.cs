@@ -159,6 +159,7 @@ public class CoreSceneController : MonoBehaviour
           Spage.CurrentSpecialWorker.NextRequest(true);
           return;
         }
+
         ConversationToServe();
       }
       else
