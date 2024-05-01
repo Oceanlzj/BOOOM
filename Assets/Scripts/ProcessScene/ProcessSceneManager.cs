@@ -4,9 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D.Animation;
 using UnityEngine.UIElements;
 
 public enum ManagerStutes
@@ -38,6 +40,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public GameObject MachineFolder;
   public GameObject PrepFolder;
 
+  public GameObject CookQTEObject;
+  public GameObject CutQTEObject;
+
   public Collider2D Machine;
 
   public List<IngredientItem> IngsOnMachine;
@@ -59,7 +64,10 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   public float seconds;
   private bool IsCompressing = false;
+  public Animator PackAnimator;
 
+  public SpriteRenderer IndicatorSR;
+  public SpriteLibraryAsset IndicatorLib;
 
 
   void Start()
@@ -73,10 +81,12 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       Snapped.Add(false);
     }
 
-
+    IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
     IngerdientItemList = new List<IngredientItem>();
     StartNewDay();
+    UpdateText();
     DoorAnimator.Play("DoorOpen");
+
   }
 
   // Update is called once per frame
@@ -84,37 +94,48 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   {
     if (qteManager.Status == QteStatus.FinishCutting)
     {
-      print(qteManager.GetCutVectorNum());
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Cooking");
       qteManager.StartCookGame();
       return;
     }
 
     if (qteManager.Status == QteStatus.FinishCooking)
     {
-      //qteManager.FinishCookGame();
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
       DishOut();
-      print(qteManager.GetCookTotalTime());
       DoorAnimator.Play("DoorOpen");
       qteManager.Status = QteStatus.WaitingForCompress;
       return;
     }
 
-    if (IsCompressing && DoorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 0)
+
+    if (IsCompressing && DoorAnimator.GetCurrentAnimatorStateInfo(0).IsName("DoorClose") && DoorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
     {
-      TextArea.text = "";
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Compressing");
+      PackAnimator.Play("PackOut");
+      TextArea.text = "压缩中……………………";
       Destroy(cd.gameObject);
+      
+      IsCompressing = false;
+
+
+    }
+
+    if (PackAnimator.GetCurrentAnimatorStateInfo(0).IsName("PackOut") && PackAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= Portion)
+    {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
+      PackAnimator.Play("idle");
+      DoorAnimator.Play("DoorOpen");
       if (NoMoreIngredient && IngerdientItemList.Count < 2)
       {
-        TextArea.text = "没有更多食材了……\n\n去服务窗口吧";
+        TextArea.text = "料理包制作完毕\n\n按【YES】前往服务窗口";
         GoNext = true;
       }
       else
       {
         Machine.enabled = true;
+        UpdateText();
       }
-
-      IsCompressing = false;
-      DoorAnimator.Play("DoorOpen");
     }
 
   }
@@ -131,7 +152,8 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   }
   public void UpdateText()
   {
-    TextArea.text = "";
+    TextArea.text = "Day:" + GameManager.Instance.CurrentDay.ToString() + '\n';
+    TextArea.text += "请选择两种食材制作料理\n";
     foreach (Ingredient dish in IngredientsOnMachine)
     {
       TextArea.text += '\u2b24' + dish.ToString() + '\n';
@@ -202,7 +224,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
     Portion = (int)((qteManager.GetCutVectorNum() * qteManager.GetCookTotalTime()) + 1);
     TextArea.text = dish.ToString() + " x " + Portion;
-    TextArea.text += "\n\n确定压缩？";
+    TextArea.text += "\n\n按【YES】压缩为料理包";
 
   }
 
@@ -215,8 +237,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       return;
     }
 
-    if (Machine.enabled && qteManager.Status == QteStatus.Waiting)
+    if (Machine.enabled && qteManager.Status == QteStatus.Waiting && IngsOnMachine.Count >= 2)
     {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Cutting");
       //cook ani
       PipeNum1 = IngsOnMachine[0].PipeNum;
       PipeNum2 = IngsOnMachine[1].PipeNum;
@@ -227,7 +250,6 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
 
       //cook destory
-      if (IngsOnMachine.Count < 2) { return; }
       IngsOnMachine[0]._status = DishStatus.Cooking;
       IngsOnMachine[1]._status = DishStatus.Cooking;
 
