@@ -55,6 +55,7 @@ public class ServePageController : MonoBehaviour
   public int CurrentLineIndex = 0;
   public List<string> CurrentLines = new List<string>();
   public bool TalkDone = false;
+  public bool Tasked = true;
 
 
   void Start()
@@ -67,6 +68,7 @@ public class ServePageController : MonoBehaviour
       if (WorkerID >= 100)//special
       {
         workers.Add(GameManager.Instance.SpecialWorkers.Find(x => x.ID == WorkerID));
+
       }
       else
       {
@@ -75,9 +77,9 @@ public class ServePageController : MonoBehaviour
     }
 
     System.Random random = new System.Random(seed);
-    for (int i = workers.Count - 1; i >= 0; i--)
+    for (int i = workers.Count - 1; i > 0; i--)
     {
-      int k = random.Next(0, i + 1);
+      int k = random.Next(1, i + 1);
 
       Worker Temp = workers[k];
       workers[k] = workers[i];
@@ -157,7 +159,7 @@ public class ServePageController : MonoBehaviour
 
   public void NextWorker()
   {
-    UpdateText();
+    TalkDone = false;
     MsgBoxArea.text = "......";
     if (CurrentIndex + 1 > workers.Count)
     {
@@ -184,20 +186,20 @@ public class ServePageController : MonoBehaviour
       CurrentSpecialWorker = (SpecialWorker)worker;
       HandSprite.sprite = HandLib.GetSprite("Special", worker.ID.ToString());
 
-      if (CurrentSpecialWorker.CurrentTask != null)
-      {
-      }
     }
     UpdateMsgBoxLine();
+    UpdateText();
     MsgBox.SetActive(true);
     MsgBoxAnimator.Play("MsgPopIn");
   }
   private void UpdateText()
   {
-    TextArea.text = worker.ToString();
+    TextArea.text = "Day:" + GameManager.Instance.CurrentDay.ToString() + '\n';
+    TextArea.text += "Ô±¹¤Êý£º" + (CurrentIndex + 1).ToString() + " / " + workers.Count.ToString() + "\n--------\n";
+    TextArea.text += worker.ToString() + "--------" + '\n';
     foreach (Dish dish in DishOnPlate)
     {
-      TextArea.text += dish.Name + " - " + dish.Description + "\n";
+      TextArea.text += dish.ToString();
     }
     TextArea.text += "";
   }
@@ -227,6 +229,10 @@ public class ServePageController : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-
+    if(Input.GetKeyDown(KeyCode.Escape))
+    {
+      UpdateMsgBoxLine();
+    }
   }
+
 }

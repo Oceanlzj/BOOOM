@@ -26,15 +26,15 @@ public class DishPack : MonoBehaviour
 
   public List<Vector3> SnapPoints;
   public List<bool> Snapped;
-  private Vector3 stopPos;   //≈Ã◊”Õ£÷πŒª÷√
-  public Vector3 InitPos;   //≈Ã◊”Õ£÷πŒª÷√
+  private Vector3 stopPos; 
+  public Vector3 InitPos;   
   private Vector2 _distance;
 
   public bool isServing = false;
   private Vector2 _mousePos;
   private PackStatus _status;
   private bool _mouseDown = false;
-  private Vector3 _velocity = Vector3.zero;
+  private Vector2 _velocity = Vector2.zero;
   public float retrunTime = 0.3f;
   private int snappedIndex = -1;
   // Start is called before the first frame update
@@ -54,14 +54,9 @@ public class DishPack : MonoBehaviour
     {
       if (!_mouseDown)
       {
-        transform.position = Vector3.SmoothDamp(transform.position, stopPos, ref _velocity, retrunTime);
+        transform.position = Vector2.SmoothDamp(transform.position, stopPos, ref _velocity, retrunTime);
       }
     }
-  }
-  private void Move(float speed)  //“∆∂Ø
-  {
-
-    transform.position = Vector3.MoveTowards(transform.position, stopPos, speed);
   }
 
   private void OnMouseDown()
@@ -71,6 +66,8 @@ public class DishPack : MonoBehaviour
     _distance = new Vector2(transform.position.x, transform.position.y) - _mousePos;
     initSO_Pack = sr_Pack.sortingOrder;
     initSO_Sticker = sr_sticker.sortingOrder;
+
+
 
     sr_sticker.sortingOrder = 100;
     sr_Pack.sortingOrder = 99;

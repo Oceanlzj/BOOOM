@@ -4,8 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D.Animation;
 using UnityEngine.UIElements;
 
 public enum ManagerStutes
@@ -37,6 +40,9 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public GameObject MachineFolder;
   public GameObject PrepFolder;
 
+  public GameObject CookQTEObject;
+  public GameObject CutQTEObject;
+
   public Collider2D Machine;
 
   public List<IngredientItem> IngsOnMachine;
@@ -52,17 +58,21 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   public int PipeNum1;
   public int PipeNum2;
 
-  public List<IngredientItem> _dishesList;
+  public List<IngredientItem> IngerdientItemList;
   public int CurrentIndex = 0;
 
 
-  public float seconds;       // 创建时间间隔
+  public float seconds;
+  private bool IsCompressing = false;
+  public Animator PackAnimator;
 
+  public SpriteRenderer IndicatorSR;
+  public SpriteLibraryAsset IndicatorLib;
 
-  private ManagerStutes _stutes;
 
   void Start()
   {
+    GameManager.Instance.Save();
     GameManager.Instance.NewDay();
 
     Snapped.Clear();
@@ -71,21 +81,63 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       Snapped.Add(false);
     }
 
-
-    _dishesList = new List<IngredientItem>();
-    _stutes = ManagerStutes.Creating;
+    IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
+    IngerdientItemList = new List<IngredientItem>();
     StartNewDay();
+    UpdateText();
     DoorAnimator.Play("DoorOpen");
+
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (GoNext)
+    if (qteManager.Status == QteStatus.FinishCutting)
     {
-      float alphaChange = 0.5f * Time.deltaTime;
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Cooking");
+      qteManager.StartCookGame();
+      return;
+    }
+
+    if (qteManager.Status == QteStatus.FinishCooking)
+    {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
+      DishOut();
+      DoorAnimator.Play("DoorOpen");
+      qteManager.Status = QteStatus.WaitingForCompress;
+      return;
+    }
+
+
+    if (IsCompressing && DoorAnimator.GetCurrentAnimatorStateInfo(0).IsName("DoorClose") && DoorAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+    {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Compressing");
+      PackAnimator.Play("PackOut");
+      TextArea.text = "压缩中……………………";
+      Destroy(cd.gameObject);
+      
+      IsCompressing = false;
+
 
     }
+
+    if (PackAnimator.GetCurrentAnimatorStateInfo(0).IsName("PackOut") && PackAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= Portion)
+    {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "None");
+      PackAnimator.Play("idle");
+      DoorAnimator.Play("DoorOpen");
+      if (NoMoreIngredient && IngerdientItemList.Count < 2)
+      {
+        TextArea.text = "料理包制作完毕\n\n按【YES】前往服务窗口";
+        GoNext = true;
+      }
+      else
+      {
+        Machine.enabled = true;
+        UpdateText();
+      }
+    }
+
   }
 
   private void StartNewDay()
@@ -97,14 +149,27 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       curNum++;
     }
 
-    _stutes = ManagerStutes.Waiting;
   }
   public void UpdateText()
   {
-    TextArea.text = "";
+    TextArea.text = "Day:" + GameManager.Instance.CurrentDay.ToString() + '\n';
+    TextArea.text += "请选择两种食材制作料理\n";
     foreach (Ingredient dish in IngredientsOnMachine)
     {
-      TextArea.text += dish.ToString();
+      TextArea.text += '\u2b24' + dish.ToString() + '\n';
+    }
+    if (IngredientsOnMachine.Count == 2)
+    {
+      Dish d = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
+      if (GameManager.Instance.CookedDish.Exists(x => x.ID == d.ID))
+      {
+
+        TextArea.text += "\n--------\n\n" + d.ToString();
+      }
+      else
+      {
+        TextArea.text += "\n--------\n\n" + d.ToFirstString();
+      }
     }
   }
 
@@ -115,7 +180,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       PipeAnimator[number].Play("PipeOut");
       IngredientItem dish = Instantiate(dishProfab, Pipes[number].GetChild(0).position /*+ new Vector3(0, 0.5f, 0)*/, Quaternion.identity);
       dish.Ingredient = GameManager.Instance.Ingredients[CurrentIndex];
-      _dishesList.Add(dish);
+      IngerdientItemList.Add(dish);
       dish.SetPos(Pipes[number].GetChild(1).position + new Vector3(0, 1, 0));
       dish.PipeNum = number;
 
@@ -138,10 +203,30 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
 
   public void RemoveIngerdient(IngredientItem dish)
   {
-    _dishesList.Remove(dish);
-    _stutes = ManagerStutes.Destroy;
+    IngerdientItemList.Remove(dish);
   }
 
+  public void DishOut()
+  {
+
+    Dish dish = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
+    GameManager.Instance.CookedDish.Add(dish);
+    Destroy(IngsOnMachine[1].gameObject);
+    Destroy(IngsOnMachine[0].gameObject);
+
+    //cook Dish
+    cd = Instantiate(CookedDish, CookedDishPos);
+    cd.Dish = dish;
+    IngredientsOnMachine.Clear();
+    Machine.enabled = false;
+
+    //new 
+
+    Portion = (int)((qteManager.GetCutVectorNum() * qteManager.GetCookTotalTime()) + 1);
+    TextArea.text = dish.ToString() + " x " + Portion;
+    TextArea.text += "\n\n按【YES】压缩为料理包";
+
+  }
 
   public void OnYesClicked()
   {
@@ -152,50 +237,31 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       return;
     }
 
-    if (Machine.enabled)
+    if (Machine.enabled && qteManager.Status == QteStatus.Waiting && IngsOnMachine.Count >= 2)
     {
+      IndicatorSR.sprite = IndicatorLib.GetSprite("0", "Cutting");
       //cook ani
-      //cook destory
-      if (IngsOnMachine.Count < 2) { return; }
       PipeNum1 = IngsOnMachine[0].PipeNum;
       PipeNum2 = IngsOnMachine[1].PipeNum;
-      try
-      {
-        Dish dish = DataFactory.Instance().GetDishByRecipe(IngredientsOnMachine[0].ID, IngredientsOnMachine[1].ID);
-        Portion = Random.Range(1, 3);
+      RemoveIngerdient(IngsOnMachine[0]);
+      RemoveIngerdient(IngsOnMachine[1]);
+      CreateIngredient(PipeNum1);
+      CreateIngredient(PipeNum2);
 
-        Destroy(IngsOnMachine[1].gameObject);
-        Destroy(IngsOnMachine[0].gameObject);
 
-        //cook Dish
-        cd = Instantiate(CookedDish, CookedDishPos);
-        cd.Dish = dish;
-        IngredientsOnMachine.Clear();
-        Machine.enabled = false;
+      //cook destory
+      IngsOnMachine[0]._status = DishStatus.Cooking;
+      IngsOnMachine[1]._status = DishStatus.Cooking;
 
-        //new 
-        CreateIngredient(PipeNum1);
-        CreateIngredient(PipeNum2);
+      DoorAnimator.Play("DoorClose");
 
-        TextArea.text = "确定压缩？";
+      qteManager.StartCutGame();
 
-        QteManager.Instance.StartQteGame();
-      }
-      catch
-      {
-        StopText = true;
-        TextArea.text = "无效的配方，请重试！";
-        if (_dishesList.Count <= 3)
-        {
 
-          TextArea.text = "没有更多可料理的了……\n\n 去服务窗口吧";
-          GoNext = true;
-        }
-        OnNoClicked();
-      }
     }
-    else
+    else if (qteManager.Status == QteStatus.WaitingForCompress)
     {
+
       if (GameManager.Instance.DishesInventory.ContainsKey(cd.Dish))
       {
         GameManager.Instance.DishesInventory[cd.Dish] += Portion;
@@ -204,16 +270,13 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
       {
         GameManager.Instance.DishesInventory.Add(cd.Dish, Portion);
       }
-      Destroy(cd.gameObject);
-      if (NoMoreIngredient && _dishesList.Count < 2)
-      {
-        TextArea.text = "没有更多食材了……\n\n 去服务窗口吧";
-        GoNext = true;
-      }
-      else
-      {
-        Machine.enabled = true;
-      }
+
+      DoorAnimator.Play("DoorClose");
+      IsCompressing = true;
+      qteManager.Status = QteStatus.Waiting;
+
+
+
     }
 
 
@@ -222,7 +285,7 @@ public class ProcessSceneManager : Singleton<ProcessSceneManager>
   }
   public void OnNoClicked()
   {
-    if (Machine.enabled)
+    if (Machine.enabled && qteManager.Status == QteStatus.Waiting)
     {
       foreach (IngredientItem item in IngsOnMachine)
       {

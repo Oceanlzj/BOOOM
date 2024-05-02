@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/BasicModule/Model/EventWorkerLine.cs.meta
+guid: 3363b2e9c147a0842bcd9681d3885b8f
+========
 guid: 0d63843e554b65649b9e892816efec71
+>>>>>>>> BackUp:Assets/BasicModule/Factory/DataFactory.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

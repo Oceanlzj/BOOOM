@@ -5,104 +5,112 @@ using UnityEngine;
 
 public class Pointer : MonoBehaviour
 {
-    
-    public float speed = 0.1f;
 
-    private bool _isActive = false;
-    
-    private bool _inArea = false;
+  public float speed = 0.1f;
 
-    private bool _stop = false;
+  private bool _isActive = false;
 
-    private bool _clockwise = true;
+  private bool _inArea = false;
 
-    private CutQte _parentGameObject;
-    
-    // Start is called before the first frame update
-    void Start()
+  private bool _stop = false;
+
+  private bool _clockwise = true;
+
+  private CutQte _parentGameObject;
+  public Animator HintAnimator;
+
+  // Start is called before the first frame update
+  void Start()
+  {
+    // 获取父物体
+    Transform parentTransform = transform.parent;
+
+    // 如果父物体存在
+    if (parentTransform == null)
     {
-        // 获取父物体
-        Transform parentTransform = transform.parent;
- 
-        // 如果父物体存在
-        if (parentTransform == null)
-        {
-           
-            Debug.Log("这是一个根物体，没有父物体。");
-        }
-        else
-        {
-            _parentGameObject = parentTransform.gameObject.GetComponent<CutQte>();
-        }
 
-        Reset();
+      Debug.Log("这是一个根物体，没有父物体。");
+    }
+    else
+    {
+      _parentGameObject = parentTransform.gameObject.GetComponent<CutQte>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_isActive && Input.GetMouseButtonDown(0))
-        {
-            _stop = true;
-            _parentGameObject.CheckVector(_inArea);
-        }
-    }
+    Reset();
+  }
 
-    private void FixedUpdate()
+  // Update is called once per frame
+  void Update()
+  {
+    if (_isActive && Input.GetKeyDown(KeyCode.Space))
     {
-        if (!_stop && _isActive)
-        {
-            // 实际测试获得 左侧0.608f，右侧-0.966f
-            if (transform.rotation.z > 0.608f)
-            {
-                _clockwise = true;
-            }
-            else if (transform.rotation.z < -0.966f)
-            {
-                _clockwise = false;
-            }
-            
-            Vector3 direction = transform.forward; 
-            if (_clockwise)
-            {
-                direction = -direction;
-            }
-            
-            transform.RotateAround(transform.position, direction, speed+Time.deltaTime);
-        }
+      _parentGameObject.transform.position -= new Vector3(0, 0.05f, 0);
+      _stop = true;
+      _parentGameObject.CheckVector(_inArea);
     }
+    if(_isActive && Input.GetKeyUp(KeyCode.Space))
+    {
+      _parentGameObject.transform.position += new Vector3(0, 0.05f, 0);
+    }
+  }
 
-    private void OnTriggerEnter2D(Collider2D other)
+  private void FixedUpdate()
+  {
+    if (!_stop && _isActive)
     {
-        if (other.tag == "DropPort")
-        {
-            _inArea = true;
-            //print("enter");
-        }
-    }
+      // 实际测试获得 左侧0.608f，右侧-0.966f
+      if (transform.rotation.z > 0.608f)
+      {
+        _clockwise = true;
+      }
+      else if (transform.rotation.z < -0.966f)
+      {
+        _clockwise = false;
+      }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.tag == "DropPort")
-        {
-            _inArea = false;
-            //print("Exit");
-        }
-    }
+      Vector3 direction = transform.forward;
+      if (_clockwise)
+      {
+        direction = -direction;
+      }
 
-    public void Reset()
-    {
-        _stop = false;
+      transform.RotateAround(transform.position, direction, speed + Time.deltaTime);
     }
+  }
 
-    public void StartGame()
+  private void OnTriggerEnter2D(Collider2D other)
+  {
+    if (other.tag == "DropPort")
     {
-        _isActive = true;
+      _inArea = true;
+      HintAnimator.Play("MouseHint");
+      //print("enter");
     }
+  }
 
-    public void StopGame()
+  private void OnTriggerExit2D(Collider2D other)
+  {
+    if (other.tag == "DropPort")
     {
-        _isActive = false;
+      _inArea = false;
+      HintAnimator.Play("MouseIdle");
+      //print("Exit");
     }
-    
+  }
+
+  public void Reset()
+  {
+    _stop = false;
+  }
+
+  public void StartGame()
+  {
+    _isActive = true;
+  }
+
+  public void StopGame()
+  {
+    _isActive = false;
+  }
+
 }

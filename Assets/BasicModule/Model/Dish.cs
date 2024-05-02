@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,25 +13,53 @@ namespace Assets.BasicModule.Model
       Normal = 1,
       Special = 2
     }
-    [Category("ID"), Description("Î¨Ò»ID")]
+    [Category("ID"), Description("å”¯ä¸€ID")]
     public int ID { get; set; }
-    [Category("Description"), Description("²ËÆ·Ãû")]
+    [Category("Description"), Description("èœå“å")]
     public string Name { get; set; }
-    [Category("Description"), Description("²ËÆ·ÃèÊö")]
+    [Category("Description"), Description("èœå“æè¿°")]
     public string Description { get; set; }
 
-    [Category("Value"), Description("²ËÆ·½¡¿µÖµ")]
+    [Category("Value"), Description("èœå“å¥åº·å€¼")]
     public double DishHealth { get; set; }
-    [Category("Value"), Description("²ËÆ·SanÖµ")]
+    [Category("Value"), Description("èœå“Sanå€¼")]
     public double DishSanity { get; set; }
-    [Category("Value"), Description("²ËÆ·±¥Ê³¶È")]
+    [Category("Value"), Description("èœå“é¥±é£Ÿåº¦")]
     public double DishSatiety { get; set; }
-    //ÁÏÀí³É¹¦¶ÈÏµÊı
-    [Category("Type"), Description("²ËÆ·ÀàĞÍ")]
+    //æ–™ç†æˆåŠŸåº¦ç³»æ•°
+    [Category("Type"), Description("èœå“ç±»å‹")]
     public DishType Type { get; set; }
-    [Category("Type"), Description("²ËÆ·ÌØÊâÊôĞÔ")]
+    [Category("Type"), Description("èœå“ç‰¹æ®Šå±æ€§")]
     public List<FoodProperty> Properties { get; set; } = new List<FoodProperty>();
 
+    public string ToFirstString()
+    {
+      string a = "\u2b9e[" + Name + "]\n";
+      return a;
+    }
+    public override string ToString()
+    {
+      string HPBar = "å¥åº·\u2624";
+      string SatBar = "é¥±é£Ÿ\u2615";
+      string SanBar = "ç†æ™º\u26ef";
 
+      for (int i = 0; i < DishHealth / 10; i++) { HPBar += '\u271a'; }
+      HPBar += "\n";
+
+      for (int i = 0; i < DishSatiety / 10; i++) { SatBar += '\u271a'; }
+      SatBar += "\n";
+
+      for (int i = 0; i < DishSanity / 10; i++) { SanBar += "\u271a"; }
+      SanBar += "\n";
+      string p = "å±æ€§ï¼š";
+      foreach (FoodProperty fp in Properties)
+      {
+        p += FoodPropertyString.FoodPropertyName(fp) + ' ';
+      }
+
+
+      string a = "\u2b9e[" + Name + "]\n" + HPBar + SatBar + SanBar + p + '\n';
+      return a;
+    }
   }
 }

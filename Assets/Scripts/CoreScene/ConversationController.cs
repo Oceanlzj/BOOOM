@@ -16,10 +16,15 @@ public class ConversationController : MonoBehaviour
   public int WorkerID = 100;
   public int TaskID = 0;
   public TextMeshProUGUI TalkTextArea;
-  public TextMeshProUGUI NarratorArea;
+
+  public SpriteRenderer CGSprite;
+  public SpriteLibraryAsset CGSpriteLib;
 
   public SpecialWorker Worker;
   public Request Request;
+
+  public bool NeedToShowCGYes = false;
+  public bool NeedToShowCGNo = false;
 
   private int CurrentIndex = 0;
   public bool ConversationEnd = false;
@@ -33,16 +38,8 @@ public class ConversationController : MonoBehaviour
       return;
     }
 
-    if (Request.ConversationSentences[CurrentIndex].IsTalk)
-    {
-      TalkTextArea.text = Request.ConversationSentences[CurrentIndex].Line;
-      NarratorArea.text = "";
-    }
-    else
-    {
-      NarratorArea.text = Request.ConversationSentences[CurrentIndex].Line;
-      TalkTextArea.text = "";
-    }
+    TalkTextArea.text = Request.ConversationSentences[CurrentIndex];
+
     CurrentIndex++;
 
   }
@@ -54,6 +51,9 @@ public class ConversationController : MonoBehaviour
     Request = sp.CurrentSpecialWorker.CurrentTask;
     WorkerSprite.sprite = SpriteLibrary.GetSprite(Worker.ID.ToString(), "0");
     CurrentIndex = 0;
+    NeedToShowCGNo = Worker.CurrentTask.CGID_NO != -1;
+    NeedToShowCGYes = Worker.CurrentTask.CGID_Yes != -1;
+
     UpdateALine();
   }
 

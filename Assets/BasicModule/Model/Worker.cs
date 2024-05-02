@@ -130,6 +130,7 @@ namespace Assets.BasicModule.Model
 
 
 
+
     public double NormalizedHealth { get { return Health / HealthMax; } }
     public double NormalizedSatiety { get { return Satiety / SatietyMax; } }
     public double NormalizedSanity { get { return Sanity / SanityMax; } }
@@ -141,7 +142,7 @@ namespace Assets.BasicModule.Model
 
     public void Eat(Dish dish)
     {
-      double mul = 0.0;
+      double mul = 1.0;
       foreach (FoodProperty fp in dish.Properties)
       {
         foreach (WorkerFoodFavor favor in FoodPopertyMultiplier)
@@ -156,111 +157,116 @@ namespace Assets.BasicModule.Model
       if (Sanity > 0)
       {
         Sanity += dish.DishSanity * mul;
+        Sanity = Sanity > SanityMax ? SanityMax : Sanity;
       }
 
       Health += dish.DishHealth * mul;
+      Health = Health > HealthMax ? HealthMax : Health;
       Satiety += dish.DishSatiety;
+      Satiety = Satiety > SatietyMax ? SatietyMax : Satiety;
     }
     public void LoadBank()
     {
       LineBank.Clear();
-
-      if (Sanity == 0)
+      try
       {
-        LineBank.Add(ZeroSatietyLines[GameManager.Instance.RNG.Next(ZeroSatietyLines.Count)]);
-        return;
+        if (Sanity == 0)
+        {
+          LineBank.Add(ZeroSatietyLines[GameManager.Instance.RNG.Next(ZeroSatietyLines.Count)]);
+          return;
+        }
+
+        //first met
+        if (!Met)
+        {
+          LineBank.Add(HelloLines[GameManager.Instance.RNG.Next(HelloLines.Count)]);
+        }
+
+        //Dying
+        if (NormalizedHealth < NormalizedLowHealthBar)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(LowHealthLines_LowSAN[GameManager.Instance.RNG.Next(LowHealthLines_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(LowHealthLines_NormalSAN[GameManager.Instance.RNG.Next(LowHealthLines_NormalSAN.Count)]);
+          }
+          return;
+        }
+
+        //low sat
+        if (NormalizedSatiety < NormalizedLowSatietyBar)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(LowSatietyLines_LowSAN[GameManager.Instance.RNG.Next(LowSatietyLines_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(LowSatietyLines_NormalSAN[GameManager.Instance.RNG.Next(LowSatietyLines_NormalSAN.Count)]);
+          }
+        }
+
+        //event
+        GameEventManager.GameEvent CurrentMostEvent = new();
+        foreach (GameEventManager.GameEvent Event in GameEventManager.Instance.Events)
+        {
+          if (!TriggeredGameEvents.Contains(Event))
+          {
+            CurrentMostEvent = Event;
+            break;
+          }
+        }
+
+        if (CurrentMostEvent.ID < 10000)//is presist or not
+        {
+          TriggeredGameEvents.Add(CurrentMostEvent);
+        }
+
+        EventWorkerLine ewl = GameManager.Instance.EventWorkerLines.Find(x => x.WorkerID == ID && x.EventID == CurrentMostEvent.ID);
+        if (ewl != null)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(ewl.Lines_LowSan[GameManager.Instance.RNG.Next(ewl.Lines_LowSan.Count)]);
+          }
+          else
+          {
+            LineBank.Add(ewl.Lines_NormalSan[GameManager.Instance.RNG.Next(ewl.Lines_NormalSan.Count)]);
+          }
+
+        }
+        else if (Met && !GameManager.Instance.IsOnRevolt)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(StandardLines_LowlSAN[GameManager.Instance.RNG.Next(StandardLines_LowlSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(StandardLines_NormalSAN[GameManager.Instance.RNG.Next(StandardLines_NormalSAN.Count)]);
+          }
+        }
+
+        //On Revolt
+        if (GameManager.Instance.IsOnRevolt)
+        {
+          if (NormalizedSanity < NormalizedLowSanBar)
+          {
+            LineBank.Add(RevoltLine_LowSAN[GameManager.Instance.RNG.Next(RevoltLine_LowSAN.Count)]);
+          }
+          else
+          {
+            LineBank.Add(RevoltLine_NormalSAN[GameManager.Instance.RNG.Next(RevoltLine_NormalSAN.Count)]);
+          }
+        }
+        if (!Met) { Met = true; }
+
+
       }
-
-      //first met
-      if (!Met)
-      {
-        LineBank.Add(HelloLines[GameManager.Instance.RNG.Next(HelloLines.Count)]);
-      }
-
-      //Dying
-      if (NormalizedHealth < NormalizedLowHealthBar)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(LowHealthLines_LowSAN[GameManager.Instance.RNG.Next(LowHealthLines_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(LowHealthLines_NormalSAN[GameManager.Instance.RNG.Next(LowHealthLines_NormalSAN.Count)]);
-        }
-        return;
-      }
-
-      //low sat
-      if (NormalizedSatiety < NormalizedLowSatietyBar)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(LowSatietyLines_LowSAN[GameManager.Instance.RNG.Next(LowSatietyLines_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(LowSatietyLines_NormalSAN[GameManager.Instance.RNG.Next(LowSatietyLines_NormalSAN.Count)]);
-        }
-      }
-
-      //event
-      GameEventManager.GameEvent CurrentMostEvent = new();
-      foreach (GameEventManager.GameEvent Event in GameEventManager.Instance.Events)
-      {
-        if (!TriggeredGameEvents.Contains(Event))
-        {
-          CurrentMostEvent = Event;
-          break;
-        }
-      }
-
-      if (CurrentMostEvent.ID > 500)//is presist or not
-      {
-        TriggeredGameEvents.Add(CurrentMostEvent);
-      }
-
-      EventWorkerLine ewl = GameManager.Instance.EventWorkerLines.Find(x => x.WorkerID == ID && x.EventID == CurrentMostEvent.ID);
-      if (ewl != null)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(ewl.Lines_LowSan[GameManager.Instance.RNG.Next(ewl.Lines_LowSan.Count)]);
-        }
-        else
-        {
-          LineBank.Add(ewl.Lines_NormalSan[GameManager.Instance.RNG.Next(ewl.Lines_NormalSan.Count)]);
-        }
-
-      }
-      else if (Met && !GameManager.Instance.IsOnRevolt)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(StandardLines_LowlSAN[GameManager.Instance.RNG.Next(StandardLines_LowlSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(StandardLines_NormalSAN[GameManager.Instance.RNG.Next(StandardLines_NormalSAN.Count)]);
-        }
-      }
-
-      //On Revolt
-      if (GameManager.Instance.IsOnRevolt)
-      {
-        if (NormalizedSanity < NormalizedLowSanBar)
-        {
-          LineBank.Add(RevoltLine_LowSAN[GameManager.Instance.RNG.Next(RevoltLine_LowSAN.Count)]);
-        }
-        else
-        {
-          LineBank.Add(RevoltLine_NormalSAN[GameManager.Instance.RNG.Next(RevoltLine_NormalSAN.Count)]);
-        }
-      }
-      if (!Met) { Met = true; }
-
-
-
+      catch { }
 
 
 
@@ -277,8 +283,11 @@ namespace Assets.BasicModule.Model
     {
       EndDay();
 
-      double HealthAdjustment = (NormalizedSatiety - 0.3) * 40 + (NormalizedSanity - 0.3) * 20;
-      Health = HealthAdjustment + Health > HealthMax ? HealthMax : HealthAdjustment + Health;
+      double HealthAdjustment = (3 * (NormalizedSatiety - 1.05) * (NormalizedSatiety - 1.05) * (NormalizedSatiety - 1.05) +
+                                  2.8 * (NormalizedSanity - 1.05) * (NormalizedSanity - 1.05) * (NormalizedSanity - 1.05)) * HealthMax;
+      Health += HealthAdjustment;
+
+
 
       if (Health <= 0)
       {
@@ -293,31 +302,48 @@ namespace Assets.BasicModule.Model
         {
           OnSanIsZero.Raise();
         }
-        SanityMax = 1;
+        SanityMax = 999999;
       }
 
     }
 
     override public string ToString()
     {
-      string HPBar = "☤[";
-      string SatBar = "☕[";
-      string SanBar = "⛯[";
+      string HPBar = "[健康]";
+      string SatBar = "[饱食]";
+      string SanBar = "[理智]";
 
-      for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '*'; }
-      while (HPBar.Length < 12) { HPBar += '-'; }
-      HPBar += "]\n";
+      for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '\u2b1b'; }
+      while (HPBar.Length < 15) { HPBar += '\u2b1c'; }
+      HPBar += HealthMax + "\n";
 
-      for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '*'; }
-      while (SatBar.Length < 12) { SatBar += "-"; }
-      SatBar += "]\n";
+      for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '\u2b1b'; }
+      while (SatBar.Length < 15) { SatBar += "\u2b1c"; }
+      SatBar += SatietyMax + "\n";
 
-      for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "*"; }
-      while (SanBar.Length < 12) { SanBar += "-"; }
-      SanBar += "]\n";
+      for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "\u2b1b"; }
+      while (SanBar.Length < 15) { SanBar += "\u2b1c"; }
+      SanBar += SanityMax + "\n";
+
+      string p = "";
+      foreach (WorkerFoodFavor fp in FoodPopertyMultiplier)
+      {
+        if (fp.Multiplier > 0)
+        {
+          p += FoodPropertyString.FoodPropertyName(fp.foodProperty) + '+' + ' ';
+        }
+        else if(fp.Multiplier == 0)
+        {
+          continue;
+        }
+        else
+        {
+          p += FoodPropertyString.FoodPropertyName(fp.foodProperty) + '-' + ' ';
+        }
+      }
 
 
-      string a = Name + "\n" + HPBar + SatBar + SanBar;
+      string a = Name + "\n" + HPBar + SatBar + SanBar + p + '\n';
       return a;
     }
   }
