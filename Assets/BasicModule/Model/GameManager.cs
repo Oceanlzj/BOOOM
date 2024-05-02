@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Unity.VisualScripting;
 namespace Assets.BasicModule.Model
 {
   [Serializable]
@@ -53,16 +54,17 @@ namespace Assets.BasicModule.Model
     public int seed { get; set; }
     public int BigEventBeginDay { get; set; }
     public int TotalDays { get; set; } = 20;
+    public List<int> KilledToday { get; set; } = new() {};
     public bool IsOnRevolt { get { return Revolt > RevoltBar * RevoltAlertBar; } }
     public List<int> BigEventPool { get; set; } = new() { 10001 };
     public List<int> NewWorkerAddCount { get; set; } = new()
     { 3,1,0,1,0,1,0,
       2,1,0,0,0,1,0,
       0,0,0,0,0,0 };
-    public List<int> NewSpecialWorkerCount { get; set; } = new()
-    { 1,0,0,0,1,0,1,
-      0,1,0,0,0,0,0,
-      0,0,0,0,0,0 };
+    public List<int> NewSpecialWorkerIndex { get; set; } = new()
+    { 102,-1,-1,-1,-1,-1,-1,
+      -1,-1,-1,-1,104,-1,-1,
+      105,-1,-1,-1,-1,-1 };
     private GameManager()
     {
       seed = (int)DateTime.Now.Ticks;
@@ -82,7 +84,7 @@ namespace Assets.BasicModule.Model
         }
       }
       WorkersToday.Clear();
-      BigEventBeginDay = RNG.Next(7, 10);
+      BigEventBeginDay = 5;
       GameEvents = DataFactory.Instance().GetGameEvents();
       EventWorkerLines = new List<EventWorkerLine>();
     }
@@ -108,9 +110,9 @@ namespace Assets.BasicModule.Model
     }
     public void NewDay()
     {
-      NewDayDish();
       NewDayWorkers();
       NewDayEvent();
+      NewDayDish();
 
       CurrentDay++;
     }
@@ -119,28 +121,43 @@ namespace Assets.BasicModule.Model
       Ingredients.Clear();
       DishesInventory.Clear();
 
+      foreach (int item in KilledToday)
+      {
+        int cnt = RNG.Next(1, 3);
+        for (int i = 0; i < cnt; i++)
+        {
+          Ingredients.Add(DataFactory.Instance().GetIngedientByID(item));
+        }
+        IngredientCountToday -= cnt;
+      }
+
       DishesInventory.Add(DataFactory.Instance().GetDishByID(0), NutrientSolutionCount);
       for (int i = 0; i < IngredientCountToday; i++)
       {
-        Ingredients.Add(DataFactory.Instance().GetIngedientByID(RNG.Next(0, DataFactory.Instance().GetIngredientCount())));
+        Ingredients.Add(DataFactory.Instance().GetIngedientByID(RNG.Next(0, 5)));
       }
+
+
+      for(int i = Ingredients.Count - 1; i >= 0; i--)
+      {
+        int index = RNG.Next(i);
+        (Ingredients[index], Ingredients[i]) = (Ingredients[i], Ingredients[index]);
+      }
+
 
     }
     public void NewDayWorkers()
     {
       AddInWorkersCountsToday = NewWorkerAddCount[CurrentDay];
-      AddInSpecialWorkerCountsToday = NewSpecialWorkerCount[CurrentDay];
 
       if (WorkersToday.Count(x => x < 100) + AddInWorkersCountsToday > Workers.Count(x => x.ID < 100))
       {
         AddInWorkersCountsToday = WorkersToday.Count(x => x < 100) - Workers.Count(x => x.ID < 100);
       }
-
-      if (WorkersToday.Count(x => x > 100) + AddInSpecialWorkerCountsToday > Workers.Count(x => x.ID > 100))
+      if (NewSpecialWorkerIndex[CurrentDay] != -1)
       {
-        AddInSpecialWorkerCountsToday = WorkersToday.Count(x => x > 100) - Workers.Count(x => x.ID > 100);
+        WorkersToday.Add(NewSpecialWorkerIndex[CurrentDay]);
       }
-
       for (int i = 0; i < AddInWorkersCountsToday; i++)
       {
         int index = RNG.Next(0, Workers.Count);
@@ -151,15 +168,6 @@ namespace Assets.BasicModule.Model
         WorkersToday.Add(Workers[index].ID);
       }
 
-      for (int i = 0; i < AddInSpecialWorkerCountsToday; i++)
-      {
-        int index = RNG.Next(0, SpecialWorkers.Count);
-        while (WorkersToday.Contains(SpecialWorkers[index].ID))
-        {
-          index = RNG.Next(0, SpecialWorkers.Count);
-        }
-        WorkersToday.Add(SpecialWorkers[index].ID);
-      }
     }
     public void NewDayEvent()
     {
@@ -186,7 +194,16 @@ namespace Assets.BasicModule.Model
     {
       foreach (int i in WorkersToday)
       {
-        Workers[Workers.IndexOf(Workers.Find(x => x.ID == i))].UpdateStatus();
+        Worker w = Workers[Workers.IndexOf(Workers.Find(x => x.ID == i))];
+        w.UpdateStatus();
+        if (!w.IsAlive)
+        {
+          WorkersToday.Remove(w.ID);
+          if (i > 100)
+          {
+            KilledToday.Add(i);
+          }
+        }
       }
     }
     public void Save()

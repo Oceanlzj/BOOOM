@@ -309,24 +309,41 @@ namespace Assets.BasicModule.Model
 
     override public string ToString()
     {
-      string HPBar = "健康\u2624";
-      string SatBar = "饱食\u2615";
-      string SanBar = "理智\u26ef";
+      string HPBar = "[健康]";
+      string SatBar = "[饱食]";
+      string SanBar = "[理智]";
 
       for (int i = 0; i < NormalizedHealth * 10; i++) { HPBar += '\u2b1b'; }
-      while (HPBar.Length < 13) { HPBar += '\u2b1c'; }
-      HPBar += "\n";
+      while (HPBar.Length < 15) { HPBar += '\u2b1c'; }
+      HPBar += HealthMax + "\n";
 
       for (int i = 0; i < NormalizedSatiety * 10; i++) { SatBar += '\u2b1b'; }
-      while (SatBar.Length < 13) { SatBar += "\u2b1c"; }
-      SatBar += "\n";
+      while (SatBar.Length < 15) { SatBar += "\u2b1c"; }
+      SatBar += SatietyMax + "\n";
 
       for (int i = 0; i < NormalizedSanity * 10; i++) { SanBar += "\u2b1b"; }
-      while (SanBar.Length < 13) { SanBar += "\u2b1c"; }
-      SanBar += "\n";
+      while (SanBar.Length < 15) { SanBar += "\u2b1c"; }
+      SanBar += SanityMax + "\n";
+
+      string p = "";
+      foreach (WorkerFoodFavor fp in FoodPopertyMultiplier)
+      {
+        if (fp.Multiplier > 0)
+        {
+          p += FoodPropertyString.FoodPropertyName(fp.foodProperty) + '+' + ' ';
+        }
+        else if(fp.Multiplier == 0)
+        {
+          continue;
+        }
+        else
+        {
+          p += FoodPropertyString.FoodPropertyName(fp.foodProperty) + '-' + ' ';
+        }
+      }
 
 
-      string a = Name + "\n" + HPBar + SatBar + SanBar;
+      string a = Name + "\n" + HPBar + SatBar + SanBar + p + '\n';
       return a;
     }
   }

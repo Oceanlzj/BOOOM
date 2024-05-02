@@ -51,8 +51,14 @@ namespace Assets.BasicModule.Model
 
       for (int i = 0; i < DishSanity / 10; i++) { SanBar += "\u271a"; }
       SanBar += "\n";
+      string p = "属性：";
+      foreach (FoodProperty fp in Properties)
+      {
+        p += FoodPropertyString.FoodPropertyName(fp) + ' ';
+      }
 
-      string a = "\u2b9e[" + Name + "]\n" + HPBar + SatBar + SanBar;
+
+      string a = "\u2b9e[" + Name + "]\n" + HPBar + SatBar + SanBar + p + '\n';
       return a;
     }
   }
